@@ -19,7 +19,7 @@
         <junit.version>4.12</junit.version>
         <javax.ws.rs.version>2.0.1</javax.ws.rs.version>
         <oauth1-signer-version>1.2.4</oauth1-signer-version>
-        <nimbus-jwt>7.8</nimbus-jwt>
+        <nimbus-jwt>7.9</nimbus-jwt>
     </properties>
     <dependencies>
         <!-- Below are mandatory dependencies for executing cross border APIs-->
