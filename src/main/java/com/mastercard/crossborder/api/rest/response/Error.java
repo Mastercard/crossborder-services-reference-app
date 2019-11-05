@@ -18,7 +18,7 @@ public class Error implements Serializable {
     private String description;
     private Boolean recoverable;
     private String requestId;
-    private Details details;
+    private ErrorDetails details;
 
     public Error() {
         this.source = null;
@@ -131,11 +131,11 @@ public class Error implements Serializable {
             required = false,
             nillable = false
     )
-    public Details getDetails() {
+    public ErrorDetails getDetails() {
         return this.details;
     }
 
-    public void setDetails(Details details) {
+    public void setDetails(ErrorDetails details) {
         this.details = details;
     }
 

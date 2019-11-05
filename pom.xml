@@ -19,7 +19,7 @@
         <junit.version>4.12</junit.version>
         <javax.ws.rs.version>2.0.1</javax.ws.rs.version>
         <oauth1-signer-version>1.2.4</oauth1-signer-version>
-        <nimbus-jwt>7.8</nimbus-jwt>
+        <nimbus-jwt>7.9</nimbus-jwt>
     </properties>
     <dependencies>
         <!-- Below are mandatory dependencies for executing cross border APIs-->
@@ -33,11 +33,28 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!-- Below dependencies are required for making REST calls -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${javax.ws.rs.version}</version>
+        </dependency>
         <!-- This dependency is used for authentication -->
         <dependency>
             <groupId>com.mastercard.developer</groupId>
             <artifactId>oauth1-signer</artifactId>
             <version>${oauth1-signer-version}</version>
+        </dependency>
+        <!-- below dependency is required for encryption -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>${nimbus-jwt}</version>
         </dependency>
         <!-- Below dependencies are for executing use cases using JUnit-->
         <dependency>
@@ -87,23 +104,6 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4j2.version}</version>
-        </dependency>
-        <!-- Below dependencies are required for making REST calls -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>${javax.ws.rs.version}</version>
-        </dependency>
-        <!-- below dependency is required for encryption -->
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>${nimbus-jwt}</version>
         </dependency>
     </dependencies>
 </project>
