@@ -181,7 +181,7 @@ public class RemittanceAPITest  {
             Assert.assertFalse(errors.getErrors().isEmpty());
             for (Error error : errors.getErrors()) {
                 assertEquals("proposal_id", error.getSource());
-                assertEquals("INVALID_INPUT_VALUE", error.getReasonCode());
+                assertEquals("DECLINE", error.getReasonCode());
             }
             logger.error("Payment with quote has failed for the error {}", se.getMessage());
         }
