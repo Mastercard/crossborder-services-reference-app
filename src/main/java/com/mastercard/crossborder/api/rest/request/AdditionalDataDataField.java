@@ -15,15 +15,11 @@ public class AdditionalDataDataField implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public AdditionalDataDataField() {
-        //Default constructor
-    }
-
     private String fieldId;
     private String value;
 
     @JsonProperty(value = "name")
-    @XmlElement(name = "name", required = true, nillable = false)
+    @XmlElement(name = "name", required = true)
     public String getFieldId() {
         return fieldId;
     }
@@ -33,7 +29,7 @@ public class AdditionalDataDataField implements Serializable {
     }
 
     @JsonProperty(value = "value")
-    @XmlElement(name = "value", required = true, nillable = false)
+    @XmlElement(name = "value", required = true)
     public String getValue() {
         return value;
     }

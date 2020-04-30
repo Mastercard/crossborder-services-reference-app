@@ -28,9 +28,6 @@ public class Proposal implements Serializable {
     private String resourceType;
     private AdditionalData additionalData;
 
-    public Proposal() {
-        //default constructor
-    }
     public void setQuoteFxRate(String quoteFxRate) {
         this.quoteFxRate = quoteFxRate;
     }

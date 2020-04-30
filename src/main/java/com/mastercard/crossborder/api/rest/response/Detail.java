@@ -26,8 +26,7 @@ public class Detail implements Serializable {
 
     @XmlElement(
             name = "Name",
-            required = true,
-            nillable = false
+            required = true
     )
     @JsonProperty(value="Name")
     public String getName() {
@@ -40,8 +39,7 @@ public class Detail implements Serializable {
 
     @XmlElement(
             name = "Value",
-            required = true,
-            nillable = false
+            required = true
     )
     @JsonProperty(value="Value")
     public String getValue() {

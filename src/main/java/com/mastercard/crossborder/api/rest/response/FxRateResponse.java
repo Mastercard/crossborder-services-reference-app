@@ -3,7 +3,6 @@ package com.mastercard.crossborder.api.rest.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,11 +17,10 @@ import java.util.List;
 @XmlRootElement(name = "rates")
 public class FxRateResponse implements Serializable {
 
-    List<FxRate> rates = new ArrayList();
+    private List<FxRate> rates = new ArrayList();
 
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
     @JsonProperty(value = "rate")
-    @XmlElement(name = "rate", required = true, nillable = false)
+    @XmlElement(name = "rate", required = true)
     public List<FxRate> getRates() {
         return rates;
     }

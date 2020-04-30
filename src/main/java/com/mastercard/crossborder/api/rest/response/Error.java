@@ -51,8 +51,7 @@ public class Error implements Serializable {
 
     @XmlElement(
             name = "Source",
-            required = true,
-            nillable = false
+            required = true
     )
     @JsonProperty(value = "Source")
     public String getSource() {
@@ -65,8 +64,7 @@ public class Error implements Serializable {
 
     @XmlElement(
             name = "ReasonCode",
-            required = true,
-            nillable = false
+            required = true
     )
     @JsonProperty(value = "ReasonCode")
     public String getReasonCode() {
@@ -87,9 +85,7 @@ public class Error implements Serializable {
     }
 
     @XmlElement(
-            name = "Description",
-            required = false,
-            nillable = false
+            name = "Description"
     )
     @JsonProperty(value = "Description")
     public String getDescription() {
@@ -102,8 +98,7 @@ public class Error implements Serializable {
 
     @XmlElement(
             name = "Recoverable",
-            required = true,
-            nillable = false
+            required = true
     )
     @JsonProperty(value = "Recoverable")
     public Boolean getRecoverable() {
@@ -115,9 +110,7 @@ public class Error implements Serializable {
     }
 
     @XmlElement(
-            name = "RequestId",
-            required = false,
-            nillable = false
+            name = "RequestId"
     )
     @JsonProperty(value = "RequestId")
     public String getRequestId() {
@@ -129,9 +122,7 @@ public class Error implements Serializable {
     }
 
     @XmlElement(
-            name = "Details",
-            required = false,
-            nillable = false
+            name = "Details"
     )
     @JsonProperty(value = "Details")
     public Details getDetails() {

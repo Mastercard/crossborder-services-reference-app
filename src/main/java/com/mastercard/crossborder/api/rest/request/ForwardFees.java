@@ -15,15 +15,12 @@ public class ForwardFees implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public ForwardFees() {
-        //default constructor
-    }
     private String feesIncluded;
 
     private String receiverCurrency;
 
     @JsonProperty(value = "fees_included")
-    @XmlElement(name = "fees_included", required = true, nillable = false)
+    @XmlElement(name = "fees_included", required = true)
     public String getFeesIncluded() {
         return feesIncluded;
     }

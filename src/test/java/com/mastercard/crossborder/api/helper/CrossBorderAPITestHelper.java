@@ -19,9 +19,6 @@ import java.util.List;
     This is a helper class, can be used to modify data to be passed to APIs.
  */
 public class CrossBorderAPITestHelper {
-    public CrossBorderAPITestHelper() {
-        //default constructor
-    }
 
     public static QuotesRequest setDataForForwardQuoteWithFeesIncluded(){
         /* set the input */
@@ -96,10 +93,10 @@ public class CrossBorderAPITestHelper {
 
     /**
      * This method will set data for forward quote with fees not included and payment type is P2B.
-     * For Payemnt type P2B following information should be set
+     * For Payment type P2B following information should be set
      * senders information -> firstname, lastname should be set, middlename being optional.
      * recipients information -> organisational name
-     * @return
+     * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForwardQuoteFeesNotIncluded() {
         RemittanceRequest paymentRequest = new RemittanceRequest();
@@ -185,7 +182,7 @@ public class CrossBorderAPITestHelper {
      * For Payemnt type P2P following information should be set
      * senders information -> firstname, lastname should be set, middlename being optional.
      * recipients information -> firstname, lastname should be set, middlename being optional
-     * @return
+     * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForwardQuoteFeesIncluded() {
         RemittanceRequest paymentRequest = new RemittanceRequest();
@@ -282,7 +279,7 @@ public class CrossBorderAPITestHelper {
      * For Payemnt type B2B following information should be set
      * senders information -> Organization name
      * recipients information -> Organization name
-     * @return
+     * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForBusinessToBusiness() {
         RemittanceRequest paymentRequest = new RemittanceRequest();
@@ -375,7 +372,7 @@ public class CrossBorderAPITestHelper {
      * For Payemnt type G2P following information should be set
      * senders information -> Organization name
      * recipients information -> firstname, lastname should be set, middlename being optional
-     * @return
+     * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForGovernmentToPerson() {
         RemittanceRequest paymentRequest = new RemittanceRequest();
@@ -517,7 +514,7 @@ public class CrossBorderAPITestHelper {
      * For Payemnt type B2P following information should be set
      * senders information -> Organization name
      * recipients information -> firstname, lastname should be set, middlename being optional
-     * @return
+     * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForReverseQuote() {
         RemittanceRequest paymentRequest = new RemittanceRequest();

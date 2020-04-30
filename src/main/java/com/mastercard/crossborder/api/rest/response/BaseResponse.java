@@ -14,16 +14,13 @@ public class BaseResponse {
 
     private static final long serialVersionUID = 1L;
 
-    public BaseResponse() {
-        //Default constructor
-    }
     private String requestId;
     private String transactionReference;
     private String responseCode;
     private AdditionalData additionalData;
 
     @JsonProperty(value = "RequestId")
-    @XmlElement(name = "RequestId", required = true, nillable = false)
+    @XmlElement(name = "RequestId", required = true)
     public String getRequestId() {
         return requestId;
     }
@@ -33,7 +30,7 @@ public class BaseResponse {
     }
 
     @JsonProperty(value = "TransactionReference")
-    @XmlElement(name = "TransactionReference", required = true, nillable = false)
+    @XmlElement(name = "TransactionReference", required = true)
     public String getTransactionReference() {
         return transactionReference;
     }
@@ -43,7 +40,7 @@ public class BaseResponse {
     }
 
     @JsonProperty(value = "status")
-    @XmlElement(name = "status", required = true, nillable = false)
+    @XmlElement(name = "status", required = true)
     public String getResponseCode() {
         return responseCode;
     }
@@ -60,10 +57,6 @@ public class BaseResponse {
 
     /**
      * Sets the value of the additionalInformationFields property.
-     *
-     * @param additionalData
-     *     allowed object is
-     *     {@link VendorSpecificField }
      *
      */
     public void setAdditionalData(AdditionalData additionalData) {

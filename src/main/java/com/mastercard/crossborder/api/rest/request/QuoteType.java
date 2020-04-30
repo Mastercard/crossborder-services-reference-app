@@ -15,15 +15,11 @@ public class QuoteType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public QuoteType() {
-        //default constructor
-    }
-
     private ReverseFees reverseFees;
     private ForwardFees forwardFees;
 
     @JsonProperty(value = "forward")
-    @XmlElement(name = "forward", required = true, nillable = false)
+    @XmlElement(name = "forward", required = true)
     public ForwardFees getForwardFees() {
         return forwardFees;
     }
@@ -33,7 +29,7 @@ public class QuoteType implements Serializable {
     }
 
     @JsonProperty(value = "reverse")
-    @XmlElement(name = "reverse", required = true, nillable = false)
+    @XmlElement(name = "reverse", required = true)
     public ReverseFees getReverseFees() {
         return reverseFees;
     }

@@ -16,14 +16,10 @@ public class AdditionalField implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public AdditionalField() {
-        //Default constructor
-    }
-
     private List<AdditionalDataField> data = new ArrayList<>();
 
     @JsonProperty(value = "data_field")
-    @XmlElement(name = "data_field", required = true, nillable = false)
+    @XmlElement(name = "data_field", required = true)
     public List<AdditionalDataField> getData() {
         return data;
     }

@@ -1,9 +1,9 @@
 package com.mastercard.crossborder.api.rest;
 
-import com.mastercard.crossborder.api.service.RestClientService;
+import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.request.RemittanceRequest;
 import com.mastercard.crossborder.api.rest.response.RemittanceResponse;
-import com.mastercard.crossborder.api.exception.ServiceException;
+import com.mastercard.crossborder.api.service.RestClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +28,6 @@ public class RemittanceAPI {
     @Autowired
     RestClientService restClientService;
 
-    public RemittanceAPI() {
-        //Default constructor
-    }
-
     public RemittanceResponse makePayment(HttpHeaders headers, Map<String, Object> requestParams, RemittanceRequest payment) throws ServiceException {
 
         logger.info("Calling payment API");
@@ -40,6 +36,6 @@ public class RemittanceAPI {
     public RemittanceResponse makePaymentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, RemittanceRequest payment) throws ServiceException {
 
         logger.info("Calling payment API");
-        return (RemittanceResponse) restClientService.serviceEncryption(PAYMENT, headers, HttpMethod.POST, requestParams, payment,RemittanceResponse.class);
+        return (RemittanceResponse) restClientService.serviceEncryption(PAYMENT, headers, HttpMethod.POST, requestParams, payment, RemittanceResponse.class);
     }
 }

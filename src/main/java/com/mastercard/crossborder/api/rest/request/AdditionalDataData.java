@@ -2,7 +2,6 @@ package com.mastercard.crossborder.api.rest.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,15 +17,10 @@ public class AdditionalDataData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public AdditionalDataData() {
-        //Default constructor
-    }
+    private List<AdditionalDataDataField> data =  new ArrayList<>();
 
-    private List<AdditionalDataDataField> data = new ArrayList<AdditionalDataDataField>() ;
-
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
     @JsonProperty(value = "data_field")
-    @XmlElement(name = "data_field", required = true, nillable = false)
+    @XmlElement(name = "data_field", required = true)
     public List<AdditionalDataDataField> getData() {
         return data;
     }

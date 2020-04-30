@@ -15,14 +15,11 @@ public class Amount implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Amount() {
-        //Default constructor
-    }
     private String currency;
     private String amount;
 
     @JsonProperty(value = "currency")
-    @XmlElement(name = "currency", required = true, nillable = false)
+    @XmlElement(name = "currency", required = true)
     public String getCurrency() {
         return currency;
     }
@@ -32,7 +29,7 @@ public class Amount implements Serializable {
     }
 
     @JsonProperty(value = "amount")
-    @XmlElement(name = "amount", required = true, nillable = false)
+    @XmlElement(name = "amount", required = true)
     public String getAmount() {
         return amount;
     }

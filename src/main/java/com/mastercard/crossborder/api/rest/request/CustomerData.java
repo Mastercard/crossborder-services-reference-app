@@ -2,10 +2,6 @@ package com.mastercard.crossborder.api.rest.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.mastercard.crossborder.api.rest.request.deserializer.GovernmentIdDeserializer;
-import com.mastercard.crossborder.api.rest.request.serializer.GovernmentIdSerializer;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -29,12 +25,8 @@ public  class CustomerData implements Serializable {
 
     private String email;
 
-    public CustomerData() {
-        //Default constructor
-    }
-
     @JsonProperty(value = "first_name")
-    @XmlElement(name = "first_name", required = false, nillable = false)
+    @XmlElement(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -44,7 +36,7 @@ public  class CustomerData implements Serializable {
     }
 
     @JsonProperty(value = "middle_name")
-    @XmlElement(name = "middle_name", required = false, nillable = false)
+    @XmlElement(name = "middle_name")
     public String getMiddleName() {
         return middleName;
     }
@@ -54,7 +46,7 @@ public  class CustomerData implements Serializable {
     }
 
     @JsonProperty(value = "last_name")
-    @XmlElement(name = "last_name", required = false, nillable = false)
+    @XmlElement(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -64,7 +56,7 @@ public  class CustomerData implements Serializable {
     }
 
     @JsonProperty(value = "nationality")
-    @XmlElement(name = "nationality", required = false)
+    @XmlElement(name = "nationality")
     public String getNationality() {
         return nationality;
     }
@@ -74,7 +66,7 @@ public  class CustomerData implements Serializable {
     }
 
     @JsonProperty(value = "address")
-    @XmlElement(name = "address", required = false, nillable = false)
+    @XmlElement(name = "address")
     public Address getAddress() {
         return address;
     }
@@ -84,9 +76,7 @@ public  class CustomerData implements Serializable {
     }
 
     @JsonProperty(value = "government_ids")
-    @JsonDeserialize(using = GovernmentIdDeserializer.class)
-    @JsonSerialize(using = GovernmentIdSerializer.class , include = JsonSerialize.Inclusion.NON_NULL)
-    @XmlElement(name = "government_ids", required = false, nillable = false)
+    @XmlElement(name = "government_ids")
     public GovernmentIdData getGovernmentIdData() {
         return governmentIdData;
     }
@@ -96,7 +86,7 @@ public  class CustomerData implements Serializable {
     }
 
     @JsonProperty(value = "date_of_birth")
-    @XmlElement(name = "date_of_birth", required = false, nillable = false)
+    @XmlElement(name = "date_of_birth")
     public String getDateOfBirth() {
         return dateOfBirth;
     }
@@ -106,7 +96,7 @@ public  class CustomerData implements Serializable {
     }
 
     @JsonProperty(value = "phone")
-    @XmlElement(name = "phone", required = false, nillable = false)
+    @XmlElement(name = "phone")
     public String getPhone() {
         return phone;
     }
@@ -116,7 +106,7 @@ public  class CustomerData implements Serializable {
     }
 
     @JsonProperty(value = "organization_name")
-    @XmlElement(name = "organization_name", required = false, nillable = false)
+    @XmlElement(name = "organization_name")
     public String getOrganizationName() {
         return organizationName;
     }
@@ -125,7 +115,7 @@ public  class CustomerData implements Serializable {
         this.organizationName = organizationName;
     }
     @JsonProperty(value = "email")
-    @XmlElement(name="email", required = false, nillable = false)
+    @XmlElement(name="email")
     public String getEmail() {
         return email;
     }

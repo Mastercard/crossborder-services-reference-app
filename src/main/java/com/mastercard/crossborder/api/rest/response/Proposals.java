@@ -2,7 +2,6 @@ package com.mastercard.crossborder.api.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,11 +14,6 @@ import java.util.List;
 public class Proposals implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public Proposals() {
-        //default constructor
-    }
-
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
     @JsonProperty(value = "proposal")
     @XmlElement(name = "proposal")
     public List<Proposal> getProposal() {

@@ -15,16 +15,12 @@ public class AdditionalData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public AdditionalData() {
-        //Default constructor
-    }
-
     private AdditionalDataData data;
     private String resourceType = "list";
     private String itemCount ="0";
 
     @JsonProperty(value = "data")
-    @XmlElement(name = "data", required = true, nillable = false)
+    @XmlElement(name = "data", required = true)
     public AdditionalDataData getData() {
         return data;
     }
@@ -34,20 +30,16 @@ public class AdditionalData implements Serializable {
     }
 
     @JsonProperty(value = "item_count")
-    @XmlElement(name = "item_count", required = true, nillable = false)
+    @XmlElement(name = "item_count", required = true)
     public String getItemCount(){
-        Integer countSize = 0;
-        if  ( (getData() != null) && (getData().getData() != null)){
-            countSize = getData().getData().size();
-        }
-        return  countSize.toString();
+        return  this.itemCount;
     }
 
     public void setItemCount(String itemCount) {
         this.itemCount = itemCount;
     }
     @JsonProperty(value = "resource_type")
-    @XmlElement(name = "resource_type", required = true, nillable = false)
+    @XmlElement(name = "resource_type", required = true)
     public String getResourceType() {
         return resourceType;
     }

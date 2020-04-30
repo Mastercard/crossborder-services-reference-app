@@ -15,8 +15,5 @@ public class CancelResponse  extends BaseResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public CancelResponse() {
-        //Default constructor
-    }
 
 }

@@ -15,14 +15,11 @@ public class ReverseFees implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public ReverseFees() {
-        //default constructor
-    }
     private String senderCurrency;
 
 
     @JsonProperty(value = "sender_currency")
-    @XmlElement(name = "sender_currency", required = true, nillable = false)
+    @XmlElement(name = "sender_currency", required = true)
     public String getSenderCurrency() {
         return senderCurrency;
     }

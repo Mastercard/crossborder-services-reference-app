@@ -21,15 +21,12 @@ public class QuotesResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public QuotesResponse() {
-        //Default constructor
-    }
     private String proposalReference;
     private Proposals proposals;
     private String paymentType;
 
     @JsonProperty(value = "transaction_reference")
-    @XmlElement(name = "transaction_reference", required = true, nillable = false)
+    @XmlElement(name = "transaction_reference", required = true)
     public String getProposalReference() {
         return proposalReference;
     }
@@ -39,7 +36,7 @@ public class QuotesResponse implements Serializable {
     }
 
     @JsonProperty(value = "payment_type")
-    @XmlElement(name="payment_type", required = true, nillable = false)
+    @XmlElement(name="payment_type", required = true)
     public String getPaymentType() {
         return paymentType;
     }

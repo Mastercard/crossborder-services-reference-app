@@ -8,9 +8,8 @@ import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
- * This class is represents the Address fields for Sender and receiver.
+ * This class is represents the Address fields for Sender and recipient.
  *
- * @author e037676
  *
  */
 
@@ -26,12 +25,9 @@ public  class Address implements Serializable {
 	private String postalCode = null;
 	private String countrySubdivision = null;
 	private String country = null;
-	public Address() {
-		//default constructor
-	}
 
 	@JsonProperty(value = "line1")
-	@XmlElement(name = "line1", required = false, nillable = false)
+	@XmlElement(name = "line1")
 	public String getLine1() {
 		return addrLine1;
 	}
@@ -42,7 +38,7 @@ public  class Address implements Serializable {
 
 
 	@JsonProperty(value = "line2")
-	@XmlElement(name = "line2", required = false, nillable = false)
+	@XmlElement(name = "line2")
 	public String getLine2() {
 		return addrLine2;
 	}
@@ -52,7 +48,7 @@ public  class Address implements Serializable {
 	}
 
 	@JsonProperty(value = "city")
-	@XmlElement(name = "city", required = false, nillable = false)
+	@XmlElement(name = "city")
 	public String getCity() {
 		return city;
 	}
@@ -62,7 +58,7 @@ public  class Address implements Serializable {
 	}
 
 	@JsonProperty(value = "country_subdivision")
-	@XmlElement(name = "country_subdivision", required = false, nillable = false)
+	@XmlElement(name = "country_subdivision")
 	public String getCountrySubdivision() {
 		return countrySubdivision;
 	}
@@ -72,7 +68,7 @@ public  class Address implements Serializable {
 	}
 
 	@JsonProperty(value = "postal_code")
-	@XmlElement(name = "postal_code", required = false, nillable = false)
+	@XmlElement(name = "postal_code")
 	public String getPostalCode() {
 		return postalCode;
 	}
@@ -83,7 +79,7 @@ public  class Address implements Serializable {
 
 
 	@JsonProperty(value = "country")
-	@XmlElement(name = "country", required = false, nillable = false)
+	@XmlElement(name = "country")
 	public String getCountry() {
 		return country;
 	}

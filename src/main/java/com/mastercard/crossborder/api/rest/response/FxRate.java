@@ -27,7 +27,7 @@ public class FxRate  implements Serializable {
         private Tiers tiers;
 
         @JsonProperty(value="type")
-        @XmlElement(name = "type", required = true, nillable = false)
+        @XmlElement(name = "type", required = true)
         public String getType() {
             return type;
         }
@@ -37,7 +37,7 @@ public class FxRate  implements Serializable {
         }
 
         @JsonProperty(value="use")
-        @XmlElement(name = "use", required = true, nillable = false)
+        @XmlElement(name = "use", required = true)
         public String getUse() {
             return use;
         }
@@ -47,7 +47,7 @@ public class FxRate  implements Serializable {
         }
 
         @JsonProperty(value="from_currency_code")
-        @XmlElement(name = "from_currency_code", required = true, nillable = false)
+        @XmlElement(name = "from_currency_code", required = true)
         public String getFromCurrencyCode() {
             return fromCurrencyCode;
         }
@@ -57,7 +57,7 @@ public class FxRate  implements Serializable {
         }
 
         @JsonProperty(value="to_currency_code")
-        @XmlElement(name = "to_currency_code", required = true, nillable = false)
+        @XmlElement(name = "to_currency_code", required = true)
         public String getToCurrencyCode() {
             return toCurrencyCode;
         }
@@ -68,7 +68,7 @@ public class FxRate  implements Serializable {
 
 
         @JsonProperty(value="valid_from")
-        @XmlElement(name = "valid_from", required = true, nillable = false)
+        @XmlElement(name = "valid_from", required = true)
         public String getValidFrom() {
             return validFrom;
         }
@@ -79,7 +79,7 @@ public class FxRate  implements Serializable {
 
 
         @JsonProperty(value="valid_to")
-        @XmlElement(name = "valid_to", required = true, nillable = false)
+        @XmlElement(name = "valid_to", required = true)
         public String getValidTo() {
             return validTo;
         }
@@ -89,7 +89,7 @@ public class FxRate  implements Serializable {
         }
 
         @JsonProperty(value="tier_identifier_rate")
-        @XmlElement(name = "tier_identifier_rate", required = false, nillable = true)
+        @XmlElement(name = "tier_identifier_rate", nillable = true)
         public String getTierIdentifierRate() {
             return tierIdentifierRate;
         }
@@ -100,7 +100,7 @@ public class FxRate  implements Serializable {
 
 
         @JsonProperty(value="tiers")
-        @XmlElement(name = "tiers", required = true, nillable = false)
+        @XmlElement(name = "tiers", required = true)
         public Tiers getTiers() {
             return tiers;
         }

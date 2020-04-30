@@ -30,7 +30,7 @@ public class FxTierRate  implements Serializable {
 
 
     @JsonProperty(value="rate_id")
-    @XmlElement(name = "rate_id", required = true, nillable = false)
+    @XmlElement(name = "rate_id", required = true)
     public String getRateId() {
         return rateId;
     }
@@ -60,7 +60,7 @@ public class FxTierRate  implements Serializable {
     }
 
     @JsonProperty(value="bid_rate")
-    @XmlElement(name = "bid_rate", required = true, nillable = false)
+    @XmlElement(name = "bid_rate", required = true)
     public String getBidRate() {
         return bidRate;
     }

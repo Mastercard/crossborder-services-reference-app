@@ -3,7 +3,6 @@ package com.mastercard.crossborder.api.rest.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,7 +19,6 @@ public class GovernmentIdData implements Serializable {
 
     private List<String> governmentIdURIs;
 
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     @JsonProperty(value = "government_id_uri")
     @XmlElement(name = "government_id_uri", required = true)
     public List<String> getGovernmentIdURIs() {

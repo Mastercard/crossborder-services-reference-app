@@ -10,15 +10,11 @@ public class BaseRequest {
 
     private static final long serialVersionUID = 1L;
 
-    public BaseRequest() {
-        //default constructor
-    }
-
     private String transactionReference;
     private AdditionalField additionalField;
 
     @JsonProperty(value = "additional_data")
-    @XmlElement(name = "additional_data", required = false, nillable = false)
+    @XmlElement(name = "additional_data")
     public AdditionalField getAdditionalField() {
         return additionalField;
     }
@@ -28,7 +24,7 @@ public class BaseRequest {
     }
 
     @JsonProperty(value = "TransactionReference")
-    @XmlElement(name = "TransactionReference", required = true, nillable = false)
+    @XmlElement(name = "TransactionReference", required = true)
     public String getTransactionReference() {
         return transactionReference;
     }

@@ -26,9 +26,6 @@ public class RemittanceResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public RemittanceResponse() {
-        //Default constructor
-    }
 
     private String responseCode;
     private RejectedTransactionStatus rejectedStatus;
@@ -70,7 +67,7 @@ public class RemittanceResponse implements Serializable {
     private String lockId;
 
     @JsonProperty(value = "status")
-    @XmlElement(name = "status", required = true, nillable = false)
+    @XmlElement(name = "status", required = true)
     public String getResponseCode() {
         return responseCode;
     }
@@ -100,7 +97,7 @@ public class RemittanceResponse implements Serializable {
     }
 
     @JsonProperty(value = "transaction_reference")
-    @XmlElement(name = "transaction_reference", required = true, nillable = false)
+    @XmlElement(name = "transaction_reference", required = true)
     public String getTransactionReference() {
         return transactionReference;
     }
@@ -190,7 +187,7 @@ public class RemittanceResponse implements Serializable {
     }
 
     @JsonProperty(value = "proposal_id")
-    @XmlElement(name = "proposal_id", required = true, nillable = false)
+    @XmlElement(name = "proposal_id", required = true)
     public String getProposalId() {
         return proposalId;
     }
@@ -200,7 +197,7 @@ public class RemittanceResponse implements Serializable {
     }
 
     @JsonProperty(value = "created")
-    @XmlElement(name = "created", required = true, nillable = false)
+    @XmlElement(name = "created", required = true)
     public String getCreated() {
         return created;
     }
@@ -210,7 +207,7 @@ public class RemittanceResponse implements Serializable {
     }
 
     @JsonProperty(value = "status_timestamp")
-    @XmlElement(name = "status_timestamp", required = true, nillable = false)
+    @XmlElement(name = "status_timestamp", required = true)
     public String getStatusTimeStamp() {
         return statusTimeStamp;
     }
@@ -220,7 +217,7 @@ public class RemittanceResponse implements Serializable {
     }
 
     @JsonProperty(value = "id")
-    @XmlElement(name = "id", required = true, nillable = false)
+    @XmlElement(name = "id", required = true)
     public String getRemittanceId() {
         return remittanceId;
     }
@@ -380,25 +377,25 @@ public class RemittanceResponse implements Serializable {
     }
 
     @JsonProperty(value = "sender")
-    @XmlElement(name = "sender", nillable = false)
+    @XmlElement(name = "sender")
     public CustomerData getSender() { return sender; }
 
     public void setSender(CustomerData sender) { this.sender = sender; }
 
     @JsonProperty(value = "recipient")
-    @XmlElement(name = "recipient", nillable = false)
+    @XmlElement(name = "recipient")
     public CustomerData getRecipient() { return recipient; }
 
     public void setRecipient(CustomerData recipient) { this.recipient = recipient; }
 
     @JsonProperty(value = "local_date_time")
-    @XmlElement(name = "local_date_time", nillable = false)
+    @XmlElement(name = "local_date_time")
     public String getLocalDateTime() { return localDateTime; }
 
     public void setLocalDateTime(String localDateTime) { this.localDateTime = localDateTime; }
 
     @JsonProperty(value = "partner_name")
-    @XmlElement(name = "partner_name", nillable = false)
+    @XmlElement(name = "partner_name")
     public String getPartnerName() { return partnerName; }
 
     public void setPartnerName(String partnerName) { this.partnerName = partnerName; }

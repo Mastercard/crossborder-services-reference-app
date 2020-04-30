@@ -13,14 +13,10 @@ import java.io.Serializable;
 public class Details implements Serializable {
     private static final long serialVersionUID = 1L;
     private Detail detail;
-    public Details() {
-        //Default constructor
-    }
 
     @XmlElement(
             name = "Detail",
-            required = true,
-            nillable = false
+            required = true
     )
     @JsonProperty(value = "Detail")
     public Detail getDetails() {

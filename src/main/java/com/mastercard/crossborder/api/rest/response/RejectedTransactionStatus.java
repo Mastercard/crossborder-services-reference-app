@@ -19,7 +19,7 @@ public class RejectedTransactionStatus implements Serializable {
     private String description;
 
     @JsonProperty(value = "Code")
-    @XmlElement(name = "Code", required = true, nillable = false)
+    @XmlElement(name = "Code", required = true)
     public String getCode() {
         return code;
     }
@@ -29,7 +29,7 @@ public class RejectedTransactionStatus implements Serializable {
     }
 
     @JsonProperty(value = "Message")
-    @XmlElement(name = "Message", required = true, nillable = false)
+    @XmlElement(name = "Message", required = true)
     public String getMessage() {
         return message;
     }
@@ -39,7 +39,7 @@ public class RejectedTransactionStatus implements Serializable {
     }
 
     @JsonProperty(value = "Description")
-    @XmlElement(name = "Description", required = true, nillable = false)
+    @XmlElement(name = "Description", required = true)
     public String getDescription() {
         return description;
     }

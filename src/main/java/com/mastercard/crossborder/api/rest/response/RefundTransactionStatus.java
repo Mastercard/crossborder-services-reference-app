@@ -17,7 +17,7 @@ public class RefundTransactionStatus implements Serializable {
     private String message;
 
     @JsonProperty(value = "Message")
-    @XmlElement(name = "Message", required = true, nillable = false)
+    @XmlElement(name = "Message", required = true)
     public String getMessage() {
         return message;
     }

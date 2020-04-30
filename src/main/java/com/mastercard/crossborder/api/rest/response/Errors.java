@@ -20,14 +20,10 @@ import java.io.Serializable;
 public class Errors implements Serializable {
     private static final long serialVersionUID = 1L;
     private Error error;
-    public Errors() {
-        //Default constructor
-    }
 
     @XmlElement(
             name = "Error",
-            required = true,
-            nillable = false
+            required = true
     )
     @JsonProperty(value = "Error")
     public Error getError() {
