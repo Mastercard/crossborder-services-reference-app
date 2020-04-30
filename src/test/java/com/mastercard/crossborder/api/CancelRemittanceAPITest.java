@@ -69,7 +69,7 @@ public class CancelRemittanceAPITest  {
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
 
-            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuote();
+            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuoteFeesNotIncluded();
             RemittanceResponse paymentDetails = remittanceAPI.makePayment(headers, paymentParams, paymentRequest);
             if (null != paymentDetails) {
                 //use payment Id to cancel payment
@@ -111,7 +111,7 @@ public class CancelRemittanceAPITest  {
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
 
-                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuote();
+                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuoteFeesNotIncluded();
                 RemittanceResponse paymentDetails = remittanceAPI.makePaymentWithEncryption(headers, paymentParams, paymentRequest);
                 if (null != paymentDetails) {
                     //use payment Id to cancel payment
@@ -140,4 +140,46 @@ public class CancelRemittanceAPITest  {
         else
             logger.info("To run this use cases, Set runWithEncryptedPayload=true and other encryption / decryption keys in mastercard-api.properties.");
     }
+    /*
+    #Usecase - 3 - **CANCEL A PAYMENT IN JSON FORMAT **
+    It will first make a payment and then cancel it using its paymentId
+    Note: In this use case makePayment and cancellation of payment, both these operations
+    are performed in Json format
+    */
+    @Test
+    public void testCancelPaymentAfterPendingPaymentInJsonFormat() {
+        logger.info("Running Usecase - 3, CANCEL A PAYMENT IN JSON FORMAT.");
+        try {
+            //make a payment
+            Map<String, Object> paymentParams = new HashMap<>();
+            paymentParams.put("partner-id", partnerId);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuoteFeesNotIncluded();
+            RemittanceResponse paymentDetails = remittanceAPI.makePayment(headers, paymentParams, paymentRequest);
+            if (null != paymentDetails) {
+                //use payment Id to cancel payment
+                String paymentId = paymentDetails.getRemittanceId();
+                Map<String, Object> requestParams = new HashMap<>();
+                requestParams.put("partner-id", partnerId);
+                requestParams.put("payment-id", paymentId);
+                CancelRemittance cancelRequest = new CancelRemittance();
+                CancelResponse cancelResponse = cancelRemittanceAPI.cancelPayment(headers, requestParams, cancelRequest);
+                if (null != cancelResponse) {
+                    logger.info("Payment is cancelled Successfully");
+                    Assert.assertEquals( "SUCCESS", cancelResponse.getResponseCode());
+                } else {
+                    logger.info("Cancel payment has failed");
+                    Assert.fail("Cancel payment has failed");
+                }
+            }else {
+                logger.info("Cancel payment has failed due to make payment failure");
+                Assert.fail("Cancel payment has failed due to make payment failure");
+            }
+        } catch (ServiceException re) {
+            Assert.fail(re.getMessage());
+            logger.error("Cancel payment has failed due to {}", re.getMessage());
+        }
+    }
+
 }

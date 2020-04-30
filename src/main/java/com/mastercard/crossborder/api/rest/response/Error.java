@@ -1,15 +1,12 @@
 package com.mastercard.crossborder.api.rest.response;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
-@XmlType(
-        name = "Error",
-        propOrder = {"requestId", "source", "reasonCode", "description", "recoverable", "details"}
-)
 public class Error implements Serializable {
     static final long serialVersionUID = 1L;
     private String source;
@@ -18,7 +15,7 @@ public class Error implements Serializable {
     private String description;
     private Boolean recoverable;
     private String requestId;
-    private ErrorDetails details;
+    private Details details;
 
     public Error() {
         this.source = null;
@@ -54,9 +51,9 @@ public class Error implements Serializable {
 
     @XmlElement(
             name = "Source",
-            required = true,
-            nillable = false
+            required = true
     )
+    @JsonProperty(value = "Source")
     public String getSource() {
         return this.source;
     }
@@ -67,9 +64,9 @@ public class Error implements Serializable {
 
     @XmlElement(
             name = "ReasonCode",
-            required = true,
-            nillable = false
+            required = true
     )
+    @JsonProperty(value = "ReasonCode")
     public String getReasonCode() {
         return this.reasonCode;
     }
@@ -88,10 +85,9 @@ public class Error implements Serializable {
     }
 
     @XmlElement(
-            name = "Description",
-            required = false,
-            nillable = false
+            name = "Description"
     )
+    @JsonProperty(value = "Description")
     public String getDescription() {
         return this.description;
     }
@@ -102,9 +98,9 @@ public class Error implements Serializable {
 
     @XmlElement(
             name = "Recoverable",
-            required = true,
-            nillable = false
+            required = true
     )
+    @JsonProperty(value = "Recoverable")
     public Boolean getRecoverable() {
         return this.recoverable;
     }
@@ -114,10 +110,9 @@ public class Error implements Serializable {
     }
 
     @XmlElement(
-            name = "RequestId",
-            required = false,
-            nillable = false
+            name = "RequestId"
     )
+    @JsonProperty(value = "RequestId")
     public String getRequestId() {
         return this.requestId;
     }
@@ -127,15 +122,14 @@ public class Error implements Serializable {
     }
 
     @XmlElement(
-            name = "Details",
-            required = false,
-            nillable = false
+            name = "Details"
     )
-    public ErrorDetails getDetails() {
+    @JsonProperty(value = "Details")
+    public Details getDetails() {
         return this.details;
     }
 
-    public void setDetails(ErrorDetails details) {
+    public void setDetails(Details details) {
         this.details = details;
     }
 

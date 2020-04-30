@@ -1,5 +1,7 @@
 package com.mastercard.crossborder.api.rest.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -8,15 +10,11 @@ public class BaseRequest {
 
     private static final long serialVersionUID = 1L;
 
-    public BaseRequest() {
-        //default constructor
-    }
-
     private String transactionReference;
     private AdditionalField additionalField;
 
-
-    @XmlElement(name = "additional_data", required = false, nillable = false)
+    @JsonProperty(value = "additional_data")
+    @XmlElement(name = "additional_data")
     public AdditionalField getAdditionalField() {
         return additionalField;
     }
@@ -25,8 +23,8 @@ public class BaseRequest {
         this.additionalField = additionalField;
     }
 
-
-    @XmlElement(name = "transaction_reference", required = true, nillable = false)
+    @JsonProperty(value = "TransactionReference")
+    @XmlElement(name = "TransactionReference", required = true)
     public String getTransactionReference() {
         return transactionReference;
     }

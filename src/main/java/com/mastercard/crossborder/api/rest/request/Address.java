@@ -1,26 +1,33 @@
 package com.mastercard.crossborder.api.rest.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
+/**
+ * This class is represents the Address fields for Sender and recipient.
+ *
+ *
+ */
 
+@JsonPropertyOrder(value = {"line1", "line2", "city", "countrySubdivision", "postalCode", "country"})
 @XmlType(name = "Address", propOrder = {"line1", "line2", "city", "countrySubdivision", "postalCode", "country"})
 public  class Address implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-    private String addrLine1 = null;
-    private String addrLine2 = null;
-    private String city = null;
-    private String postalCode = null;
-    private String countrySubdivision = null;
-    private String country = null;
-	public Address() {
-		//Default constructor
-	}
+	private String addrLine1 = null;
+	private String addrLine2 = null;
+	private String city = null;
+	private String postalCode = null;
+	private String countrySubdivision = null;
+	private String country = null;
 
-	@XmlElement(name = "line1", required = false, nillable = false)
+	@JsonProperty(value = "line1")
+	@XmlElement(name = "line1")
 	public String getLine1() {
 		return addrLine1;
 	}
@@ -30,7 +37,8 @@ public  class Address implements Serializable {
 	}
 
 
-	@XmlElement(name = "line2", required = false, nillable = false)
+	@JsonProperty(value = "line2")
+	@XmlElement(name = "line2")
 	public String getLine2() {
 		return addrLine2;
 	}
@@ -39,7 +47,8 @@ public  class Address implements Serializable {
 		this.addrLine2 = addrLine2;
 	}
 
-	@XmlElement(name = "city", required = false, nillable = false)
+	@JsonProperty(value = "city")
+	@XmlElement(name = "city")
 	public String getCity() {
 		return city;
 	}
@@ -48,7 +57,8 @@ public  class Address implements Serializable {
 		this.city = city;
 	}
 
-	@XmlElement(name = "country_subdivision", required = false, nillable = false)
+	@JsonProperty(value = "country_subdivision")
+	@XmlElement(name = "country_subdivision")
 	public String getCountrySubdivision() {
 		return countrySubdivision;
 	}
@@ -57,7 +67,8 @@ public  class Address implements Serializable {
 		this.countrySubdivision = countrySubdivision;
 	}
 
-	@XmlElement(name = "postal_code", required = false, nillable = false)
+	@JsonProperty(value = "postal_code")
+	@XmlElement(name = "postal_code")
 	public String getPostalCode() {
 		return postalCode;
 	}
@@ -67,7 +78,8 @@ public  class Address implements Serializable {
 	}
 
 
-	@XmlElement(name = "country", required = false, nillable = false)
+	@JsonProperty(value = "country")
+	@XmlElement(name = "country")
 	public String getCountry() {
 		return country;
 	}

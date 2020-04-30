@@ -1,19 +1,22 @@
 package com.mastercard.crossborder.api.rest.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
+@JsonTypeName(value = "paymentrequest")
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @XmlType(name = "PaymentRequest", propOrder = {"remittanceReference", "proposalId", "localDateTime","senderAccountUri","recipientAccountUri","paymentAmount","originatingCountry","fxType","receivingBankName","receivingBankBranchName","bankCode","paymentType","sourceOfIncome","senderInformation", "receiverInformation","purposeOfRemittance","fundingHints", "paymentFileIdentifier", "cardRateId","lockId"})
 @XmlRootElement(name = "paymentrequest")
 public class RemittanceRequest extends BaseRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public RemittanceRequest() {
-        //default constructor
-    }
 
     private String remittanceReference;
     private String proposalId;
@@ -36,7 +39,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
     private String cardRateId;
     private String lockId;
 
-    @XmlElement(name = "transaction_reference", required = true, nillable = false)
+    @JsonProperty(value = "transaction_reference")
+    @XmlElement(name = "transaction_reference", required = true)
     public String getRemittanceReference() {
         return remittanceReference;
     }
@@ -45,7 +49,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.remittanceReference = remittanceReference;
     }
 
-    @XmlElement(name = "sender", required = false)
+    @JsonProperty(value = "sender")
+    @XmlElement(name = "sender")
     public CustomerData getSenderInformation() {
         return senderInformation;
     }
@@ -54,7 +59,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.senderInformation = senderInformation;
     }
 
-    @XmlElement(name = "recipient", required = false)
+    @JsonProperty(value = "recipient")
+    @XmlElement(name = "recipient")
     public CustomerData getReceiverInformation() {
         return receiverInformation;
     }
@@ -63,7 +69,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.receiverInformation = receiverInformation;
     }
 
-    @XmlElement(name = "proposal_id", required = true, nillable = false)
+    @JsonProperty(value = "proposal_id")
+    @XmlElement(name = "proposal_id", required = true)
     public String getProposalId() {
         return proposalId;
     }
@@ -72,7 +79,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.proposalId = proposalId;
     }
 
-    @XmlElement(name = "funding_hints", required = false, nillable = false)
+    @JsonProperty(value = "funding_hints")
+    @XmlElement(name = "funding_hints")
     public AdditionalDataData getFundingHints() {
         return fundingHints;
     }
@@ -81,7 +89,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.fundingHints = fundingHints;
     }
 
-    @XmlElement(name = "local_date_time", required = true, nillable = false)
+    @JsonProperty(value = "local_date_time")
+    @XmlElement(name = "local_date_time", required = true)
     public String getLocalDateTime() {
         return localDateTime;
     }
@@ -90,7 +99,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.localDateTime = localDateTime;
     }
 
-    @XmlElement(name="purpose_of_payment", required = false, nillable = false)
+    @JsonProperty(value = "purpose_of_payment")
+    @XmlElement(name="purpose_of_payment")
     public String getPurposeOfRemittance() {
         return purposeOfRemittance;
     }
@@ -99,7 +109,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.purposeOfRemittance = purposeOfRemittance;
     }
 
-    @XmlElement(name = "source_of_income", required = false, nillable = false)
+    @JsonProperty(value = "source_of_income")
+    @XmlElement(name = "source_of_income")
     public String getSourceOfIncome() {
         return sourceOfIncome;
     }
@@ -108,7 +119,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.sourceOfIncome = sourceOfIncome;
     }
 
-    @XmlElement(name = "receiving_bank_name", required = false, nillable = false)
+    @JsonProperty(value = "receiving_bank_name")
+    @XmlElement(name = "receiving_bank_name")
     public String getReceivingBankName() {
         return receivingBankName;
     }
@@ -117,7 +129,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.receivingBankName = receivingBankName;
     }
 
-    @XmlElement(name = "receiving_bank_branch_name", required = false, nillable = false)
+    @JsonProperty(value = "receiving_bank_branch_name")
+    @XmlElement(name = "receiving_bank_branch_name")
     public String getReceivingBankBranchName() {
         return receivingBankBranchName;
     }
@@ -126,7 +139,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.receivingBankBranchName = receivingBankBranchName;
     }
 
-    @XmlElement(name = "payment_type", required = false, nillable = false)
+    @JsonProperty(value = "payment_type")
+    @XmlElement(name = "payment_type")
     public String getPaymentType() {
         return paymentType;
     }
@@ -135,7 +149,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.paymentType = paymentType;
     }
 
-    @XmlElement(name = "payment_file_identifier", required = false, nillable = false)
+    @JsonProperty(value = "payment_file_identifier")
+    @XmlElement(name = "payment_file_identifier")
     public String getPaymentFileIdentifier() {
         return paymentFileIdentifier;
     }
@@ -144,7 +159,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.paymentFileIdentifier = paymentFileIdentifier;
     }
 
-    @XmlElement(name="sender_account_uri", required = false, nillable = false)
+    @JsonProperty(value = "sender_account_uri")
+    @XmlElement(name="sender_account_uri")
     public String getSenderAccountUri() {
         return senderAccountUri;
     }
@@ -153,7 +169,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.senderAccountUri = senderAccountUri;
     }
 
-    @XmlElement(name="recipient_account_uri", required = false, nillable = false)
+    @JsonProperty(value = "recipient_account_uri")
+    @XmlElement(name="recipient_account_uri")
     public String getRecipientAccountUri() {
         return recipientAccountUri;
     }
@@ -161,7 +178,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
     public void setRecipientAccountUri(String recipientAccountUri) {
         this.recipientAccountUri = recipientAccountUri;
     }
-    @XmlElement(name="payment_amount", required = false, nillable = false)
+    @JsonProperty(value = "payment_amount")
+    @XmlElement(name="payment_amount")
     public Amount getPaymentAmount() {
         return paymentAmount;
     }
@@ -169,8 +187,9 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
     public void setPaymentAmount(Amount paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
-    
-    @XmlElement(name="payment_origination_country", required = true, nillable = false)
+
+    @JsonProperty(value = "payment_origination_country")
+    @XmlElement(name="payment_origination_country", required = true)
     public String getOriginatingCountry() {
         return originatingCountry;
     }
@@ -178,8 +197,9 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
     public void setOriginatingCountry(String originatingCountry) {
         this.originatingCountry = originatingCountry;
     }
-    
-    @XmlElement(name="bank_code", required = false, nillable = false)
+
+    @JsonProperty(value = "bank_code")
+    @XmlElement(name="bank_code")
     public String getBankCode() {
         return bankCode;
     }
@@ -188,7 +208,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.bankCode = bankCode;
     }
 
-    @XmlElement(name="fx_type", required = false, nillable = false)
+    @JsonProperty(value = "fx_type")
+    @XmlElement(name="fx_type")
     public QuoteType getFxType() {
         return fxType;
     }
@@ -197,7 +218,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.fxType = fxType;
     }
 
-    @XmlElement(name="card_rate_id", required = false, nillable = true)
+    @JsonProperty(value = "card_rate_id")
+    @XmlElement(name="card_rate_id", nillable = true)
     public String getCardRateId() {
         return cardRateId;
     }
@@ -206,7 +228,8 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
         this.cardRateId = cardRateId;
     }
 
-    @XmlElement(name="lock_id", required = false, nillable = true)
+    @JsonProperty(value = "lock_id")
+    @XmlElement(name="lock_id",  nillable = true)
     public String getLockId() { return lockId; }
 
     public void setLockId(String lockId) { this.lockId = lockId; }

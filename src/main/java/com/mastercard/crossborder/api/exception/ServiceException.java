@@ -11,7 +11,7 @@ public class ServiceException extends Exception{
     public ServiceException(String errorMessage, Errors serviceErrors)
     {
         super(errorMessage);
-        errors.setErrors(serviceErrors.getErrors());
+        errors.setError(serviceErrors.getError());
     }
 
     public Errors getErrors() {

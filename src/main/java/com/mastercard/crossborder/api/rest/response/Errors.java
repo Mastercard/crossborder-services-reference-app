@@ -1,47 +1,37 @@
 package com.mastercard.crossborder.api.rest.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @XmlType(
         name = "Errors",
-        propOrder = {"errors"}
+        propOrder = {"error"}
 )
 @XmlRootElement(
         name = "Errors"
 )
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class Errors implements Serializable {
     private static final long serialVersionUID = 1L;
-    private List<Error> errors = new ArrayList();
-
-    public Errors() {
-        //Default constructor
-    }
+    private Error error;
 
     @XmlElement(
             name = "Error",
-            required = true,
-            nillable = false
+            required = true
     )
-    public List<Error> getErrors() {
-        if (this.errors == null) {
-            this.errors = new ArrayList();
-        }
-
-        return this.errors;
+    @JsonProperty(value = "Error")
+    public Error getError() {
+        return this.error;
+    }
+    public void setError(Error errors){
+        this.error = errors;
     }
 
-    public void setErrors(List<Error> errors) {
-        this.errors = errors;
-    }
-
-    public void addError(Error error) {
-        this.getErrors().add(error);
-    }
 }
 
