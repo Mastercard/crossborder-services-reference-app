@@ -1,5 +1,7 @@
 package com.mastercard.crossborder.api.rest.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
@@ -17,6 +19,7 @@ public class AdditionalDataField implements Serializable {
     private String fieldId;
     private String value;
 
+    @JsonProperty(value = "name")
     @XmlElement(name = "name", required = true, nillable = false)
     public String getFieldId() {
         return fieldId;
@@ -26,6 +29,7 @@ public class AdditionalDataField implements Serializable {
         this.fieldId = fieldId;
     }
 
+    @JsonProperty(value = "value")
     @XmlElement(name = "value", required = true, nillable = false)
     public String getValue() {
         return value;
@@ -34,5 +38,4 @@ public class AdditionalDataField implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
-
 }

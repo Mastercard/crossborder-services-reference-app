@@ -70,9 +70,8 @@ public class RemittanceAPITest  {
         requestParams.put("partner-id", partnerId);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
-
         try {
-            QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuote();
+            QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncluded();
             QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if ( proposal.isPresent()) {
@@ -82,8 +81,8 @@ public class RemittanceAPITest  {
                 if (null != paymentDetails) {
                     String paymentId = paymentDetails.getRemittanceId();
                     Assert.assertNotNull(paymentId);
-                    //This is to verify that quote created above is used to make a payment. Same amount is charged to make a payment as that of quote
-                    assertEquals( paymentDetails.getCreditedAmount().getAmount(), ((Proposal) proposal.get()).getCreditedAmount().getAmount());
+                    if(paymentDetails.getCreditedAmount()!=null)
+                        assertEquals( paymentDetails.getCreditedAmount().getAmount(), ((Proposal) proposal.get()).getCreditedAmount().getAmount());
                     logger.info("Payment with quote is successful, paymentId is {}", paymentId);
                 } else {
                     Assert.fail("Payment with quote has failed as Payment API has failed");
@@ -101,25 +100,30 @@ public class RemittanceAPITest  {
     }
 
     /*
-      #Usecase - 2 - **FORWARD PAYMENT WITHOUT QUOTE**
+      #Usecase - 2 - **FORWARD PAYMENT WITHOUT QUOTE WITH NOT FEES INCLUDED FOR PERSON TO BUSINESS PAYMENT TYPE**
       There is no separate call made to get the quote, in single API call we are making payment.
    */
     @Test
     public void testOneShotPaymentWithForwardQuote() {
-        logger.info("Running Usecase - 2, FORWARD PAYMENT WITHOUT QUOTE.");
+        logger.info("Running Usecase - 2, FORWARD PAYMENT WITHOUT QUOTE WITH NOT FEES INCLUDED FOR PERSON TO BUSINESS PAYMENT TYPE");
 
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner-id", partnerId);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
         try {
-            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuote();
+            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuoteFeesNotIncluded();
             RemittanceResponse paymentDetails = remittanceAPI.makePayment(headers, requestParams, paymentRequest);
 
             if (null != paymentDetails) {
                 String paymentId = paymentDetails.getRemittanceId();
                 Assert.assertNotNull(paymentId);
                 logger.info("One shot payment is successful, paymentId is {}", paymentId);
+                //This is to verify that the payment amount and the principal amount are equal when fees are not included in the quote request
+                Assert.assertEquals(Double.valueOf(paymentRequest.getPaymentAmount().getAmount()), Double.valueOf(paymentDetails.getPrincipalAmount().getAmount()));
+                //This is to verify that the charged amount is greater than the payment amount when fees are not included in the quote request
+                Assert.assertTrue(Double.valueOf(paymentDetails.getChargedAmount().getAmount()) > Double.valueOf(paymentRequest.getPaymentAmount().getAmount()));
+
             } else {
                 Assert.fail("One shot payment has failed.");
                 logger.info("One shot payment has failed.");
@@ -131,12 +135,46 @@ public class RemittanceAPITest  {
         }
     }
     /*
-         #Usecase - 3 - **REVERSE PAYMENT WITHOUT QUOTE**
+      #Usecase - 3 - **FORWARD PAYMENT WITHOUT QUOTE WITH FEES INCLUDED FOR PERSON TO PERSON PAYMENT TYPE**
+      There is no separate call made to get the quote, in single API call we are making payment.
+   */
+    @Test
+    public void testOneShotPaymentWithForwardQuoteFeesIncluded() {
+        logger.info("Running Usecase - 3, FORWARD PAYMENT WITHOUT QUOTE WITH FEES INCLUDED FOR PERSON TO PERSON PAYMENT TYPE");
+
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
+        try {
+            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuoteFeesIncluded();
+            RemittanceResponse paymentDetails = remittanceAPI.makePayment(headers, requestParams, paymentRequest);
+
+            if (null != paymentDetails) {
+                String paymentId = paymentDetails.getRemittanceId();
+                Assert.assertNotNull(paymentId);
+                logger.info("One shot payment is successful, paymentId is {}", paymentId);
+                //This is to verify that the payment amount and the charged amount are equal when fees are included in the quote request
+                Assert.assertEquals(Double.valueOf(paymentRequest.getPaymentAmount().getAmount()), Double.valueOf(paymentDetails.getChargedAmount().getAmount()));
+
+            } else {
+                Assert.fail("One shot payment has failed.");
+                logger.info("One shot payment has failed.");
+            }
+        }
+        catch (ServiceException re){
+            Assert.fail(re.getMessage());
+            logger.error("One shot payment API has failed for the error {}", re.getMessage());
+        }
+    }
+
+    /*
+         #Usecase - 4 - **REVERSE PAYMENT WITHOUT QUOTE FOR BUSINESS TO PERSON PAYMENT TYPE**
          There is no separate call made to get the quote, in a single API call we are making payment
       */
     @Test
     public void testOneShotPaymentWithReverseQuote() {
-        logger.info("Running Usecase - 3, REVERSE PAYMENT WITHOUT QUOTE.");
+        logger.info("Running Usecase - 4,REVERSE PAYMENT WITHOUT QUOTE FOR BUSINESS TO PERSON PAYMENT TYPE");
 
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner-id", partnerId);
@@ -148,6 +186,9 @@ public class RemittanceAPITest  {
             if (null != paymentDetails) {
                 String paymentId = paymentDetails.getRemittanceId();
                 Assert.assertNotNull(paymentId);
+                logger.info("One shot payment is successful, paymentId is {}", paymentId);
+                if(paymentDetails.getCreditedAmount()!=null)
+                    Assert.assertEquals(Double.valueOf(paymentRequest.getPaymentAmount().getAmount()), Double.valueOf(paymentDetails.getCreditedAmount().getAmount()));
                 logger.info("One shot payment is successful, paymentId is {}", paymentId);
             } else {
                 Assert.fail("One shot payment has failed.");
@@ -161,13 +202,81 @@ public class RemittanceAPITest  {
     }
 
     /*
-      #Usecase - 4 - **ERROR HANDLING**
+      #Usecase - 5 - **FORWARD PAYMENT WITHOUT QUOTE FOR BUSINESS TO BUSINESS PAYMENT TYPE**
+      There is no separate call made to get the quote, in single API call we are making payment.
+   */
+    @Test
+    public void testOneShotPaymentForBusinessToBusiness() {
+        logger.info("Running Usecase - 5, FORWARD PAYMENT WITHOUT QUOTE FOR BUSINESS TO BUSINESS PAYMENT TYPE");
+
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
+        try {
+            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForBusinessToBusiness();
+            RemittanceResponse paymentDetails = remittanceAPI.makePayment(headers, requestParams, paymentRequest);
+
+            if (null != paymentDetails) {
+                String paymentId = paymentDetails.getRemittanceId();
+                Assert.assertNotNull(paymentId);
+                logger.info("One shot payment is successful, paymentId is {}", paymentId);
+                Assert.assertEquals(Double.valueOf(paymentRequest.getPaymentAmount().getAmount()), Double.valueOf(paymentDetails.getChargedAmount().getAmount()));
+
+            } else {
+                Assert.fail("One shot payment has failed.");
+                logger.info("One shot payment has failed.");
+            }
+        }
+        catch (ServiceException re){
+            Assert.fail(re.getMessage());
+            logger.error("One shot payment API has failed for the error {}", re.getMessage());
+        }
+    }
+
+    /*
+      #Usecase - 6 - **FORWARD PAYMENT WITHOUT QUOTE FOR GOVERNMENT TO PERSON PAYMENT TYPE**
+      There is no separate call made to get the quote, in single API call we are making payment.
+   */
+    @Test
+    public void testOneShotPaymentForGovernmentToPerson() {
+        logger.info("Running Usecase - 6, FORWARD PAYMENT WITHOUT QUOTE FOR GOVERNMENT TO PERSON PAYMENT TYPE");
+
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
+        try {
+            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForGovernmentToPerson();
+            RemittanceResponse paymentDetails = remittanceAPI.makePayment(headers, requestParams, paymentRequest);
+
+            if (null != paymentDetails) {
+                String paymentId = paymentDetails.getRemittanceId();
+                Assert.assertNotNull(paymentId);
+                logger.info("One shot payment is successful, paymentId is {}", paymentId);
+                Assert.assertEquals(Double.valueOf(paymentRequest.getPaymentAmount().getAmount()), Double.valueOf(paymentDetails.getChargedAmount().getAmount()));
+
+            } else {
+                Assert.fail("One shot payment has failed.");
+                logger.info("One shot payment has failed.");
+            }
+        }
+        catch (ServiceException re){
+            Assert.fail(re.getMessage());
+            logger.error("One shot payment API has failed for the error {}", re.getMessage());
+        }
+    }
+
+    /*
+
+    /*
+      #Usecase - 7 - **ERROR HANDLING**
       Payment can fail for various reasons, this scenario is added so that user should know what to expect where there is a failure
       Refer https://developer.mastercard.com/documentation/mastercard-send-cross-border/1#error-codes for details
    */
     @Test
     public void testErrorHandling() {
-        logger.info("Running Usecase - 4, ERROR HANDLING.");
+        logger.info("Running Usecase - 7, ERROR HANDLING.");
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner-id", partnerId);
         HttpHeaders headers = new HttpHeaders();
@@ -178,8 +287,9 @@ public class RemittanceAPITest  {
             Assert.fail("Payment has to fail for wrong proposal ID");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-            Assert.assertFalse(errors.getErrors().isEmpty());
-            for (Error error : errors.getErrors()) {
+            Error error = errors.getError();
+            Assert.assertFalse(error== null);
+            if( error != null) {
                 assertEquals("proposal_id", error.getSource());
                 assertEquals("DECLINE", error.getReasonCode());
             }
@@ -187,19 +297,19 @@ public class RemittanceAPITest  {
         }
     }
 
-    /* #Usecase - 5 - **PAYMENT WITH ENCRYPTION SUPPORTED**
+    /* #Usecase - 8 - **PAYMENT WITH ENCRYPTION SUPPORTED**
        By making a call to makePaymentWithEncryption, we are encrypting payment request and response
      */
     @Test
     public void testOneShotPaymentWithEncryption() {
         if (apiConfig.getRunWithEncryptedPayload()) {
-            logger.info("Running Usecase - 5, PAYMENT WITH ENCRYPTION SUPPORTED.");
+            logger.info("Running Usecase - 8, PAYMENT WITH ENCRYPTION SUPPORTED.");
             Map<String, Object> requestParams = new HashMap<>();
             requestParams.put("partner-id", partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
             try {
-                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuote();
+                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuoteFeesNotIncluded();
                 RemittanceResponse paymentDetails = remittanceAPI.makePaymentWithEncryption(headers, requestParams, paymentRequest);
                 if (null != paymentDetails) {
                     String paymentId = paymentDetails.getRemittanceId();
@@ -216,6 +326,76 @@ public class RemittanceAPITest  {
         }
         else
             logger.info("To run this use cases, Set runWithEncryptedPayload=true and other encryption / decryption keys in mastercard-api.properties.");
+    }
+
+    /*
+       #Usecase - 9 - **PAYMENT WITH FORWARD QUOTE IN JSON FORMAT**
+       Make a forward quote and use same proposal ID to make payment
+       Both these operations are performed with request / response in Json format
+       NOTE: Proposal returned from quotes response is time bound
+    */
+    @Test
+    public void testPaymentWithQuoteInJsonFormat() {
+        logger.info("Running Usecase - 9, PAYMENT WITH FORWARD QUOTE in Json format.");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        try {
+            QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncluded();
+            QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
+            Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
+            if ( proposal.isPresent()) {
+                String ProposalId = ((Proposal) proposal.get()).getProposalId();
+                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataWithQuote(ProposalId);
+                RemittanceResponse paymentDetails = remittanceAPI.makePayment(headers, requestParams, paymentRequest);
+                if (null != paymentDetails) {
+                    String paymentId = paymentDetails.getRemittanceId();
+                    Assert.assertNotNull(paymentId);
+                    if(paymentDetails.getCreditedAmount()!=null)
+                        assertEquals ( paymentDetails.getCreditedAmount().getAmount(), ((Proposal) proposal.get()).getCreditedAmount().getAmount());
+                    logger.info("Payment with quote is successful, paymentId is {}", paymentId);
+                } else {
+                    Assert.fail("Payment with quote has failed as Payment API has failed");
+                    logger.info("Payment with quote has failed as Payment API has failed");
+                }
+            }
+            else {
+                Assert.fail("Payment with quote has failed as quotes API has failed");
+                logger.info("Payment with quote has failed as quotes API has failed");
+            }
+        } catch (ServiceException re){
+            Assert.fail(re.getMessage());
+            logger.error("Payment with quote has failed for the error {}", re.getMessage());
+        }
+    }
+
+    /*
+      #Usecase - 10 - **ERROR HANDLING IN JSON FORMAT**
+      Payment can fail for various reasons, this scenario is added so that user should know what to expect where there is a failure
+      Refer https://developer.mastercard.com/documentation/mastercard-send-cross-border/1#error-codes for details
+   */
+    @Test
+    public void testErrorHandlingInJsonFormat() {
+        logger.info("Running Usecase - 10, ERROR HANDLING IN JSON FORMAT.");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        try {
+            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataRejectedStatus();
+            remittanceAPI.makePayment(headers, requestParams, paymentRequest);
+            Assert.fail("Payment has to fail for wrong proposal ID");
+        } catch (ServiceException se){
+            Errors errors = se.getErrors();
+            Error error = errors.getError();
+            Assert.assertFalse(error== null);
+            if( error != null) {
+                assertEquals("proposal_id", error.getSource());
+                assertEquals("DECLINE", error.getReasonCode());
+            }
+            logger.error("Payment with quote has failed for the error {}", se.getMessage());
+        }
     }
 
 }

@@ -57,7 +57,7 @@ public class QuotesAPITest {
 
         /* set the input */
         try {
-            QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuote();
+            QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncluded();
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
             QuotesResponse quotesResponse = quotesAPI.getQuote( headers, requestParams, request);
@@ -66,10 +66,14 @@ public class QuotesAPITest {
             if ( proposal.isPresent()) {
                 logger.info("ProposalId for the quotes are : {}", ((Proposal) proposal.get()).getProposalId());
                 Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
+                //This is to verify that the payment amount and the charged amount are equal when fees are included in the quote request
+                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()),Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getAmount()));
+
             } else {
                 logger.info("Quotes request has failed, ProposalId does not exist");
                 Assert.fail("Quotes request has failed, ProposalId does not exist");
             }
+
         }
         catch (ServiceException re){
             logger.error("Quotes request failed as : {}", re.getMessage());
@@ -95,6 +99,10 @@ public class QuotesAPITest {
             if ( proposal.isPresent()) {
                 logger.info("ProposalId for the quotes are : {}", ((Proposal) proposal.get()).getProposalId());
                 Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
+                //This is to verify that the charged amount is greater than the payment amount when fees are not included in the quote request
+                Assert.assertTrue(Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getAmount()) > Double.valueOf(request.getRemittanceAmount().getAmount()));
+                //This is to verify that the payment amount and the principal amount are equal when fees are not included in the quote request
+                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getPrincipalAmount().getAmount())));
             } else {
                 logger.info("Quotes request has failed, ProposalId does not exist");
                 Assert.fail("Quotes request has failed, ProposalId does not exist");
@@ -117,7 +125,6 @@ public class QuotesAPITest {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
-
         /* set the input */
         try {
             QuotesRequest request = CrossBorderAPITestHelper.setDataForReverseQuote();
@@ -126,6 +133,9 @@ public class QuotesAPITest {
             if ( proposal.isPresent()) {
                 logger.info("Quotes request is successful, ProposalId : {}", ((Proposal) proposal.get()).getProposalId());
                 Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
+                //This is to verify that the payment amount and the credited amount are equal when we send reverse quote
+                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getCreditedAmount().getAmount())));
+
             } else {
                 logger.info("Quotes request has failed, ProposalId does not exist");
                 Assert.fail("Quotes request has failed, ProposalId does not exist");
@@ -151,7 +161,75 @@ public class QuotesAPITest {
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
             /* set the input */
             try {
-                QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuote();
+                QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncluded();
+                //This API call makes sure your request is encrypted before being sent over the network
+                QuotesResponse quotesResponse = quotesAPI.getQuoteWithEncryption(headers, requestParams, request);
+                Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
+                if (proposal.isPresent()) {
+                    logger.info("Quotes request is successful, ProposalId : {}", ((Proposal) proposal.get()).getProposalId());
+                    Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
+                } else {
+                    logger.info("Quotes request has failed, ProposalId does not exist");
+                    Assert.fail("Quotes request has failed, ProposalId does not exist");
+                }
+            } catch (ServiceException re) {
+                logger.error("Quotes request failed as : {}", re.getMessage());
+                Assert.fail(re.getMessage());
+            }
+        }
+        else
+            logger.info("To run this use cases, Set runWithEncryptedPayload=true and other encryption / decryption keys in mastercard-api.properties.");
+    }
+
+    /*
+       #Usecase - 5 - **REVERSE QUOTE IN JSON FORMAT**
+     */
+    @Test
+    public void testRequestReverseQuoteInJsonFormat() {
+        logger.info("Running Usecase - 5, REVERSE QUOTE WIH JSON.");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        /* set the input */
+        try {
+            QuotesRequest request = CrossBorderAPITestHelper.setDataForReverseQuote();
+            QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
+            Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
+            if ( proposal.isPresent()) {
+                logger.info("Quotes request is successful, ProposalId : {}", ((Proposal) proposal.get()).getProposalId());
+                Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
+                //This is to verify that the payment amount and the credited amount are equal when we send reverse quote
+                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getCreditedAmount().getAmount())));
+
+            } else {
+                logger.info("Quotes request has failed, ProposalId does not exist");
+                Assert.fail("Quotes request has failed, ProposalId does not exist");
+            }
+        }
+        catch (ServiceException re){
+            logger.error("Quotes request failed as : {}", re.getMessage());
+            Assert.fail(re.getMessage());
+        }
+    }
+
+    /*
+        #Usecase - 6 - **QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT**
+        Any type of quote can be encrypted, here we have shown a forward quote for reference.
+        Request and response will be in JSON format
+      */
+    @Test
+    public void testRequestQuoteEncryptedInJsonFormat() {
+        if (apiConfig.getRunWithEncryptedPayload()) {
+            logger.info("Running Usecase - 6, QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT.");
+            Map<String, Object> requestParams = new HashMap<>();
+            requestParams.put("partner-id", partnerId);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+            /* set the input */
+            try {
+                QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncluded();
                 //This API call makes sure your request is encrypted before being sent over the network
                 QuotesResponse quotesResponse = quotesAPI.getQuoteWithEncryption(headers, requestParams, request);
                 Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();

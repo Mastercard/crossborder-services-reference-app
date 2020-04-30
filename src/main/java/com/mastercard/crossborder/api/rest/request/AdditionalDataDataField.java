@@ -1,10 +1,14 @@
 package com.mastercard.crossborder.api.rest.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
+@JsonPropertyOrder(value = {"fieldId", "value"})
 @XmlType(name = "AdditionalDataDataField", propOrder = {"fieldId", "value"})
 @XmlRootElement(name = "data_field")
 public class AdditionalDataDataField implements Serializable {
@@ -18,6 +22,7 @@ public class AdditionalDataDataField implements Serializable {
     private String fieldId;
     private String value;
 
+    @JsonProperty(value = "name")
     @XmlElement(name = "name", required = true, nillable = false)
     public String getFieldId() {
         return fieldId;
@@ -27,6 +32,7 @@ public class AdditionalDataDataField implements Serializable {
         this.fieldId = fieldId;
     }
 
+    @JsonProperty(value = "value")
     @XmlElement(name = "value", required = true, nillable = false)
     public String getValue() {
         return value;
