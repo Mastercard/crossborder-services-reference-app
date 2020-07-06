@@ -187,9 +187,6 @@ public class RemittanceAPITest  {
                 String paymentId = paymentDetails.getRemittanceId();
                 Assert.assertNotNull(paymentId);
                 logger.info("One shot payment is successful, paymentId is {}", paymentId);
-                if(paymentDetails.getCreditedAmount()!=null)
-                    Assert.assertEquals(Double.valueOf(paymentRequest.getPaymentAmount().getAmount()), Double.valueOf(paymentDetails.getCreditedAmount().getAmount()));
-                logger.info("One shot payment is successful, paymentId is {}", paymentId);
             } else {
                 Assert.fail("One shot payment has failed.");
                 logger.info("One shot payment has failed.");
