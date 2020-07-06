@@ -133,9 +133,6 @@ public class QuotesAPITest {
             if ( proposal.isPresent()) {
                 logger.info("Quotes request is successful, ProposalId : {}", ((Proposal) proposal.get()).getProposalId());
                 Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
-                //This is to verify that the payment amount and the credited amount are equal when we send reverse quote
-                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getCreditedAmount().getAmount())));
-
             } else {
                 logger.info("Quotes request has failed, ProposalId does not exist");
                 Assert.fail("Quotes request has failed, ProposalId does not exist");
@@ -200,9 +197,6 @@ public class QuotesAPITest {
             if ( proposal.isPresent()) {
                 logger.info("Quotes request is successful, ProposalId : {}", ((Proposal) proposal.get()).getProposalId());
                 Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
-                //This is to verify that the payment amount and the credited amount are equal when we send reverse quote
-                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getCreditedAmount().getAmount())));
-
             } else {
                 logger.info("Quotes request has failed, ProposalId does not exist");
                 Assert.fail("Quotes request has failed, ProposalId does not exist");
