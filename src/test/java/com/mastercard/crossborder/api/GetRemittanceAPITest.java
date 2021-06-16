@@ -99,7 +99,7 @@ public class GetRemittanceAPITest  {
         logger.info("Running Usecase - 2, RETRIEVE PAYMENT BY OI PROVIDED TRANSACTION REFERENCE ID.");
         try {
             Map<String, Object> paymentParams = new HashMap<>();
-            paymentParams.put(partnerIdStr, "partnerId");
+            paymentParams.put(partnerIdStr, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
             RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForReverseQuote();
@@ -181,7 +181,7 @@ public class GetRemittanceAPITest  {
         logger.info("Running Usecase - 4, RETRIEVE PAYMENT BY OI PROVIDED TRANSACTION REFERENCE ID IN JSON FORMAT.");
         try {
             Map<String, Object> paymentParams = new HashMap<>();
-            paymentParams.put(partnerIdStr, "partnerId");
+            paymentParams.put(partnerIdStr, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForReverseQuote();

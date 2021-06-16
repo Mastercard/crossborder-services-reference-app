@@ -6,8 +6,8 @@
     <groupId>com.mastercard</groupId>
     <artifactId>crossborder-ref-app</artifactId>
     <version>1.0.0</version>
-    <name>MasterCard Send - XB - RefApp - API</name>
-    <description>This is cross-border reference application</description>
+    <name>MasterCard Cross-Border Services - Reference App</name>
+    <description>This is cross-border services reference application</description>
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
