@@ -1,7 +1,10 @@
 package com.mastercard.crossborder.api.rest;
 
+import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
+import com.mastercard.crossborder.api.rest.response.EncryptedPayload;
 import com.mastercard.crossborder.api.rest.response.FxRateResponse;
+import com.mastercard.crossborder.api.service.EncryptionService;
 import com.mastercard.crossborder.api.service.RestClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +18,14 @@ import java.util.Map;
 @Component
 public class PullCardedAPI {
 
-
     @Autowired
     RestClientService restClientService;
+
+    @Autowired
+    EncryptionService encryptionService;
+
+    @Autowired
+    MastercardApiConfig mastercardApiConfig;
 
     private static final Logger logger = LoggerFactory.getLogger(PullCardedAPI.class);
 
@@ -26,13 +34,14 @@ public class PullCardedAPI {
 
     public FxRateResponse getFxRates(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
         logger.info("Calling retrieve FX Rates API");
-        return (FxRateResponse) restClientService.service(FXRATE, headers, HttpMethod.GET, requestParams,null, FxRateResponse.class);
+
+        return (FxRateResponse) restClientService.service(FXRATE, headers, HttpMethod.GET, requestParams, null, FxRateResponse.class, false);
     }
 
-
     public FxRateResponse getFxRatesEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
+        logger.info("Calling retrieve FX Rates API with Encryption");
 
-        logger.info("Calling retrieve FX Rates API");
-        return (FxRateResponse) restClientService.serviceEncryption(FXRATE, headers, HttpMethod.GET, requestParams, null, FxRateResponse.class);
+        EncryptedPayload response = (EncryptedPayload) restClientService.service(FXRATE, headers, HttpMethod.GET, requestParams, null, EncryptedPayload.class, true);
+        return (FxRateResponse) encryptionService.getDecryptedResponse(response, headers, FxRateResponse.class);
     }
 }

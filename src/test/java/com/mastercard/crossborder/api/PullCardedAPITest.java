@@ -49,12 +49,12 @@ public class PullCardedAPITest {
 
 
     /*
-        #Usecase - 1 - **Get Fx Rates for partner ID**
+        #Usecase - 1.A - **Get Fx Rates for partner ID**
         It will pull all the Fx Rates related to Partner ID
     */
     @Test
     public void testGetFxRatesInJsonFormat() {
-        logger.info("Running Usecase - 1, RETRIEVE FX RATES IN JSON FORMAT.");
+        logger.info("Running Usecase - 1.A, RETRIEVE FX RATES IN JSON FORMAT.");
         try {
             Map<String, Object> paymentParams = new HashMap<>();
             paymentParams.put(partnerIdStr, partnerId);
@@ -79,18 +79,18 @@ public class PullCardedAPITest {
     }
 
     /*
-         #Usecase - 2 - **RETRIEVE FX RATES IN ENCRYPTED FORM**
+         #Usecase - 1.B - **RETRIEVE FX RATES IN ENCRYPTED FORM**
          All these calls are encrypted.
        */
     @Test
     public void testGetFxRatesWithEncryption() {
         if (apiConfig.getRunWithEncryptedPayload()) {
-            logger.info("Running Usecase - 2, RETRIEVE FX RATES IN ENCRYPTED FORM.");
+            logger.info("Running Usecase - 1.B, RETRIEVE FX RATES IN ENCRYPTED FORM.");
             try {
                 Map<String, Object> FXCardRateParams = new HashMap<>();
                 FXCardRateParams.put(partnerIdStr, partnerId);
                 HttpHeaders headers = new HttpHeaders();
-                headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+                headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
                 Map<String, Object> requestParams = new HashMap<>();
                 requestParams.put(partnerIdStr, partnerId);
                 FxRateResponse retrieveGetFxRates = pullCardedAPI.getFxRatesEncryption(headers, requestParams);

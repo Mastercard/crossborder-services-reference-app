@@ -1,8 +1,11 @@
 package com.mastercard.crossborder.api.rest;
 
+import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.request.RemittanceRequest;
+import com.mastercard.crossborder.api.rest.response.EncryptedPayload;
 import com.mastercard.crossborder.api.rest.response.RemittanceResponse;
+import com.mastercard.crossborder.api.service.EncryptionService;
 import com.mastercard.crossborder.api.service.RestClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +31,31 @@ public class RemittanceAPI {
     @Autowired
     RestClientService restClientService;
 
+    @Autowired
+    EncryptionService encryptionService;
+
+    @Autowired
+    MastercardApiConfig mastercardApiConfig;
+
     public RemittanceResponse makePayment(HttpHeaders headers, Map<String, Object> requestParams, RemittanceRequest payment) throws ServiceException {
 
         logger.info("Calling payment API");
-        return (RemittanceResponse) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, payment, RemittanceResponse.class);
+        String requestStr = getRequestString(headers, payment);
+        return (RemittanceResponse) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, RemittanceResponse.class, false);
     }
+
     public RemittanceResponse makePaymentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, RemittanceRequest payment) throws ServiceException {
 
-        logger.info("Calling payment API");
-        return (RemittanceResponse) restClientService.serviceEncryption(PAYMENT, headers, HttpMethod.POST, requestParams, payment, RemittanceResponse.class);
+        logger.info("Calling payment API with Encryption");
+
+        String requestStr = getRequestString(headers, payment);
+        /*Encrypt the request payload and return */
+        requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
+        EncryptedPayload response = (EncryptedPayload) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class, true);
+        return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
+    }
+
+    private String getRequestString(HttpHeaders headers, RemittanceRequest payment) throws ServiceException {
+        return restClientService.convertToString(headers, payment);
     }
 }
