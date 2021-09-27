@@ -28,8 +28,8 @@ openssl pkcs8 -topk8 -inform PEM -outform DER -in <filename2>.text.pem -out <fil
 ### Setup  
 - Create an account at [Mastercard Developers](https://developer.mastercard.com/account/sign-up).  
 - Create a new project and add `Mastercard Cross-Border Services` API to your project.   
-- Configure project and download signing key.  
-- Select converted .p12 file from .pem file and copy it to `src\main\resources` in the project folder.
+- Configure project and download signing key. It will download the zip file.  
+- Select .p12 file from zip and copy it to `src\main\resources` in the project folder.
 - Open `[project folder]\src\main\resources\mastercard-api.properties` and configure below parameters.
     
     >**mastercard.api.environment.sandbox.endPointURL=http://sandbox.api.mastercard.com**, its a static field, will be used as a host to make API calls.
