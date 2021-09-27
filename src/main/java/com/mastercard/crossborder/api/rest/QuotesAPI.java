@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 
 /*
@@ -39,23 +38,18 @@ public class QuotesAPI {
 
     public QuotesResponse getQuote(HttpHeaders headers, Map<String, Object> requestParams, QuotesRequest quotesRequest) throws ServiceException {
         logger.info("Calling Quotes API");
-        String requestStr = getRequestString(headers, quotesRequest);
+        String requestStr = restClientService.convertToString(headers, quotesRequest);
         return (QuotesResponse) restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, requestStr, QuotesResponse.class, false);
     }
 
     public QuotesResponse getQuoteWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, QuotesRequest quotesRequest) throws ServiceException {
         logger.info("Calling Quotes API with Encryption");
 
-        String requestStr = getRequestString(headers, quotesRequest);
+        String requestStr = restClientService.convertToString(headers, quotesRequest);
         /*Encrypt the request payload and return */
         requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
 
         EncryptedPayload response = (EncryptedPayload) restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class, true);
         return (QuotesResponse) encryptionService.getDecryptedResponse(response, headers, QuotesResponse.class);
     }
-
-    private String getRequestString(HttpHeaders headers, QuotesRequest quotesRequest) throws ServiceException {
-        return restClientService.convertToString(headers, quotesRequest);
-    }
-
 }

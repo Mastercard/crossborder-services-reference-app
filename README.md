@@ -1,6 +1,6 @@
-## Reference Implementation for Mastercard Send Cross-border APIs
+## Reference Implementation for Mastercard Cross-Border Services APIs
   
-This is a reference application that demonstrates how Cross-border APIs can be used for the supported transaction types. Please see here for details on the APIs: [Mastercard Developers](https://developer.mastercard.com/send-cross-border/documentation/). 
+This is a reference application that demonstrates how Cross-border APIs can be used for the supported transaction types. Please see here for details on the APIs: [Mastercard Developers](https://developer.mastercard.com/cross-border-services/documentation/). 
 This application illustrates connecting to the cross-border APIs with / without encryption.
 Both the approaches require consumer key and .p12 file as received from [Mastercard Developers](https://developer.mastercard.com/dashboard).
 
@@ -27,7 +27,7 @@ openssl pkcs8 -topk8 -inform PEM -outform DER -in <filename2>.text.pem -out <fil
   
 ### Setup  
 - Create an account at [Mastercard Developers](https://developer.mastercard.com/account/sign-up).  
-- Create a new project and add `Mastercard Send Cross Border` API to your project.   
+- Create a new project and add `Mastercard Cross-Border Services` API to your project.   
 - Configure project and download signing key.  
 - Select converted .p12 file from .pem file and copy it to `src\main\resources` in the project folder.
 - Open `[project folder]\src\main\resources\mastercard-api.properties` and configure below parameters.
@@ -60,8 +60,8 @@ openssl pkcs8 -topk8 -inform PEM -outform DER -in <filename2>.text.pem -out <fil
       
 ### Build and Run   
 `Using IDE`
- - Open project send-api-crossborder-ref-app and dependencies will be downloaded automatically. Open the maven window in IDE,
-	 -  Select MasterCard Send - XB - RefApp - API
+ - Open reference application in IDE and dependencies will be downloaded automatically. Open the maven window,
+	 -  Select MasterCard Cross-Border Services - Reference App
 	 -  Select Life cycle 
 	 -  Run clean and install
 
@@ -76,7 +76,7 @@ openssl pkcs8 -topk8 -inform PEM -outform DER -in <filename2>.text.pem -out <fil
 
 ### Use cases
 Main use cases in cross-border APIs are Quote, Payment, Retrieve payment and Cancel payment. Below are few variations.   
-A] [Request a quote](https://developer.mastercard.com/send-cross-border/documentation/api-ref/quotes-api/):
+A] [Request a quote](https://developer.mastercard.com/cross-border-services/documentation/api-ref/quotes-api/):
 
 Below are the different flavors available for a quote transaction:
 
@@ -113,7 +113,7 @@ e.g. If OI specifies beneficiary should receive 1000 INR(assuming beneficiary's 
 - Quotes response will also be in encrypted form.
 - Refer to #Usecase - 5 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
 
-B] [Make payment](https://developer.mastercard.com/send-cross-border/documentation/api-ref/payment-api/):   
+B] [Make payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/payment-api/):   
 Payment can be made in two ways. Make payment using quote, One shot payment (payment without quotes).
 
 > Case 1: **PAYMENT WITH FORWARD QUOTE**
@@ -162,7 +162,7 @@ Payment can be made in two ways. Make payment using quote, One shot payment (pay
 - OI wants to make a direct payment with any of the above types.
 - Whereas the payment can fail for various reasons.
 - This use case just shows one of the example of such failure.
-- You can refer [Error Codes](https://developer.mastercard.com/send-cross-border/documentation/api-ref/error-codes/) to understand different types of errors. 
+- You can refer [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-codes/) to understand different types of errors. 
 - Please refer to #Usecase - 7 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
 > Case 8:  **PAYMENT WITH FORWARD QUOTE IN JSON FORMAT**
@@ -175,10 +175,10 @@ Payment can be made in two ways. Make payment using quote, One shot payment (pay
 - OI wants to make a direct payment with any of the above types.
 - Whereas the payment can fail for various reasons.
 - This use case just shows one of the example of such failure where media type is Json.
-- You can refer [Error Codes](https://developer.mastercard.com/send-cross-border/documentation/api-ref/error-codes/) to understand different types of errors. 
+- You can refer [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-codes/) to understand different types of errors. 
 - Please refer to #Usecase - 9 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
-C] [Retrieve payment](https://developer.mastercard.com/send-cross-border/documentation/api-ref/retrieve-payment-api/):
+C] [Retrieve payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/retrieve-payment-api/):
 Status of a payment can be seen by retrieve payment API calls. There are two ways of knowing the details of payment,
 Get payment by ID and Get payment by reference.
 
@@ -199,7 +199,7 @@ Get payment by ID and Get payment by reference.
 - transaction_reference passed as input to payment can be used to get the payment details.  
 - Refer to #Usecase - 3 in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
 
-D] [Cancel payment](https://developer.mastercard.com/send-cross-border/documentation/api-ref/cancel-payment-api/):
+D] [Cancel payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/cancel-payment-api/):
 This facility of cancelling a payment is available only for some mobile money providers and cash-out. It is not available for banks account channels.
 Payment can be cancelled if the payment is in 'Pending' status.
 > Case 1: **CANCEL A PAYMENT**
@@ -213,11 +213,11 @@ Payment can be cancelled if the payment is in 'Pending' status.
 - You can use the payment Id returned while making a payment. 
 - Refer to #Usecase - 3 in [CancelRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\CancelRemittanceAPITest.java) for details.
 
-E] [Carded Rate API](https://developer.mastercard.com/send-cross-border/documentation/api-ref/carded-rate-api/):
+E] [Carded Rate API](https://developer.mastercard.com/cross-border-services/documentation/api-ref/carded-rate-api/):
 Carded Rate is offered as an opt-in functionality to obtain the FX rates for the currency pairs that you, as the originating institution (OI) support, for a valid period of time.
 
-- [FX Rate Pull](https://developer.mastercard.com/send-cross-border/documentation/api-ref/carded-rate-api/#fx-rate-pull):
-The FX Rate Pull API will require you to create a scheduler that will call this API based on the refresh times per currency pair provided by Mastercard Send.
+- [FX Rate Pull](https://developer.mastercard.com/cross-border-services/documentation/api-ref/carded-rate-api/#fx-rate-pull):
+The FX Rate Pull API will require you to create a scheduler that will call this API based on the refresh times per currency pair provided by Mastercard Cross-Border services.
 This API supports only JSON.
 > Case 1: **PULL CARDED RATE**
 - OI can call this method to get FX rates
@@ -256,12 +256,10 @@ Get All Accounts Balances and Get account balance by ID.
 ### Implementation details for cross-border APIs
 To develop a client application using cross border APIs, refer below documentation. All the cross-border APIs are REST APIs that support both XML and JSON as a payload.   
 
-- [Request a quote](https://developer.mastercard.com/send-cross-border/documentation/api-ref/quotes-api/) (HTTP POST)
-- [Make payment](https://developer.mastercard.com/send-cross-border/documentation/api-ref/payment-api/) (HTTP POST)
-- [Retrieve payment](https://developer.mastercard.com/send-cross-border/documentation/api-ref/retrieve-payment-api/) (HTTP GET)
-- [Cancel payment](https://developer.mastercard.com/send-cross-border/documentation/api-ref/cancel-payment-api/) (HTTP POST)
-- [Balance Api](https://developer.mastercard.com/cross-border-services/documentation/api-ref/balance-api/) (HTTP GET)
-
+- [Request a quote](https://developer.mastercard.com/cross-border-services/documentation/api-ref/quotes-api/) (HTTP POST)
+- [Make payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/payment-api/) (HTTP POST)
+- [Retrieve payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/retrieve-payment-api/) (HTTP GET)
+- [Cancel payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/cancel-payment-api/) (HTTP POST)
 
 To understand implementation details, you can refer to makePayment() in [RemittanceAPI.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java).
 
@@ -288,7 +286,7 @@ Cross border APIs support JWE encryption. To develop an application that uses cr
 
 **Step4**: Make an API call Pass with this encrypted request entity and you will get the encrypted response.
 
-**Step5**: You can decrypt the response by calling EncryptionUtils.jweDecrypt(). Parameters required for decryption are key (.key) file. For more information on decryption keys, contact mastercard support team. There are multiple ways of decrypting a response. Reference implementation talks about only one type of decryption. Please refer https://developer.mastercard.com/page/generate-the-private-and-public-key-for-use-with-sdk-for-authorization-api for more details.
+**Step5**: You can decrypt the response by calling EncryptionUtils.jweDecrypt(). Parameters required for decryption are key (.key) file. For more information on decryption keys, contact mastercard support team. There are multiple ways of decrypting a response. Reference implementation talks about only one type of decryption. Please refer https://developer.mastercard.com/cross-border-services/documentation/api-ref/encryption/ for more details.
 
 To understand implementation details of encryption and decryption, you can refer to makePaymentWithEncryption() in [RemittanceAPI.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java).
 

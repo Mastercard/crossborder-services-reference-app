@@ -40,7 +40,7 @@ public class RemittanceAPI {
     public RemittanceResponse makePayment(HttpHeaders headers, Map<String, Object> requestParams, RemittanceRequest payment) throws ServiceException {
 
         logger.info("Calling payment API");
-        String requestStr = getRequestString(headers, payment);
+        String requestStr = restClientService.convertToString(headers, payment);
         return (RemittanceResponse) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, RemittanceResponse.class, false);
     }
 
@@ -48,14 +48,10 @@ public class RemittanceAPI {
 
         logger.info("Calling payment API with Encryption");
 
-        String requestStr = getRequestString(headers, payment);
+        String requestStr = restClientService.convertToString(headers, payment);
         /*Encrypt the request payload and return */
         requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
         EncryptedPayload response = (EncryptedPayload) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class, true);
         return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
-    }
-
-    private String getRequestString(HttpHeaders headers, RemittanceRequest payment) throws ServiceException {
-        return restClientService.convertToString(headers, payment);
     }
 }

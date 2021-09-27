@@ -39,22 +39,18 @@ public class CancelRemittanceAPI {
 
     public CancelResponse cancelPayment(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest) throws ServiceException {
         logger.info("Calling cancel payment API");
-        String requestStr = getRequestString(headers, cancelRequest);
+        String requestStr = restClientService.convertToString(headers, cancelRequest);
         return (CancelResponse) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, requestStr, CancelResponse.class, false);
     }
 
 
     public CancelResponse cancelPaymentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest ) throws ServiceException {
         logger.info("Calling cancel payment API with Encryption");
-        String requestStr = getRequestString(headers, cancelRequest);
+        String requestStr = restClientService.convertToString(headers, cancelRequest);
 
         /*Encrypt the request payload and return */
         requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
         EncryptedPayload response = (EncryptedPayload) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class, true);
         return (CancelResponse) encryptionService.getDecryptedResponse(response, headers, CancelResponse.class);
-    }
-
-    private String getRequestString(HttpHeaders headers, CancelRemittance cancelRequest) throws ServiceException {
-        return restClientService.convertToString(headers, cancelRequest);
     }
 }

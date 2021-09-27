@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 
 /*
@@ -42,17 +41,13 @@ public class GetRemittanceAPI {
     public RemittanceResponse getPaymentById(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by ID API");
-        return getPayment(headers, requestParams, GET_PAYMENT_BY_ID);
+        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class, false);
     }
 
     public RemittanceResponse getPaymentByRef(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by reference API");
-        return getPayment(headers, requestParams, GET_PAYMENT_BY_REF);
-    }
-
-    private RemittanceResponse getPayment(HttpHeaders headers, Map<String, Object> requestParams, String baseURL) throws ServiceException {
-        return (RemittanceResponse) restClientService.service(baseURL, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class, false);
+        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class, false);
     }
 
     public RemittanceResponse getPaymentByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
