@@ -57,7 +57,7 @@ public class GetRemittanceAPI {
 
     public RemittanceResponse getPaymentByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
-        logger.info("Calling retrieve payment by ID API");
+        logger.info("Calling retrieve payment by ID API with Encryption");
         EncryptedPayload response = (EncryptedPayload) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, EncryptedPayload.class, true);
 
         return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
@@ -65,7 +65,7 @@ public class GetRemittanceAPI {
 
     public RemittanceResponse getPaymentByRefWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
-        logger.info("Calling retrieve payment by ID API");
+        logger.info("Calling retrieve payment by ID API with Encryption");
         EncryptedPayload response = (EncryptedPayload) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams, null, EncryptedPayload.class, true);
 
         return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);

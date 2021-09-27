@@ -38,14 +38,14 @@ public class CancelRemittanceAPI {
     MastercardApiConfig mastercardApiConfig;
 
     public CancelResponse cancelPayment(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest) throws ServiceException {
-        logger.info("Calling cancel payment API that supports encryption ");
+        logger.info("Calling cancel payment API");
         String requestStr = getRequestString(headers, cancelRequest);
         return (CancelResponse) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, requestStr, CancelResponse.class, false);
     }
 
 
     public CancelResponse cancelPaymentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest ) throws ServiceException {
-        logger.info("Calling cancel payment API");
+        logger.info("Calling cancel payment API with Encryption");
         String requestStr = getRequestString(headers, cancelRequest);
 
         /*Encrypt the request payload and return */
