@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
+
 /*
     This class is to call to cancel payment API.
     If the payment is initiated and it is not yet successful
@@ -40,17 +42,17 @@ public class CancelRemittanceAPI {
     public CancelResponse cancelPayment(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest) throws ServiceException {
         logger.info("Calling cancel payment API");
         String requestStr = restClientService.convertToString(headers, cancelRequest);
-        return (CancelResponse) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, requestStr, CancelResponse.class, false);
+        return (CancelResponse) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, requestStr, CancelResponse.class);
     }
 
 
     public CancelResponse cancelPaymentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest ) throws ServiceException {
         logger.info("Calling cancel payment API with Encryption");
         String requestStr = restClientService.convertToString(headers, cancelRequest);
-
         /*Encrypt the request payload and return */
         requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
-        EncryptedPayload response = (EncryptedPayload) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class, true);
+        headers.add(ENCRYPTED_HEADER.toString(), "true");
+        EncryptedPayload response = (EncryptedPayload) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class);
         return (CancelResponse) encryptionService.getDecryptedResponse(response, headers, CancelResponse.class);
     }
 }

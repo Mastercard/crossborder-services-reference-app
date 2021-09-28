@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
+
 /*
     This class is to make a call to payment API.
     There are two ways by which payment can be made
@@ -41,7 +43,7 @@ public class RemittanceAPI {
 
         logger.info("Calling payment API");
         String requestStr = restClientService.convertToString(headers, payment);
-        return (RemittanceResponse) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, RemittanceResponse.class, false);
+        return (RemittanceResponse) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, RemittanceResponse.class);
     }
 
     public RemittanceResponse makePaymentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, RemittanceRequest payment) throws ServiceException {
@@ -51,7 +53,8 @@ public class RemittanceAPI {
         String requestStr = restClientService.convertToString(headers, payment);
         /*Encrypt the request payload and return */
         requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
-        EncryptedPayload response = (EncryptedPayload) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class, true);
+        headers.add(ENCRYPTED_HEADER.toString(), "true");
+        EncryptedPayload response = (EncryptedPayload) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class);
         return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
     }
 }

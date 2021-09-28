@@ -1,7 +1,8 @@
 package com.mastercard.crossborder.api.constants;
 
 public enum MastercardHttpHeaders  {
-    ENCRYPTED_HEADER("x-encrypted");
+    ENCRYPTED_HEADER("x-encrypted"),
+    X_MC_ROUTING("x-mc-routing");
     private final String text;
 
     MastercardHttpHeaders(String text) {

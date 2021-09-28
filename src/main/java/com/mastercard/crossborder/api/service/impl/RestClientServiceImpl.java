@@ -47,6 +47,7 @@ import java.security.cert.CertificateException;
 import java.util.Map;
 
 import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
+import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.X_MC_ROUTING;
 
 @Component
 public class RestClientServiceImpl<T> implements RestClientService<T> {
@@ -60,7 +61,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
     MastercardApiConfig mastercardApiConfig;
 
     @Override
-    public T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, String request, Class<T> responseClass, Boolean encryptionFlag) throws ServiceException {
+    public T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, String request, Class<T> responseClass) throws ServiceException {
 
         String url = buildURL(baseURL, requestParams);
 
@@ -68,7 +69,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         String oAuthString = authenticate(url, httpMethod, request);
 
         /*Build requestEntity */
-        HttpEntity<MultiValueMap<String, String>> requestEntity = generateRequestEntity(encryptionFlag , headers, request, oAuthString);
+        HttpEntity<MultiValueMap<String, String>> requestEntity = generateRequestEntity(headers, request, oAuthString);
         logger.info("Request payload : {}", requestEntity);
 
         /*make API call*/
@@ -98,9 +99,9 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
 
     }
 
-    private HttpEntity<MultiValueMap<String, String>> generateRequestEntity(Boolean encrypt, HttpHeaders headers, String requestStr, String oAuthString) {
+    private HttpEntity<MultiValueMap<String, String>> generateRequestEntity(HttpHeaders headers, String requestStr, String oAuthString) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("x-mc-routing","nextgen-apigw");
+        httpHeaders.add(X_MC_ROUTING.toString(),"nextgen-apigw");
         httpHeaders.add(HttpHeaders.AUTHORIZATION, oAuthString);
         //if content type is not already added, use application_xml
         if(headers.containsKey(HttpHeaders.CONTENT_TYPE) && null != headers.getContentType()) {
@@ -108,12 +109,8 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         } else {
             httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
         }
-
-        //Below header need to be added to process the encryption request
-        if (processForEncryption(encrypt))
-        {
+        if(headers.containsKey(ENCRYPTED_HEADER.toString()))
             httpHeaders.add(ENCRYPTED_HEADER.toString(), "true");
-        }
         return (HttpEntity<MultiValueMap<String, String>>) new HttpEntity(requestStr, httpHeaders);
     }
 
@@ -133,10 +130,6 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         }
 
         return response;
-    }
-
-    private boolean processForEncryption( Boolean encrypt){
-        return encrypt && mastercardApiConfig.getRunWithEncryptedPayload();
     }
 
     public String convertToString(HttpHeaders headers, Object data) throws ServiceException {

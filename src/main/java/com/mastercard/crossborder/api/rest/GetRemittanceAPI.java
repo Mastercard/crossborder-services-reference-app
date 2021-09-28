@@ -14,6 +14,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import java.util.Map;
 
+import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
+
 /*
     This class is to get payment API.
     There are two ways by which get payment can be achieved
@@ -41,19 +43,21 @@ public class GetRemittanceAPI {
     public RemittanceResponse getPaymentById(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by ID API");
-        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class, false);
+        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class);
     }
 
     public RemittanceResponse getPaymentByRef(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by reference API");
-        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class, false);
+        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class);
     }
 
     public RemittanceResponse getPaymentByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by ID API with Encryption");
-        EncryptedPayload response = (EncryptedPayload) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, EncryptedPayload.class, true);
+        if (mastercardApiConfig.getRunWithEncryptedPayload())
+            headers.add(ENCRYPTED_HEADER.toString(), "true");
+        EncryptedPayload response = (EncryptedPayload) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, EncryptedPayload.class);
 
         return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
     }
@@ -61,7 +65,8 @@ public class GetRemittanceAPI {
     public RemittanceResponse getPaymentByRefWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by ID API with Encryption");
-        EncryptedPayload response = (EncryptedPayload) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams, null, EncryptedPayload.class, true);
+        headers.add(ENCRYPTED_HEADER.toString(), "true");
+        EncryptedPayload response = (EncryptedPayload) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams, null, EncryptedPayload.class);
 
         return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
     }

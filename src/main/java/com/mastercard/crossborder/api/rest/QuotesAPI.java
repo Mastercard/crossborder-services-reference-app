@@ -15,6 +15,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import java.util.Map;
 
+import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
+
 /*
     This class is to make a Quotes API call.
     Quotes can be requested for given partnerID, amount and currency.
@@ -39,7 +41,7 @@ public class QuotesAPI {
     public QuotesResponse getQuote(HttpHeaders headers, Map<String, Object> requestParams, QuotesRequest quotesRequest) throws ServiceException {
         logger.info("Calling Quotes API");
         String requestStr = restClientService.convertToString(headers, quotesRequest);
-        return (QuotesResponse) restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, requestStr, QuotesResponse.class, false);
+        return (QuotesResponse) restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, requestStr, QuotesResponse.class);
     }
 
     public QuotesResponse getQuoteWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, QuotesRequest quotesRequest) throws ServiceException {
@@ -48,8 +50,8 @@ public class QuotesAPI {
         String requestStr = restClientService.convertToString(headers, quotesRequest);
         /*Encrypt the request payload and return */
         requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
-
-        EncryptedPayload response = (EncryptedPayload) restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class, true);
+        headers.add(ENCRYPTED_HEADER.toString(), "true");
+        EncryptedPayload response = (EncryptedPayload) restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class);
         return (QuotesResponse) encryptionService.getDecryptedResponse(response, headers, QuotesResponse.class);
     }
 }

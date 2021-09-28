@@ -11,19 +11,6 @@ Both the approaches require consumer key and .p12 file as received from [Masterc
 - Java 8 and above  
 - Apache maven 3.5.x  
 - Set up the `JAVA_HOME` environment variable to match the location of your Java installation.  
-
-### Steps to create .crt and .key files from .pem and .p12 files
-- Creating .cert file from .pem file: 
-
-Encryption_cert_generation
-openssl x509 -outform der -in ./MastercardSendCrossBorderClientEncxxxxxxxxxx.pem -out ./MastercardSendCrossBorderClientEncxxxxxxxxx.crt
-
-- Decrypting using private key:
-Decryption_key_generation
- 
-openssl pkcs12 -in keyalias-encryption-mc.p12 -nocerts -out <filename1>.key.pem –nodes
-openssl rsa -in <filename1>.key.pem -out <filename2>.text.pem –text
-openssl pkcs8 -topk8 -inform PEM -outform DER -in <filename2>.text.pem -out <filename3>.key –nocrypt
   
 ### Setup  
 - Create an account at [Mastercard Developers](https://developer.mastercard.com/account/sign-up).  
@@ -57,7 +44,19 @@ openssl pkcs8 -topk8 -inform PEM -outform DER -in <filename2>.text.pem -out <fil
     >**mastercard.api.encryption.fingerPrint=**, this is the encryption key, required to encrypt a request.
        
     >**mastercard.api.decryption.keyFile=**, this is the .key file, required to decrypt a request. Add classpath for .key file, after placing it at src\main\resources in the project folder.
-      
+   
+    **Steps to create .crt and .key files from .pem and .p12 files**   
+     
+    >**Encryption certificate generation (create .crt from .pem file):**
+
+    - openssl x509 -outform der -in ./MastercardSendCrossBorderClientEncxxxxxxxxxx.pem -out ./MastercardSendCrossBorderClientEncxxxxxxxxx.crt
+
+    >**Decryption private key generation (create .key from .p12 file):**
+    
+    - openssl pkcs12 -in keyalias-encryption-mc.p12 -nocerts -out <filename1>.key.pem –nodes
+    - openssl rsa -in <filename1>.key.pem -out <filename2>.text.pem –text
+    - openssl pkcs8 -topk8 -inform PEM -outform DER -in <filename2>.text.pem -out <filename3>.key –nocrypt
+   
 ### Build and Run   
 `Using IDE`
  - Open reference application in IDE and dependencies will be downloaded automatically. Open the maven window,
@@ -224,34 +223,6 @@ This API supports only JSON.
 - For FX Rates retrieval, we need to pass partner-id in the request URL itself
 - Please refer to #Usecase for without Encryption - 1.A in [PullCardedAPITest.java](./src\test\java\com\mastercard\crossborder\api\PullCardedAPITest.java) for details.
 - Please refer to #Usecase for with Encryption - 1.B in [PullCardedAPITest.java](./src\test\java\com\mastercard\crossborder\api\PullCardedAPITest.java) for details.
-
-F] [Balance API](https://developer.mastercard.com/cross-border-services/documentation/api-ref/balance-api/):
- There are two ways of fetching the details of Accounts and Balances,
-Get All Accounts Balances and Get account balance by ID.
-
-> Case 1: ** RETRIEVE ALL ACCOUNTS BALANCES FOR OI WITH BALANCE INCLUDED **
-- OI can call this method to know the  details of all Account Balances.
-- For balance api we need to pass partner-id and query param include_balance=true.  
-- Refer to #Usecase for without Encryption - 1.A in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
-- Refer to #Usecase for with Encryption - 1.B in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
-
-> Case 2: ** RETRIEVE ACCOUNT BALANCES BY ACCOUNTID WITH BALANCE INCLUDED **
-- OI can call this method to know the  details of Account Balances for particuler account.
-- For balance api we need to pass partner-id and query param include_balance=true and Account id.  
-- Refer to #Usecase for without Encryption - 2.A in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
-- Refer to #Usecase for with Encryption - 2.B in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
-
-> Case 3: ** RETRIEVE ALL ACCOUNTS BALANCES FOR OI WITH BALANCE NOT INCLUDED **
-- OI can call this method to know the  details of all Accounts Without Balances.
-- For this we need to pass partner-id and query param include_balance=false.  
-- Refer to #Usecase for without Encryption - 3.A in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
-- Refer to #Usecase for with Encryption - 3.B in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
-
-> Case 4: ** RETRIEVE ACCOUNT BALANCES BY ACCOUNT ID WITH BALANCE NOT INCLUDED **
-- OI can call this method to know the  details of Account Balances for particuler account.
-- For this we need to pass partner-id and query param include_balance=false and Account id.  
-- Refer to #Usecase for without Encryption - 4.A in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
-- Refer to #Usecase for with Encryption - 4.B in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
 
 ### Implementation details for cross-border APIs
 To develop a client application using cross border APIs, refer below documentation. All the cross-border APIs are REST APIs that support both XML and JSON as a payload.   
