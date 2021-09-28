@@ -45,9 +45,7 @@ import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Map;
-
 import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
-import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.X_MC_ROUTING;
 
 @Component
 public class RestClientServiceImpl<T> implements RestClientService<T> {
@@ -101,7 +99,6 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
 
     private HttpEntity<MultiValueMap<String, String>> generateRequestEntity(HttpHeaders headers, String requestStr, String oAuthString) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(X_MC_ROUTING.toString(),"nextgen-apigw");
         httpHeaders.add(HttpHeaders.AUTHORIZATION, oAuthString);
         //if content type is not already added, use application_xml
         if(headers.containsKey(HttpHeaders.CONTENT_TYPE) && null != headers.getContentType()) {
