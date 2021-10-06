@@ -6,7 +6,7 @@ import org.springframework.http.HttpHeaders;
 
 public interface EncryptionService<T> {
 
-    String getEncryptedRequestBody(HttpHeaders headers, String requestStr)throws ServiceException;
+    T getEncryptedRequestBody(HttpHeaders headers, String requestStr)throws ServiceException;
 
     T getDecryptedResponse(EncryptedPayload response, HttpHeaders headers, Class<T> responseClass) throws ServiceException;
 

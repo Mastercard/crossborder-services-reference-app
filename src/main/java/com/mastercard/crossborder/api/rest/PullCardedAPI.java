@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import java.util.Map;
-
 import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
 
 @Component
@@ -35,7 +34,6 @@ public class PullCardedAPI {
 
     public FxRateResponse getFxRates(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
         logger.info("Calling retrieve FX Rates API");
-
         return (FxRateResponse) restClientService.service(FXRATE, headers, HttpMethod.GET, requestParams, null, FxRateResponse.class);
     }
 

@@ -1,6 +1,5 @@
 package com.mastercard.crossborder.api.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
@@ -20,21 +19,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.w3c.dom.Document;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -51,8 +41,6 @@ import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENC
 public class RestClientServiceImpl<T> implements RestClientService<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(RestClientServiceImpl.class);
-    private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    private TransformerFactory tf = TransformerFactory.newInstance();
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
@@ -129,56 +117,6 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         return response;
     }
 
-    public String convertToString(HttpHeaders headers, Object data) throws ServiceException {
-        if(data != null){
-            if ( null != headers.getContentType() && MediaType.APPLICATION_JSON.equals(headers.getContentType().toString())) {
-                return convertJsonToString(data);
-            }
-            if ( null != headers.getContentType() && MediaType.APPLICATION_XML.equals(headers.getContentType().toString())) {
-                return convertDocumentToString(data);
-            }
-        }
-        return null;
-    }
-    private String convertDocumentToString(Object obj) throws ServiceException {
-
-        if(null == obj)
-            return "";
-        Document document = createXMLDocument(obj);
-        Transformer transformer;
-        if(null != document ) {
-            try {
-                transformer = tf.newTransformer();
-                StringWriter writer = new StringWriter();
-                transformer.transform(new DOMSource(document), new StreamResult(writer));
-                return writer.getBuffer().toString();
-            } catch (TransformerException e) {
-                throw new ServiceException(e.getMessage());
-            }
-        }
-        return "";
-    }
-
-    public String convertJsonToString(Object jsonObject) throws ServiceException {
-
-        try {
-            return mapper.writeValueAsString(jsonObject);
-        } catch (JsonProcessingException e) {
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
-    private Document createXMLDocument(Object request) throws ServiceException {
-        try {
-            Document doc = dbf.newDocumentBuilder().newDocument();
-            JAXBContext context = JAXBContext.newInstance(request.getClass());
-            context.createMarshaller().marshal(request, doc);
-            return doc;
-        }catch (ParserConfigurationException | JAXBException e){
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
     public T getContentFromString(HttpHeaders headers, String responseBodyAsString, Class<T> responseClass) throws ServiceException {
         if (null != headers.getContentType() && MediaType.APPLICATION_XML.equals(headers.getContentType().toString())) {
             return convertStringToXMLDocument(responseBodyAsString, responseClass);
@@ -207,5 +145,4 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
             throw new ServiceException(e.getMessage());
         }
     }
-
 }

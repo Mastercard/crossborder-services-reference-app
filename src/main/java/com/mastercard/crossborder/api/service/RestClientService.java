@@ -16,5 +16,4 @@ public interface RestClientService<T> {
 
     T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, String request, Class<T> responseClass) throws ServiceException;
 
-    String convertToString(HttpHeaders headers, Object data) throws ServiceException;
 }

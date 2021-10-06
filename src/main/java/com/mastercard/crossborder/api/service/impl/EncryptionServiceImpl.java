@@ -50,19 +50,19 @@ public class EncryptionServiceImpl<T> implements EncryptionService<T> {
         return null;
     }
 
-    public String getEncryptedRequestBody(HttpHeaders headers, String requestStr)throws ServiceException {
+    public T getEncryptedRequestBody(HttpHeaders headers, String requestStr)throws ServiceException {
 
         String encryptedStr ;
         if (null != requestStr && processForEncryption(Boolean.TRUE) &&  headers.containsKey(HttpHeaders.CONTENT_TYPE) )
         {
             if ( null!= headers.getContentType()&& MediaType.APPLICATION_XML.equals(headers.getContentType().toString())) {
                 encryptedStr = com.mastercard.crossborder.api.util.EncryptionUtils.jweEncrypt(requestStr, mastercardApiConfig.getCertificateFile(), mastercardApiConfig.getEncryptionFP(), MediaType.APPLICATION_XML);
-                return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" +
-                        "<encrypted_payload><data>" + encryptedStr + "</data></encrypted_payload>";
+                return (T) ("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" +
+                                        "<encrypted_payload><data>" + encryptedStr + "</data></encrypted_payload>");
             }
             if(null != headers.getContentType() && MediaType.APPLICATION_JSON.equals(headers.getContentType().toString())) {
                 encryptedStr = EncryptionUtils.jweEncrypt(requestStr, mastercardApiConfig.getCertificateFile(), mastercardApiConfig.getEncryptionFP(), MediaType.APPLICATION_JSON);
-                return "{\"encrypted_payload\":{\"data\":"+"\"" + encryptedStr +"\""+"}}";
+                return (T) ("{\"encrypted_payload\":{\"data\":"+"\"" + encryptedStr +"\""+"}}");
             }
         }
         return null;

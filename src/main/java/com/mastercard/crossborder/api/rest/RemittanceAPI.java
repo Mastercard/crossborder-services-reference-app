@@ -7,15 +7,14 @@ import com.mastercard.crossborder.api.rest.response.EncryptedPayload;
 import com.mastercard.crossborder.api.rest.response.RemittanceResponse;
 import com.mastercard.crossborder.api.service.EncryptionService;
 import com.mastercard.crossborder.api.service.RestClientService;
+import com.mastercard.crossborder.api.util.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
-
 import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
 
 /*
@@ -39,10 +38,13 @@ public class RemittanceAPI {
     @Autowired
     MastercardApiConfig mastercardApiConfig;
 
+    @Autowired
+    CommonUtils commonUtils;
+
     public RemittanceResponse makePayment(HttpHeaders headers, Map<String, Object> requestParams, RemittanceRequest payment) throws ServiceException {
 
         logger.info("Calling payment API");
-        String requestStr = restClientService.convertToString(headers, payment);
+        String requestStr = commonUtils.convertToString(headers, payment);
         return (RemittanceResponse) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, RemittanceResponse.class);
     }
 
@@ -50,9 +52,9 @@ public class RemittanceAPI {
 
         logger.info("Calling payment API with Encryption");
 
-        String requestStr = restClientService.convertToString(headers, payment);
+        String requestStr = commonUtils.convertToString(headers, payment);
         /*Encrypt the request payload and return */
-        requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
+        requestStr = (String) encryptionService.getEncryptedRequestBody(headers, requestStr);
         headers.add(ENCRYPTED_HEADER.toString(), "true");
         EncryptedPayload response = (EncryptedPayload) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class);
         return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
