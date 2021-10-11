@@ -52,7 +52,7 @@ public class QuotesAPI {
 
         String requestStr = commonUtils.convertToString(headers, quotesRequest);
         /*Encrypt the request payload and return */
-        requestStr = (String) encryptionService.getEncryptedRequestBody(headers, requestStr);
+        requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
         headers.add(ENCRYPTED_HEADER.toString(), "true");
         EncryptedPayload response = (EncryptedPayload) restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class);
         return (QuotesResponse) encryptionService.getDecryptedResponse(response, headers, QuotesResponse.class);

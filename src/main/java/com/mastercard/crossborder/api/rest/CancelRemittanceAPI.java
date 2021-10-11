@@ -51,7 +51,7 @@ public class CancelRemittanceAPI {
         logger.info("Calling cancel payment API with Encryption");
         String requestStr = commonUtils.convertToString(headers, cancelRequest);
         /*Encrypt the request payload and return */
-        requestStr = (String) encryptionService.getEncryptedRequestBody(headers, requestStr);
+        requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
         headers.add(ENCRYPTED_HEADER.toString(), "true");
         EncryptedPayload response = (EncryptedPayload) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class);
         return (CancelResponse) encryptionService.getDecryptedResponse(response, headers, CancelResponse.class);

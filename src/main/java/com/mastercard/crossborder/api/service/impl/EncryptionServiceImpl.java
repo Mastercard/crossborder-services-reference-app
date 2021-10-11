@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 @Component
-public class EncryptionServiceImpl<T> implements EncryptionService<T> {
+public class EncryptionServiceImpl<T> implements EncryptionService {
 
     private static final Logger logger = LoggerFactory.getLogger(EncryptionServiceImpl.class);
     private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -34,7 +34,7 @@ public class EncryptionServiceImpl<T> implements EncryptionService<T> {
     @Autowired
     MastercardApiConfig mastercardApiConfig;
 
-    public T getDecryptedResponse(EncryptedPayload response, HttpHeaders headers, Class<T> responseClass) throws ServiceException {
+    public <T> T getDecryptedResponse(EncryptedPayload response, HttpHeaders headers, Class<T> responseClass) throws ServiceException {
         try {
 
             /*Decrypt the response payload and return*/
@@ -50,19 +50,19 @@ public class EncryptionServiceImpl<T> implements EncryptionService<T> {
         return null;
     }
 
-    public T getEncryptedRequestBody(HttpHeaders headers, String requestStr)throws ServiceException {
+    public String getEncryptedRequestBody(HttpHeaders headers, String requestStr)throws ServiceException {
 
         String encryptedStr ;
         if (null != requestStr && processForEncryption(Boolean.TRUE) &&  headers.containsKey(HttpHeaders.CONTENT_TYPE) )
         {
             if ( null!= headers.getContentType()&& MediaType.APPLICATION_XML.equals(headers.getContentType().toString())) {
                 encryptedStr = com.mastercard.crossborder.api.util.EncryptionUtils.jweEncrypt(requestStr, mastercardApiConfig.getCertificateFile(), mastercardApiConfig.getEncryptionFP(), MediaType.APPLICATION_XML);
-                return (T) ("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" +
+                return ("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" +
                                         "<encrypted_payload><data>" + encryptedStr + "</data></encrypted_payload>");
             }
             if(null != headers.getContentType() && MediaType.APPLICATION_JSON.equals(headers.getContentType().toString())) {
                 encryptedStr = EncryptionUtils.jweEncrypt(requestStr, mastercardApiConfig.getCertificateFile(), mastercardApiConfig.getEncryptionFP(), MediaType.APPLICATION_JSON);
-                return (T) ("{\"encrypted_payload\":{\"data\":"+"\"" + encryptedStr +"\""+"}}");
+                return ("{\"encrypted_payload\":{\"data\":"+"\"" + encryptedStr +"\""+"}}");
             }
         }
         return null;
@@ -72,7 +72,7 @@ public class EncryptionServiceImpl<T> implements EncryptionService<T> {
         return encrypt && mastercardApiConfig.getRunWithEncryptedPayload();
     }
 
-    public T getContentFromString(HttpHeaders headers, String responseBodyAsString, Class<T> responseClass) throws ServiceException {
+    public <T> T getContentFromString(HttpHeaders headers, String responseBodyAsString, Class<T> responseClass) throws ServiceException {
         if (null != headers.getContentType() && MediaType.APPLICATION_XML.equals(headers.getContentType().toString())) {
             return convertStringToXMLDocument(responseBodyAsString, responseClass);
         }
@@ -82,7 +82,7 @@ public class EncryptionServiceImpl<T> implements EncryptionService<T> {
         return null;
     }
 
-    private T convertStringToXMLDocument(String xmlString, Class<T> responseClass) throws ServiceException {
+    private <T> T convertStringToXMLDocument(String xmlString, Class<T> responseClass) throws ServiceException {
         try {
 
             JAXBContext jaxbContext = JAXBContext.newInstance(responseClass);
@@ -93,7 +93,7 @@ public class EncryptionServiceImpl<T> implements EncryptionService<T> {
         }
     }
 
-    private T convertStringToJSON(String jsonString, Class responseClass) throws ServiceException {
+    private <T> T convertStringToJSON(String jsonString, Class responseClass) throws ServiceException {
         try {
             return (T) mapper.readValue(jsonString, responseClass);
         } catch (IOException e) {

@@ -54,7 +54,7 @@ public class RemittanceAPI {
 
         String requestStr = commonUtils.convertToString(headers, payment);
         /*Encrypt the request payload and return */
-        requestStr = (String) encryptionService.getEncryptedRequestBody(headers, requestStr);
+        requestStr = encryptionService.getEncryptedRequestBody(headers, requestStr);
         headers.add(ENCRYPTED_HEADER.toString(), "true");
         EncryptedPayload response = (EncryptedPayload) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, requestStr, EncryptedPayload.class);
         return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
