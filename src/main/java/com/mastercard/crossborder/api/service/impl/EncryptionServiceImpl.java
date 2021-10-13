@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 @Component
-public class EncryptionServiceImpl<T> implements EncryptionService {
+public class EncryptionServiceImpl implements EncryptionService {
 
     private static final Logger logger = LoggerFactory.getLogger(EncryptionServiceImpl.class);
     private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
