@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
 import java.util.Map;
+
 /*
     RestClientService is a service used for cross border API calls
     1. builds the request URL to make a rest call
@@ -13,7 +14,6 @@ import java.util.Map;
  */
 public interface RestClientService<T> {
 
-    T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass) throws ServiceException;
+    T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, String request, Class<T> responseClass) throws ServiceException;
 
-    T serviceEncryption(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass) throws ServiceException;
 }

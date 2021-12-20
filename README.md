@@ -44,7 +44,19 @@ Both the approaches require consumer key and .p12 file as received from [Masterc
     >**mastercard.api.encryption.fingerPrint=**, this is the encryption key, required to encrypt a request.
        
     >**mastercard.api.decryption.keyFile=**, this is the .key file, required to decrypt a request. Add classpath for .key file, after placing it at src\main\resources in the project folder.
-      
+   
+    **Steps to create .crt and .key files from .pem and .p12 files**   
+     
+    >**Encryption certificate generation (create .crt from .pem file):**
+
+    - openssl x509 -outform der -in ./MastercardSendCrossBorderClientEncxxxxxxxxxx.pem -out ./MastercardSendCrossBorderClientEncxxxxxxxxx.crt
+
+    >**Decryption private key generation (create .key from .p12 file):**
+    
+    - openssl pkcs12 -in keyalias-encryption-mc.p12 -nocerts -out <filename1>.key.pem –nodes
+    - openssl rsa -in <filename1>.key.pem -out <filename2>.text.pem –text
+    - openssl pkcs8 -topk8 -inform PEM -outform DER -in <filename2>.text.pem -out <filename3>.key –nocrypt
+   
 ### Build and Run   
 `Using IDE`
  - Open reference application in IDE and dependencies will be downloaded automatically. Open the maven window,
@@ -71,38 +83,34 @@ Below are the different flavors available for a quote transaction:
 - Originating institute (OI) can make a forward quote request.  
 - In case of forward quote with fees included, OI wants to specify the Sending amount and currency for a payment. Quotes response will provide the amount that will be received by beneficiary. 
 e.g. If OI wants to send 100$, then amount received by beneficiary will be conversion of (100 $ - (fees)) in receiver currency.      
-- Refer to #Usecase - 1 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.  
+- Refer to #Usecase for without Encryption - 1.A in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.  
+- Refer to #Usecase for with Encryption - 1.B in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.  
 
 > Case 2:  **FORWARD QUOTE WITH FEES NOT INCLUDED**
 - Originating institute (OI) can make a forward quote request with fees not included.  
 - In case of forward quote with fees not included, OI will to specify the Sending amount and currency for a payment. Fees collected will be on top of what was requested to be paid. So OI will pay the fees but on top of initial amount.
 - e.g. If OI wants to transfer 100$ to beneficiary then he will be asked to pay (100 $ + fees) and beneficiary will receive conversion of 100$ in receiving currency. 
-- Refer to #Use case - 2 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.  
+- Refer to #Usecase for without Encryption - 2.A in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.  
+- Refer to #Usecase for with Encryption - 2.B in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.  
 
 > Case 3:  **REVERSE QUOTE**
 - Originating institute (OI) can initiate the request for reverse quote.  
 - In this case of reverse quote, OI needs to ensure the beneficiary receives a specific amount in beneficiary currency. Quotes response will provide the amount to be transferred by OI.
 e.g. If OI specifies beneficiary should receive 1000 INR(assuming beneficiary's currency is INR) as a fixed amount, OI will be asked to pay conversion of 1000 INR + fees as a quotes response.
-- Refer to #Usecase - 3 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
+- Refer to #Usecase for without Encryption - 3.A in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
+- Refer to #Usecase for with Encryption - 3.B in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
     
-> Case 4:  **QUOTES REQUEST WITH ENCRYPTION**
-- Originating institute (OI) can initiate the request for a quote.  
-- This can be any type of quote, just that quotes request payload will be sent in encrypted form if property 'runWithEncryptedPayload' is set to True.
-- Quotes response will also be in encrypted form.
-- Refer to #Usecase - 4 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
-
-> Case 5:  **QUOTES REQUEST IN JSON FORMAT**
+> Case 4:  **QUOTES REQUEST IN JSON FORMAT**
 - Originating institute (OI) can initiate the request for reverse quote in Json format.  
 - In this case of reverse quote, OI needs to ensure the beneficiary receives a specific amount in beneficiary currency. Quotes response will provide the amount to be transferred by OI.
 e.g. If OI specifies beneficiary should receive 1000 INR(assuming beneficiary's currency is INR) as a fixed amount, OI will be asked to pay conversion of 1000 INR + fees as a quotes response.
-- Refer to #Usecase - 5 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
-    
-    
-> Case 6:  **QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT**
+- Refer to #Usecase - 4 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
+  
+> Case 5:  **QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT**
 - Originating institute (OI) can initiate the request for a quote in Json format.  
 - This can be any type of quote, just that quotes request payload will be sent in encrypted form if property 'runWithEncryptedPayload' is set to True.
 - Quotes response will also be in encrypted form.
-- Refer to #Usecase - 6 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
+- Refer to #Usecase - 5 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
 
 B] [Make payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/payment-api/):   
 Payment can be made in two ways. Make payment using quote, One shot payment (payment without quotes).
@@ -111,37 +119,43 @@ Payment can be made in two ways. Make payment using quote, One shot payment (pay
 - OI wants to initiate quotes request to make a payment with quote. A quote can be forward or reverse.
 - Refer Quotes Use cases 1,2 or 3 to make forward or reverse quote request.
 - Proposal Id from the quotes response should be used make payment request
-- Please refer to #Usecase - 1 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details. 
+- Please refer to #Usecase for without Encryption - 1.A in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details. 
+- Please refer to #Usecase for with Encryption - 1.B in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details. 
 
 > Case 2: **FORWARD PAYMENT WITHOUT QUOTE WITH NOT FEES INCLUDED FOR PERSON TO BUSINESS PAYMENT TYPE**
 - OI wants to make a direct payment without making separate a quote request .
 - For one shot payment, quotes related information need to be passed in payment request itself.
 - In this case payment request consists of forward quote without fees included and P2B payment type information.  
-- Please refer to #Usecase - 2 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for without Encryption - 2.A in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for with Encryption - 2.B in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
 > Case 3: **FORWARD PAYMENT WITHOUT QUOTE WITH FEES INCLUDED FOR PERSON TO PERSON PAYMENT TYPE**
 - OI wants to make a direct payment without making separate a quote request .
 - For one shot payment, quotes related information need to be passed in payment request itself.
 - In this case payment request consists of forward quote with fees included and P2P payment type information information.  
-- Please refer to #Usecase - 3 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for without Encryption - 3.A in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for with Encryption - 3.B in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
 > Case 4: **REVERSE PAYMENT WITHOUT QUOTE FOR BUSINESS TO PERSON PAYMENT TYPE**
 - OI wants to make a direct payment without making separate a quote request .
 - For one shot payment, quotes related information need to be passed in payment request itself.
 - In this case payment request consists of reverse quote and B2P payment type information.  
-- Please refer to #Usecase - 4 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for without Encryption - 4.A in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for with Encryption - 4.B in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
 > Case 5: **FORWARD PAYMENT WITHOUT QUOTE FOR BUSINESS TO BUSINESS PAYMENT TYPE**
 - OI wants to make a direct payment without making separate a quote request .
 - For one shot payment, quotes related information need to be passed in payment request itself.
 - In this case payment request consists of forward quote with fees included and B2B payment type information.  
-- Please refer to #Usecase - 5 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for without Encryption - 5.A in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for with Encryption - 5.B in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
 > Case 6: **FORWARD PAYMENT WITHOUT QUOTE FOR GOVERNMENT TO PERSON PAYMENT TYPE**
 - OI wants to make a direct payment without making separate a quote request .
 - For one shot payment, quotes related information need to be passed in payment request itself.
 - In this case payment request consists of forward quote with fees included and G2P payment type information.  
-- Please refer to #Usecase - 6 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for without Encryption - 6.A in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase for with Encryption - 6.B in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
 > Case 7: **ERROR HANDLING**
 - OI wants to make a direct payment with any of the above types.
@@ -150,25 +164,18 @@ Payment can be made in two ways. Make payment using quote, One shot payment (pay
 - You can refer [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-codes/) to understand different types of errors. 
 - Please refer to #Usecase - 7 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
-> Case 8:  **PAYMENT WITH ENCRYPTION SUPPORTED**
-- Originating institute (OI) can initiate any of the above type of payment with encryption.  
-- In this case request payload of payment will be sent in encrypted form if property 'runWithEncryptedPayload' is set to True.
-- Payment response will also be in encrypted form.
-- Refer to #Usecase - 8 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
-
-> Case 9:  **PAYMENT WITH FORWARD QUOTE IN JSON FORMAT**
+> Case 8:  **PAYMENT WITH FORWARD QUOTE IN JSON FORMAT**
 - OI wants to initiate quotes request to make a payment with quote in Json format. 
 - In this example forward quote with fees included is used.
 - Proposal Id from the quotes response should be used make payment request
-- Please refer to #Usecase - 9 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details. 
+- Please refer to #Usecase - 8 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details. 
       
-
-> Case 10:  **ERROR HANDLING IN JSON FORMAT**
+> Case 9:  **ERROR HANDLING IN JSON FORMAT**
 - OI wants to make a direct payment with any of the above types.
 - Whereas the payment can fail for various reasons.
 - This use case just shows one of the example of such failure where media type is Json.
 - You can refer [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-codes/) to understand different types of errors. 
-- Please refer to #Usecase - 10 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+- Please refer to #Usecase - 9 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
 C] [Retrieve payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/retrieve-payment-api/):
 Status of a payment can be seen by retrieve payment API calls. There are two ways of knowing the details of payment,
@@ -177,23 +184,19 @@ Get payment by ID and Get payment by reference.
 > Case 1: **RETRIEVE PAYMENT BY MASTERCARD PROVIDED ID**
 - OI can call this method to know the status of payment.
 - Payment Id returned while making a payment can be used to get the payment details.  
-- Refer to #Usecase - 1 in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
+- Refer to #Usecase for without Encryption - 1.A in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
+- Refer to #Usecase for with Encryption - 1.B in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
 
 > Case 2: **RETRIEVE PAYMENT BY OI PROVIDED TRANSACTION REFERENCE ID**
 - OI can call this method to know the status of payment.
 - transaction_reference passed as input to payment can be used to get the payment details.  
-- Refer to #Usecase - 2 in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
+- Refer to #Usecase - 2.A in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
+- Refer to #Usecase - 2.B in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
 
-> Case 3: **RETRIEVE PAYMENT IN ENCRYPTED FORM**
-- OI can call this method to know the status of payment, made with or without quote.
-- transaction_reference or payment ID returned while making a payment can be used to get the payment details.  
-- In this case, request payload is empty but the response payload will be encrypted.
-- Refer to #Usecase - 3 in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
-
-> Case 4: **RETRIEVE PAYMENT BY OI PROVIDED TRANSACTION REFERENCE ID IN JSON FORMAT**
+> Case 3: **RETRIEVE PAYMENT BY OI PROVIDED TRANSACTION REFERENCE ID IN JSON FORMAT**
 - OI can call this method to know the status of payment in Json format.
 - transaction_reference passed as input to payment can be used to get the payment details.  
-- Refer to #Usecase - 4 in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
+- Refer to #Usecase - 3 in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
 
 D] [Cancel payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/cancel-payment-api/):
 This facility of cancelling a payment is available only for some mobile money providers and cash-out. It is not available for banks account channels.
@@ -201,15 +204,10 @@ Payment can be cancelled if the payment is in 'Pending' status.
 > Case 1: **CANCEL A PAYMENT**
 - OI can cancel a payment by making Cancel payment API call. 
 - You can use the payment Id returned while making a payment. 
-- Refer to #Usecase - 1 in [CancelRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\CancelRemittanceAPITest.java) for details.
+- Refer to #Usecase for without Encryption - 1.A in [CancelRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\CancelRemittanceAPITest.java) for details.
+- Refer to #Usecase for with Encryption - 1.B in [CancelRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\CancelRemittanceAPITest.java) for details.
 
-> Case 2: **CANCEL A PAYMENT WITH ENCRYPTION**
-- OI can cancel a payment by making Cancel payment API call in encrypted form. 
-- Payment can be cancelled only if the status of payment is in ‘Pending’ status, payment Id can be returned while making a payment can be used here.
-- Request and response payload will be encrypted.
-- Refer to #Usecase - 2 in [CancelRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\CancelRemittanceAPITest.java) for details.
-
-> Case 3: **CANCEL A PAYMENT IN JSON FORMAT**
+> Case 2: **CANCEL A PAYMENT IN JSON FORMAT**
 - OI can cancel a payment by making Cancel payment API call in Json format. 
 - You can use the payment Id returned while making a payment. 
 - Refer to #Usecase - 3 in [CancelRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\CancelRemittanceAPITest.java) for details.
@@ -223,14 +221,8 @@ This API supports only JSON.
 > Case 1: **PULL CARDED RATE**
 - OI can call this method to get FX rates
 - For FX Rates retrieval, we need to pass partner-id in the request URL itself
-- Please refer to #Usecase - 1 in [PullCardedAPITest.java](./src\test\java\com\mastercard\crossborder\api\PullCardedAPITest.java) for details.
-
-> Case 2: **PULL CARDED RATE WITH ENCRYPTION**
-- OI can call this method to get FX rates
-- For FX Rates retrieval, we need to pass partner-id in the request URL itself.
-- In this case, request payload is empty but the response payload will be encrypted.
-- Please refer to #Usecase - 2 in [PullCardedAPITest.java](./src\test\java\com\mastercard\crossborder\api\PullCardedAPITest.java) for details.
-
+- Please refer to #Usecase for without Encryption - 1.A in [PullCardedAPITest.java](./src\test\java\com\mastercard\crossborder\api\PullCardedAPITest.java) for details.
+- Please refer to #Usecase for with Encryption - 1.B in [PullCardedAPITest.java](./src\test\java\com\mastercard\crossborder\api\PullCardedAPITest.java) for details.
 
 ### Implementation details for cross-border APIs
 To develop a client application using cross border APIs, refer below documentation. All the cross-border APIs are REST APIs that support both XML and JSON as a payload.   

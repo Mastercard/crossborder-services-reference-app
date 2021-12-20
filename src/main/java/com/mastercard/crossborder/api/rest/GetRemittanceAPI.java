@@ -1,16 +1,21 @@
 package com.mastercard.crossborder.api.rest;
 
-import com.mastercard.crossborder.api.service.RestClientService;
-import com.mastercard.crossborder.api.rest.response.RemittanceResponse;
+import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
+import com.mastercard.crossborder.api.rest.response.EncryptedPayload;
+import com.mastercard.crossborder.api.rest.response.RemittanceResponse;
+import com.mastercard.crossborder.api.service.EncryptionService;
+import com.mastercard.crossborder.api.service.RestClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
+
+import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
+
 /*
     This class is to get payment API.
     There are two ways by which get payment can be achieved
@@ -29,21 +34,40 @@ public class GetRemittanceAPI {
     @Autowired
     RestClientService restClientService;
 
+    @Autowired
+    EncryptionService encryptionService;
 
-    public RemittanceResponse  getPaymentById(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
+    @Autowired
+    MastercardApiConfig mastercardApiConfig;
+
+    public RemittanceResponse getPaymentById(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by ID API");
-        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams,null, RemittanceResponse.class);
+        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class);
     }
+
     public RemittanceResponse getPaymentByRef(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by reference API");
-        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams,null,  RemittanceResponse.class);
+        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class);
     }
 
-    public RemittanceResponse  getPaymentByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
+    public RemittanceResponse getPaymentByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
-        logger.info("Calling retrieve payment by ID API");
-        return (RemittanceResponse) restClientService.serviceEncryption(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class);
+        logger.info("Calling retrieve payment by ID API with Encryption");
+        if (mastercardApiConfig.getRunWithEncryptedPayload())
+            headers.add(ENCRYPTED_HEADER.toString(), "true");
+        EncryptedPayload response = (EncryptedPayload) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, EncryptedPayload.class);
+
+        return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
+    }
+
+    public RemittanceResponse getPaymentByRefWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
+
+        logger.info("Calling retrieve payment by ID API with Encryption");
+        headers.add(ENCRYPTED_HEADER.toString(), "true");
+        EncryptedPayload response = (EncryptedPayload) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams, null, EncryptedPayload.class);
+
+        return (RemittanceResponse) encryptionService.getDecryptedResponse(response, headers, RemittanceResponse.class);
     }
 }

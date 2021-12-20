@@ -1,12 +1,12 @@
 package com.mastercard.crossborder.api;
 
+import com.mastercard.crossborder.api.config.MastercardApiConfig;
+import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.helper.CrossBorderAPITestHelper;
+import com.mastercard.crossborder.api.rest.QuotesAPI;
 import com.mastercard.crossborder.api.rest.request.QuotesRequest;
 import com.mastercard.crossborder.api.rest.response.Proposal;
 import com.mastercard.crossborder.api.rest.response.QuotesResponse;
-import com.mastercard.crossborder.api.config.MastercardApiConfig;
-import com.mastercard.crossborder.api.exception.ServiceException;
-import com.mastercard.crossborder.api.rest.QuotesAPI;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,9 +14,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.http.HttpHeaders;
 
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
@@ -47,11 +47,11 @@ public class QuotesAPITest {
         partnerId = apiConfig.getPartnerId();
     }
     /*
-        #Usecase - 1 - **FORWARD QUOTE WITH FEES INCLUDED**
+        #Usecase - 1.A - **FORWARD QUOTE WITH FEES INCLUDED**
      */
     @Test
     public void testRequestForwardQuoteWithFeesIncluded() {
-        logger.info("Running Usecase - 1, FORWARD QUOTE WITH FEES INCLUDED.");
+        logger.info("Running Usecase - 1.A, FORWARD QUOTE WITH FEES INCLUDED.");
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner-id", partnerId);
 
@@ -82,11 +82,45 @@ public class QuotesAPITest {
     }
 
     /*
-       #Usecase - 2 - **FORWARD QUOTE WITH FEES NOT INCLUDED**
+        #Usecase - 1.B - **QUOTES REQUEST WITH ENCRYPTION**
+        Any type of quote can be encrypted, here we have shown a forward quote for reference.
+      */
+    @Test
+    public void testRequestQuoteEncrypted() {
+        if (apiConfig.getRunWithEncryptedPayload()) {
+            logger.info("Running Usecase - 1.B, QUOTES REQUEST WITH ENCRYPTION.");
+            Map<String, Object> requestParams = new HashMap<>();
+            requestParams.put("partner-id", partnerId);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
+            /* set the input */
+            try {
+                QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncluded();
+                //This API call makes sure your request is encrypted before being sent over the network
+                QuotesResponse quotesResponse = quotesAPI.getQuoteWithEncryption(headers, requestParams, request);
+                Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
+                if (proposal.isPresent()) {
+                    logger.info("Quotes request is successful, ProposalId : {}", ((Proposal) proposal.get()).getProposalId());
+                    Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
+                } else {
+                    logger.info("Quotes request has failed, ProposalId does not exist");
+                    Assert.fail("Quotes request has failed, ProposalId does not exist");
+                }
+            } catch (ServiceException re) {
+                logger.error("Quotes request failed as : {}", re.getMessage());
+                Assert.fail(re.getMessage());
+            }
+        }
+        else
+            logger.info("To run this use cases, Set runWithEncryptedPayload=true and other encryption / decryption keys in mastercard-api.properties.");
+    }
+
+    /*
+       #Usecase - 2.A - **FORWARD QUOTE WITH FEES NOT INCLUDED**
      */
     @Test
     public void testRequestForwardQuoteWithFeesNotIncluded() {
-        logger.info("Running Usecase - 2, FORWARD QUOTE WITH FEES NOT INCLUDED.");
+        logger.info("Running Usecase - 2.A, FORWARD QUOTE WITH FEES NOT INCLUDED.");
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner-id", partnerId);
         HttpHeaders headers = new HttpHeaders();
@@ -115,11 +149,45 @@ public class QuotesAPITest {
     }
 
     /*
-       #Usecase - 3 - **REVERSE QUOTE**
+       #Usecase - 2.B - **FORWARD QUOTE WITH FEES NOT INCLUDED**
+     */
+    @Test
+    public void testRequestForwardQuoteWithFeesNotIncludedWithEncryption() {
+        if (apiConfig.getRunWithEncryptedPayload()) {
+            logger.info("Running Usecase - 2.B, FORWARD QUOTE WITH FEES NOT INCLUDED AND ENCRYPTION.");
+            Map<String, Object> requestParams = new HashMap<>();
+            requestParams.put("partner-id", partnerId);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
+            /* set the input */
+            try {
+                QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesNotIncluded();
+                QuotesResponse quotesResponse = quotesAPI.getQuoteWithEncryption(headers, requestParams, request);
+                Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
+                if (proposal.isPresent()) {
+                    logger.info("ProposalId for the quotes are : {}", ((Proposal) proposal.get()).getProposalId());
+                    Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
+                    //This is to verify that the charged amount is greater than the payment amount when fees are not included in the quote request
+                    Assert.assertTrue(Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getAmount()) > Double.valueOf(request.getRemittanceAmount().getAmount()));
+                    //This is to verify that the payment amount and the principal amount are equal when fees are not included in the quote request
+                    Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getPrincipalAmount().getAmount())));
+                } else {
+                    logger.info("Quotes request has failed, ProposalId does not exist");
+                    Assert.fail("Quotes request has failed, ProposalId does not exist");
+                }
+            } catch (ServiceException re) {
+                logger.error("Quotes request failed as : {}", re.getMessage());
+                Assert.fail(re.getMessage());
+            }
+        }
+    }
+
+    /*
+       #Usecase - 3.A - **REVERSE QUOTE**
      */
     @Test
     public void testRequestReverseQuote() {
-        logger.info("Running Usecase - 3, REVERSE QUOTE.");
+        logger.info("Running Usecase - 3.A, REVERSE QUOTE.");
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner-id", partnerId);
 
@@ -145,22 +213,21 @@ public class QuotesAPITest {
     }
 
     /*
-        #Usecase - 4 - **QUOTES REQUEST WITH ENCRYPTION**
-        Any type of quote can be encrypted, here we have shown a forward quote for reference.
-      */
+       #Usecase - 3.B - **REVERSE QUOTE WITH ENCRYPTION**
+     */
     @Test
-    public void testRequestQuoteEncrypted() {
+    public void testRequestReverseQuoteWithEncryption() {
         if (apiConfig.getRunWithEncryptedPayload()) {
-            logger.info("Running Usecase - 4, QUOTES REQUEST WITH ENCRYPTION.");
+            logger.info("Running Usecase - 3.B, REVERSE QUOTE WITH ENCRYPTION.");
             Map<String, Object> requestParams = new HashMap<>();
             requestParams.put("partner-id", partnerId);
+
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
             /* set the input */
             try {
-                QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncluded();
-                //This API call makes sure your request is encrypted before being sent over the network
-                QuotesResponse quotesResponse = quotesAPI.getQuoteWithEncryption(headers, requestParams, request);
+                QuotesRequest request = CrossBorderAPITestHelper.setDataForReverseQuote();
+                QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
                 Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
                 if (proposal.isPresent()) {
                     logger.info("Quotes request is successful, ProposalId : {}", ((Proposal) proposal.get()).getProposalId());
@@ -174,16 +241,14 @@ public class QuotesAPITest {
                 Assert.fail(re.getMessage());
             }
         }
-        else
-            logger.info("To run this use cases, Set runWithEncryptedPayload=true and other encryption / decryption keys in mastercard-api.properties.");
     }
 
     /*
-       #Usecase - 5 - **REVERSE QUOTE IN JSON FORMAT**
+       #Usecase - 4 - **REVERSE QUOTE IN JSON FORMAT**
      */
     @Test
     public void testRequestReverseQuoteInJsonFormat() {
-        logger.info("Running Usecase - 5, REVERSE QUOTE WIH JSON.");
+        logger.info("Running Usecase - 4, REVERSE QUOTE WIH JSON.");
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner-id", partnerId);
 
@@ -209,14 +274,14 @@ public class QuotesAPITest {
     }
 
     /*
-        #Usecase - 6 - **QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT**
+        #Usecase - 5 - **QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT**
         Any type of quote can be encrypted, here we have shown a forward quote for reference.
         Request and response will be in JSON format
       */
     @Test
     public void testRequestQuoteEncryptedInJsonFormat() {
         if (apiConfig.getRunWithEncryptedPayload()) {
-            logger.info("Running Usecase - 6, QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT.");
+            logger.info("Running Usecase - 5, QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT.");
             Map<String, Object> requestParams = new HashMap<>();
             requestParams.put("partner-id", partnerId);
             HttpHeaders headers = new HttpHeaders();
