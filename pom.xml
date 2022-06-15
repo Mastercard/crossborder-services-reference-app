@@ -6,6 +6,18 @@
     <groupId>com.mastercard</groupId>
     <artifactId>crossborder-ref-app</artifactId>
     <version>1.0.0</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <name>MasterCard Cross-Border Services - Reference App</name>
     <description>This is cross-border services reference application</description>
     <properties>
@@ -15,7 +27,7 @@
         <spring.version>5.1.8.RELEASE</spring.version>
         <slf4j.version>1.7.32</slf4j.version>
         <log4j2.version>2.17.0</log4j2.version>
-        <jackson.version>2.13.0</jackson.version>
+        <jackson.version>2.9.10.4</jackson.version>
         <junit.version>4.13.2</junit.version>
         <javax.ws.rs.version>2.0.1</javax.ws.rs.version>
         <oauth1-signer-version>1.2.4</oauth1-signer-version>
@@ -34,6 +46,11 @@
             <version>${spring.version}</version>
         </dependency>
         <!-- Below dependencies are required for making REST calls -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>

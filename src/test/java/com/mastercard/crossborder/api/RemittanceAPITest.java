@@ -82,7 +82,7 @@ public class RemittanceAPITest  {
                     String paymentId = paymentDetails.getRemittanceId();
                     Assert.assertNotNull(paymentId);
                     if(paymentDetails.getCreditedAmount()!=null)
-                        assertEquals( paymentDetails.getCreditedAmount().getAmount(), ((Proposal) proposal.get()).getCreditedAmount().getAmount());
+                        assertEquals( paymentDetails.getCreditedAmount().getAmount(), ((Proposal) proposal.get()).getCreditedAmount().getCrAmt());
                     logger.info("Payment with quote is successful, paymentId is {}", paymentId);
                 } else {
                     Assert.fail("Payment with quote has failed as Payment API has failed");
@@ -350,7 +350,7 @@ public class RemittanceAPITest  {
                     String paymentId = paymentDetails.getRemittanceId();
                     Assert.assertNotNull(paymentId);
                     if(paymentDetails.getCreditedAmount()!=null)
-                        assertEquals ( paymentDetails.getCreditedAmount().getAmount(), ((Proposal) proposal.get()).getCreditedAmount().getAmount());
+                        assertEquals ( paymentDetails.getCreditedAmount().getAmount(), ((Proposal) proposal.get()).getCreditedAmount().getCrAmt());
                     logger.info("Payment with quote is successful, paymentId is {}", paymentId);
                 } else {
                     Assert.fail("Payment with quote has failed as Payment API has failed");

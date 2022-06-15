@@ -1,16 +1,6 @@
 package com.mastercard.crossborder.api.helper;
 
-import com.mastercard.crossborder.api.rest.request.AdditionalDataField;
-import com.mastercard.crossborder.api.rest.request.AdditionalField;
-import com.mastercard.crossborder.api.rest.request.Address;
-import com.mastercard.crossborder.api.rest.request.Amount;
-import com.mastercard.crossborder.api.rest.request.CustomerData;
-import com.mastercard.crossborder.api.rest.request.ForwardFees;
-import com.mastercard.crossborder.api.rest.request.GovernmentIdData;
-import com.mastercard.crossborder.api.rest.request.QuoteType;
-import com.mastercard.crossborder.api.rest.request.QuotesRequest;
-import com.mastercard.crossborder.api.rest.request.RemittanceRequest;
-import com.mastercard.crossborder.api.rest.request.ReverseFees;
+import com.mastercard.crossborder.api.rest.request.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -632,6 +622,12 @@ public class CrossBorderAPITestHelper {
         paymentRequest.setReceiverInformation(recipientData);
 
         return paymentRequest;
+    }
+    public static QuoteConfirmation setDataForQuoteConfirmation(String proposalId, String transactionReference ){
+        QuoteConfirmation quoteConfirmationRequest=new QuoteConfirmation();
+        quoteConfirmationRequest.setProposalId(proposalId);
+        quoteConfirmationRequest.setTransactionReference(transactionReference);
+        return quoteConfirmationRequest;
     }
 
 }
