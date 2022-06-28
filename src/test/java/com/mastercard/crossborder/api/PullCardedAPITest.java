@@ -90,7 +90,7 @@ public class PullCardedAPITest {
                 Map<String, Object> FXCardRateParams = new HashMap<>();
                 FXCardRateParams.put(partnerIdStr, partnerId);
                 HttpHeaders headers = new HttpHeaders();
-                headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+                headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
                 Map<String, Object> requestParams = new HashMap<>();
                 requestParams.put(partnerIdStr, partnerId);
                 FxRateResponse retrieveGetFxRates = pullCardedAPI.getFxRatesEncryption(headers, requestParams);

@@ -629,5 +629,27 @@ public class CrossBorderAPITestHelper {
         quoteConfirmationRequest.setTransactionReference(transactionReference);
         return quoteConfirmationRequest;
     }
+    public static UploadDocumentRequest setDataForUploadDocument(){
+        /* set the input */
+        UploadDocumentRequest request = new UploadDocumentRequest();
+        request.setFileName("Passport copy.txt");
+        request.setFile("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+
+
+        return request;
+    }
+    public static UpdateRequest setDataForUpdateRequest(){
+        /* set the input */
+        UpdateRequest request = new UpdateRequest();
+        Sender sender=new Sender();
+        sender.setFullName("Joseph Bloggs");
+
+        request.setSender(sender);
+
+
+        return request;
+    }
+
+
 
 }
