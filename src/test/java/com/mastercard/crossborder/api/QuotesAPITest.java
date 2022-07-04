@@ -67,7 +67,7 @@ public class QuotesAPITest {
                 logger.info("ProposalId for the quotes are : {}", ((Proposal) proposal.get()).getProposalId());
                 Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
                 //This is to verify that the payment amount and the charged amount are equal when fees are included in the quote request
-                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()),Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getAmount()));
+                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()),Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getChrgAmt()));
 
             } else {
                 logger.info("Quotes request has failed, ProposalId does not exist");
@@ -100,9 +100,9 @@ public class QuotesAPITest {
                 logger.info("ProposalId for the quotes are : {}", ((Proposal) proposal.get()).getProposalId());
                 Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
                 //This is to verify that the charged amount is greater than the payment amount when fees are not included in the quote request
-                Assert.assertTrue(Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getAmount()) > Double.valueOf(request.getRemittanceAmount().getAmount()));
+                Assert.assertTrue(Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getChrgAmt()) > Double.valueOf(request.getRemittanceAmount().getAmount()));
                 //This is to verify that the payment amount and the principal amount are equal when fees are not included in the quote request
-                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getPrincipalAmount().getAmount())));
+                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getPrincipalAmount().getPrinAmt())));
             } else {
                 logger.info("Quotes request has failed, ProposalId does not exist");
                 Assert.fail("Quotes request has failed, ProposalId does not exist");

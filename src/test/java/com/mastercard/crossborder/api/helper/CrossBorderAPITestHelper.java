@@ -1,16 +1,6 @@
 package com.mastercard.crossborder.api.helper;
 
-import com.mastercard.crossborder.api.rest.request.AdditionalDataField;
-import com.mastercard.crossborder.api.rest.request.AdditionalField;
-import com.mastercard.crossborder.api.rest.request.Address;
-import com.mastercard.crossborder.api.rest.request.Amount;
-import com.mastercard.crossborder.api.rest.request.CustomerData;
-import com.mastercard.crossborder.api.rest.request.ForwardFees;
-import com.mastercard.crossborder.api.rest.request.GovernmentIdData;
-import com.mastercard.crossborder.api.rest.request.QuoteType;
-import com.mastercard.crossborder.api.rest.request.QuotesRequest;
-import com.mastercard.crossborder.api.rest.request.RemittanceRequest;
-import com.mastercard.crossborder.api.rest.request.ReverseFees;
+import com.mastercard.crossborder.api.rest.request.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -633,5 +623,33 @@ public class CrossBorderAPITestHelper {
 
         return paymentRequest;
     }
+    public static QuoteConfirmation setDataForQuoteConfirmation(String proposalId, String transactionReference ){
+        QuoteConfirmation quoteConfirmationRequest=new QuoteConfirmation();
+        quoteConfirmationRequest.setProposalId(proposalId);
+        quoteConfirmationRequest.setTransactionReference(transactionReference);
+        return quoteConfirmationRequest;
+    }
+    public static UploadDocumentRequest setDataForUploadDocument(){
+        /* set the input */
+        UploadDocumentRequest request = new UploadDocumentRequest();
+        request.setFileName("Passport copy.txt");
+        request.setFile("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+
+
+        return request;
+    }
+    public static UpdateRequest setDataForUpdateRequest(){
+        /* set the input */
+        UpdateRequest request = new UpdateRequest();
+        Sender sender=new Sender();
+        sender.setFullName("Joseph Bloggs");
+
+        request.setSender(sender);
+
+
+        return request;
+    }
+
+
 
 }
