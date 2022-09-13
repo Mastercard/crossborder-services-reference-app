@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.w3c.dom.Document;
@@ -82,7 +83,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
             String responseLog = convertToString(headers, response);
             logger.info("Response payload : {}", responseLog);
             return response;
-        }catch (HttpClientErrorException he){
+        }catch (HttpClientErrorException | HttpServerErrorException he){
             T errors = getContentFromString(headers, he.getResponseBodyAsString(), (Class<T>) Errors.class);
             throw new ServiceException(he.getResponseBodyAsString(), (Errors)errors );
         }

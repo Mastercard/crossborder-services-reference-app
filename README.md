@@ -104,6 +104,16 @@ e.g. If OI specifies beneficiary should receive 1000 INR(assuming beneficiary's 
 - Quotes response will also be in encrypted form.
 - Refer to #Usecase - 6 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
 
+> Case 7:  **QUOTES REQUEST WITH REVERSE QUOTE WITH CONFIRMATION EXPIRY TIME**
+- Originating institute (OI) can initiate the request for a quote in Json format.
+- In this case of reverse quote, quote response will have "confirmation_expiry_time" field.
+- Refer to #Usecase - 7 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
+
+> Case 8:  **QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT**
+- Originating institute (OI) can initiate the request for a quote in Json format.
+- This use case uses quote request payload to get timeout response.
+- Refer to #Usecase - 8 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
+
 B] [Make payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/payment-api/):   
 Payment can be made in two ways. Make payment using quote, One shot payment (payment without quotes).
 
@@ -169,6 +179,18 @@ Payment can be made in two ways. Make payment using quote, One shot payment (pay
 - This use case just shows one of the example of such failure where media type is Json.
 - You can refer [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-codes/) to understand different types of errors. 
 - Please refer to #Usecase - 10 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+
+> Case 11:  **TIMEOUT FOR ONE SHOT PAYMENT**
+- OI wants to make one shot payment to handle timeout response.
+- This use case uses one shot payment request payload to get timeout response.
+- The response is verified by calling Retrieve payment API with transaction ref.
+- Please refer to #Usecase - 11 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+
+> Case 12: **TIMEOUT FOR PAYMENT WITH QUOTE**
+- OI wants to make payment with quote to handle timeout response.
+- This use case uses payment with quote request payload to get timeout response.
+- The response is verified by calling Retrieve payment API with transaction ref.
+- Please refer to #Usecase - 12 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
 C] [Retrieve payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/retrieve-payment-api/):
 Status of a payment can be seen by retrieve payment API calls. There are two ways of knowing the details of payment,
