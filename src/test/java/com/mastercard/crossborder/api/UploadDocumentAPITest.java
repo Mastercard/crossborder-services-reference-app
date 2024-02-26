@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -119,11 +120,12 @@ public class UploadDocumentAPITest {
             Assert.fail("Upload Document Request has to fail for wrong File Name");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-            Error error = errors.getError();
+            //Error error = errors.getError();
+            List<Error> error = errors.getErrors();
             //Assert.assertFalse(error== null);
-            if( error != null) {
-                assertEquals("FileName", error.getSource());
-                assertEquals("DECLINE", error.getReasonCode());
+            if( error != null && !error.isEmpty()) {
+                assertEquals("FileName", error.get(0).getSource());
+                assertEquals("DECLINE", error.get(0).getReasonCode());
             }
             logger.error("Upload Document Request  has failed for the error {}", se.getMessage());
         }

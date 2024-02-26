@@ -1,5 +1,6 @@
 package com.mastercard.crossborder.api.rest.request;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -8,6 +9,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 
 @JsonTypeName(value = "paymentrequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -20,14 +23,15 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
 
     private String remittanceReference;
     private String proposalId;
+    private String receivingBankName;
+    private String receivingBankBranchName;
+    private String sourceOfIncome;
     private CustomerData senderInformation;
     private CustomerData receiverInformation;
     private AdditionalDataData fundingHints;
     private String localDateTime;
     private String purposeOfRemittance;
-    private String sourceOfIncome;
-    private String receivingBankName;
-    private String receivingBankBranchName;
+
     private String paymentType;
     private String paymentFileIdentifier;
     private String senderAccountUri;
@@ -207,6 +211,7 @@ public class RemittanceRequest extends BaseRequest implements Serializable {
     public void setBankCode(String bankCode) {
         this.bankCode = bankCode;
     }
+
 
     @JsonProperty(value = "fx_type")
     @XmlElement(name="fx_type")

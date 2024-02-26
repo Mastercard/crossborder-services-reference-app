@@ -1,6 +1,7 @@
 package com.mastercard.crossborder.api;
 
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
+
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.BalanceAPI;
 import com.mastercard.crossborder.api.rest.response.accountbalances.Account;
@@ -20,8 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import static org.junit.Assert.assertNotNull;
+
 
 /*
     This class is to get Accounts Balances API.
@@ -71,7 +72,10 @@ public class BalanceAPITest {
             List<Account> accountResponse= balanceAPI.getAllAccountsBalances(headers, requestParams);
             if (null != accountResponse) {
                 logger.info("Retrieve Accounts Balances by Partner ID with balance included is Successful with partnerId {}", partnerId);
-                assertNotNull( accountResponse);
+               if(!accountResponse.isEmpty() && accountResponse.get(0)!=null && accountResponse.get(0).getBalanceDetails()!=null && accountResponse.get(0).getBalanceDetails().getQueuedBalance()!=null) {
+            	   logger.info("Balance details Response consists of queued balance also, which is applicable only if customer has Customer is enrolled for Prefund queuing");
+            	   Assert.assertNotNull(accountResponse.get(0).getBalanceDetails().getQueuedBalance());
+               }
             } else {
                 logger.info("Retrieve Accounts Balance by Partner-ID with balance included has failed");
                 Assert.fail("Retrieve Accounts Balance by Partner-ID with balance included  has failed");
@@ -101,9 +105,15 @@ public class BalanceAPITest {
             if (null == accountResponse) {
                 logger.info("Retrieve Accounts Balance by Account-ID  with balance included has failed");
                 Assert.fail("Retrieve Accounts Balance by Account-ID with balance included has failed");
+                
+                
             } else {
                 logger.info("Retrieve Accounts Balances by Account ID with balance included is Successful with account_Id {}", accountResponse.getAccountId());
-                Assert.assertEquals(accountResponse.getAccountState(), status);
+                if(accountResponse.getBalanceDetails()!=null && accountResponse.getBalanceDetails().getQueuedBalance()!=null) {
+             	   logger.info("Balance details Response consists of queued balance also, which is applicable only if customer is enrolled for Prefund queuing");
+             	   Assert.assertNotNull(accountResponse.getBalanceDetails().getQueuedBalance());
+                }
+               Assert.assertEquals(accountResponse.getAccountState(), status);
             }
 
         } catch (ServiceException re) {
@@ -135,8 +145,8 @@ public class BalanceAPITest {
             }
 
         } catch (ServiceException re) {
-            Assert.fail(re.getMessage());
-            logger.error("Retrieve Balance by PartnerID With Encryption balance included has failed {}", re.getMessage());
+        	    Assert.fail(re.getMessage());
+                logger.error("Retrieve Balance by PartnerID With Encryption balance included has failed {}", re.getMessage());
         }
     }
      /*
@@ -289,6 +299,5 @@ public class BalanceAPITest {
             logger.info("To run this use cases, Set runWithEncryptedPayload=true and other encryption / decryption keys in mastercard-api.properties.");
     }
 
-
-
+   
 }

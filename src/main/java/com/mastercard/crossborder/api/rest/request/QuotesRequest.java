@@ -1,10 +1,8 @@
 package com.mastercard.crossborder.api.rest.request;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -107,5 +105,6 @@ public class QuotesRequest extends BaseRequest implements Serializable {
     public void setBankCode(String bankCode) {
         this.bankCode = bankCode;
     }
+
 
 }

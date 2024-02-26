@@ -168,7 +168,7 @@ public class RemittanceResponse implements Serializable {
 
     @JsonProperty(value = "additional_data_list")
     @XmlElement(name = "additional_data_list")
-    public AdditionalData getAdditionalData() {
+    public  AdditionalData getAdditionalData() {
         return additionalData;
     }
 

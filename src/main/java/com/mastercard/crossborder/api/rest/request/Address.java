@@ -1,5 +1,6 @@
 package com.mastercard.crossborder.api.rest.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -23,6 +24,7 @@ public  class Address implements Serializable {
 	private String addrLine2 = null;
 	private String city = null;
 	private String postalCode = null;
+	@JsonIgnoreProperties(ignoreUnknown=true)
 	private String countrySubdivision = null;
 	private String country = null;
 
@@ -58,7 +60,7 @@ public  class Address implements Serializable {
 	}
 
 	@JsonProperty(value = "country_subdivision")
-	@XmlElement(name = "country_subdivision")
+	@XmlElement(name = "countrySubdivision")
 	public String getCountrySubdivision() {
 		return countrySubdivision;
 	}
@@ -68,7 +70,7 @@ public  class Address implements Serializable {
 	}
 
 	@JsonProperty(value = "postal_code")
-	@XmlElement(name = "postal_code")
+	@XmlElement(name = "postalCode")
 	public String getPostalCode() {
 		return postalCode;
 	}

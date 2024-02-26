@@ -1,11 +1,11 @@
 package com.mastercard.crossborder.api;
-
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.DownloadDocumentAPI;
 import com.mastercard.crossborder.api.rest.response.DownloadDocumentResponse;
 import com.mastercard.crossborder.api.rest.response.Error;
 import com.mastercard.crossborder.api.rest.response.Errors;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -109,18 +110,19 @@ public class DownloadDocumentAPITest {
         requestParams.put("document_id","d0b7db34-eff8-47fa-b707-2ad12929f0a8");
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
 
         try {
             DownloadDocumentResponse downloadDocumentResponse = downloadDocumentAPI.downloadDocumentById(headers, requestParams);
             Assert.fail("Download Document Request has to fail for wrong document Id");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-            Error error = errors.getError();
+//            Error error = errors.getError();
+            List<Error> error = errors.getErrors();
             Assert.assertFalse(errors== null);
             if( error != null) {
-                assertEquals("document_id", error.getSource());
-                assertEquals("DECLINE", error.getReasonCode());
+                assertEquals("document_id", error.get(0).getSource());
+                assertEquals("DECLINE", error.get(0).getReasonCode());
             }
             logger.error("Download Document Request  has failed for the error {}", se.getMessage());
         }

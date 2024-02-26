@@ -23,11 +23,11 @@ import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 /*
- * Retrieve Payment:-
- * Status of a payment can be seen by retrieve payment API calls. There are two ways of knowing the details of payment,
- * Get payment by ID and Get payment by reference. These getPayment APIs also support encryption.
- *
- * */
+* Retrieve Payment:-
+* Status of a payment can be seen by retrieve payment API calls. There are two ways of knowing the details of payment,
+* Get payment by ID and Get payment by reference. These getPayment APIs also support encryption.
+*
+* */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MastercardApiConfig.class})
 public class GetRemittanceAPITest  {
@@ -107,7 +107,6 @@ public class GetRemittanceAPITest  {
             if (null != paymentDetails) {
                 //transaction_reference can also be used from request, paymentRequest.getTransactionReference()
                 String transactionReference = paymentDetails.getTransactionReference();
-
                 Map<String, Object> requestParams = new HashMap<>();
                 requestParams.put(partnerIdStr, partnerId);
                 requestParams.put("payment-reference", transactionReference);
@@ -191,6 +190,7 @@ public class GetRemittanceAPITest  {
                 String transactionReference = paymentDetails.getTransactionReference();
                 if (!Strings.isBlank(transactionReference)) {
                     Map<String, Object> requestParams = new HashMap<>();
+                    headers.add(HttpHeaders.ACCEPT,MediaType.APPLICATION_JSON);
                     requestParams.put(partnerIdStr, partnerId);
                     requestParams.put("payment-reference", transactionReference);
 

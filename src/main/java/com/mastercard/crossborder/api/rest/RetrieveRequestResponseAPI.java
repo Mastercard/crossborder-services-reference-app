@@ -2,6 +2,7 @@ package com.mastercard.crossborder.api.rest;
 
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.response.RetrieveRequestResponse;
+import com.mastercard.crossborder.api.rest.response.RetrieveResponse;
 import com.mastercard.crossborder.api.service.RestClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

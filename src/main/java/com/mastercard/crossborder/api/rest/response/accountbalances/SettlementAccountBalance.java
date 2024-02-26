@@ -1,7 +1,7 @@
 package com.mastercard.crossborder.api.rest.response.accountbalances;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonPropertyOrder(value = { "amount", "currency" })
 public class SettlementAccountBalance {

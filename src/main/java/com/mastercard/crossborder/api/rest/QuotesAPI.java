@@ -1,18 +1,17 @@
 package com.mastercard.crossborder.api.rest;
 
-import com.mastercard.crossborder.api.exception.ServiceException;
+import com.mastercard.crossborder.api.service.RestClientService;
 import com.mastercard.crossborder.api.rest.request.QuotesRequest;
 import com.mastercard.crossborder.api.rest.response.QuotesResponse;
-import com.mastercard.crossborder.api.service.RestClientService;
+import com.mastercard.crossborder.api.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-
 /*
     This class is to make a Quotes API call.
     Quotes can be requested for given partnerID, amount and currency.

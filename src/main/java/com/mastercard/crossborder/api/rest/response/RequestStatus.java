@@ -13,7 +13,7 @@ public class RequestStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    List<RequestHistory> requestHistory = new ArrayList();
+    List< RequestHistory > requestHistory = new ArrayList();
 
     @JsonProperty(value = "requestHistory")
     public List<RequestHistory> getRequestHistory() {

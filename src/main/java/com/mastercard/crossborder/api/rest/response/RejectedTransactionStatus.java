@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
-
 @JsonTypeName(value = "RejectedTransactionStatus")
 @XmlType(name = "RejectedTransactionStatus", propOrder = {"code", "message", "description"})
 @XmlRootElement(name = "RejectedTransactionStatus")

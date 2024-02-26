@@ -1,11 +1,9 @@
 package com.mastercard.crossborder.api.rest.response;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.mastercard.crossborder.api.rest.request.AdditionalData;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -216,7 +214,7 @@ public class Proposal implements Serializable {
     @JsonProperty(value = "additional_data_list")
     @XmlElement(name = "additional_data_list")
 
-    public AdditionalData getAdditionalData() {
+    public  AdditionalData getAdditionalData() {
         return additionalData;
     }
 

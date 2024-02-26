@@ -1,8 +1,6 @@
 package com.mastercard.crossborder.api.rest.request;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import java.io.Serializable;
 
 @JsonPropertyOrder(value = {"fullName", "dateOfBirth", "placeOfBirth", "nationality", "governmentId", "fullAddress", "sourceOfIncome", "additionalQuestion","additionalDocuments"})
