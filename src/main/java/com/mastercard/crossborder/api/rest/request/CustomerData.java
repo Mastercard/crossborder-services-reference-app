@@ -1,12 +1,13 @@
 package com.mastercard.crossborder.api.rest.request;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(value = {"firstName","middleName","lastName","organizationName","nationality","address", "governmentIdData", "dateOfBirth", "phone", "email"})
 @XmlType(name = "customerdata", propOrder = {"firstName","middleName","lastName","organizationName","nationality","address", "governmentIdData", "dateOfBirth", "phone", "email"})
 public  class CustomerData implements Serializable {

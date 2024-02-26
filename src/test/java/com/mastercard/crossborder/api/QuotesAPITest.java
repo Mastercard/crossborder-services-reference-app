@@ -5,6 +5,7 @@ import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.helper.CrossBorderAPITestHelper;
 import com.mastercard.crossborder.api.rest.QuotesAPI;
 import com.mastercard.crossborder.api.rest.request.QuotesRequest;
+import com.mastercard.crossborder.api.rest.response.Error;
 import com.mastercard.crossborder.api.rest.response.Proposal;
 import com.mastercard.crossborder.api.rest.response.QuotesResponse;
 import org.junit.Assert;
@@ -290,12 +291,17 @@ public class QuotesAPITest {
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
             quotesAPI.getQuote(headers, requestParams, request);
+            Assert.fail("Quote request did not timeout");
         } catch (ServiceException re) {
-            if (re != null && re.getErrors() != null && re.getErrors().getError() != null) {
+            if (re != null && re.getErrors() != null && re.getErrors().getErrorList() != null && !re.getErrors().getErrorList().isEmpty() ) {
                 logger.error("Quote processing has timed out {}", re.getMessage());
-                String source = re.getErrors().getError().getSource();
+                String source = re.getErrors().getErrorList().get(0).getSource();
                 assertThat(source, anyOf(is("Service"), is("Gateway")));
+            }
+            else{
+                Assert.fail("Exepcted exception not received");
             }
         }
     }
+
 }

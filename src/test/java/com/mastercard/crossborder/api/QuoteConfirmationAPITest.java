@@ -7,9 +7,9 @@ import com.mastercard.crossborder.api.rest.QuoteConfirmationAPI;
 import com.mastercard.crossborder.api.rest.QuotesAPI;
 import com.mastercard.crossborder.api.rest.request.QuoteConfirmation;
 import com.mastercard.crossborder.api.rest.request.QuotesRequest;
+import com.mastercard.crossborder.api.rest.response.QuotesResponse;
 import com.mastercard.crossborder.api.rest.response.Proposal;
 import com.mastercard.crossborder.api.rest.response.QuoteConfirmationResponse;
-import com.mastercard.crossborder.api.rest.response.QuotesResponse;
 import com.mastercard.crossborder.api.rest.response.RetrieveQuoteStatus;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,12 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -85,6 +83,7 @@ public class QuoteConfirmationAPITest {
             logger.error("Quote Confirmation within expiry time has failed for the error {}", re.getMessage());
         }
     }
+
 
     @Test
     public void testCancelConfirmedQuote() {
@@ -227,6 +226,40 @@ public class QuoteConfirmationAPITest {
         } catch (ServiceException re){
             Assert.fail(re.getMessage());
             logger.error("Retrieve Cancelled Quote has failed for the error {}", re.getMessage());
+        }
+    }
+
+    @Test
+    public void testQuoteConfirmationWithEncryption() {
+        logger.info("Running Usecase - 6, Quote Confirmation With Encryption");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        try {
+            QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncluded();
+            QuotesResponse quotesResponse = quotesAPI.getQuoteWithEncryption(headers, requestParams, request);
+            Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
+            if ( proposal.isPresent()) {
+                String ProposalId = ((Proposal) proposal.get()).getProposalId();
+                String transactionReference=quotesResponse.getProposalReference();
+                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(ProposalId,transactionReference);
+
+                QuoteConfirmationResponse quoteConfirmationResponse = quoteConfirmationAPI.getQuoteConfirmationWithEncryption(headers, requestParams, quoteConfirmationRequest);
+                if (null != quoteConfirmationResponse) {
+                    Assert.assertNotNull(quoteConfirmationResponse.getProposalId());
+                } else {
+                    Assert.fail("Quote Confirmation within expiry time has failed");
+                    logger.info("Quote Confirmation within expiry time has failed");
+                }
+            }
+            else {
+                Assert.fail("Quote Confirmation has failed as quotes API has failed");
+                logger.info("Quote Confirmation has failed as quotes API has failed");
+            }
+        } catch (ServiceException re){
+            Assert.fail(re.getMessage());
+            logger.error("Quote Confirmation within expiry time has failed for the error {}", re.getMessage());
         }
     }
 }
