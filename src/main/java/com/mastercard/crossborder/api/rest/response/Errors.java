@@ -46,8 +46,4 @@ public class Errors implements Serializable {
     public void setErrorList(List<Error> Errors) {
         this.Errors = Errors;
     }
-
-  /*  public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }*/
 }
