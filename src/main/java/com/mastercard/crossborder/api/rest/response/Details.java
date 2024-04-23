@@ -46,8 +46,4 @@ public class Details implements Serializable {
 
         this.getDetails().add(detail);
     }
-/*
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }*/
 }
