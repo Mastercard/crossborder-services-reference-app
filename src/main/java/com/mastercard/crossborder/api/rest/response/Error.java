@@ -2,11 +2,13 @@ package com.mastercard.crossborder.api.rest.response;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
+@ToString
 public class Error implements Serializable {
     static final long serialVersionUID = 1L;
     private String source;

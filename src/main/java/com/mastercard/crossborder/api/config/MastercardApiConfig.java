@@ -45,7 +45,13 @@ public class MastercardApiConfig {
 
     @Value("${mastercard.api.decryption.keyFile}")
     private Resource decryptionKeyFile;
-
+    
+    @Value("${mastercard.api.decryption.keyAlias}")
+    private String decryptionKeyAlias;
+    
+    @Value("${mastercard.api.decryption.password}")
+    private String decryptionKeyPassword;
+    
     @PostConstruct
     public void setupApiConfiguration() throws ServiceException {
         if(null == p12File || StringUtils.isEmpty( consumerKey))
@@ -92,5 +98,11 @@ public class MastercardApiConfig {
     public Resource getDecryptionKeyFile() {
         return decryptionKeyFile;
     }
+    public String getDecryptionKeyAlias() {
+        return decryptionKeyAlias;
+    }
 
+    public String getDecryptionKeyPassword() {
+        return decryptionKeyPassword;
+    }
 }

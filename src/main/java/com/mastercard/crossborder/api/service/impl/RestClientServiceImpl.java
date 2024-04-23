@@ -1,9 +1,10 @@
 package com.mastercard.crossborder.api.service.impl;
+import com.mastercard.crossborder.api.exception.ServiceException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
-import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.response.EncryptedPayload;
 import com.mastercard.crossborder.api.rest.response.Errors;
 import com.mastercard.crossborder.api.service.RestClientService;
@@ -48,6 +49,8 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
@@ -64,10 +67,10 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
     MastercardApiConfig mastercardApiConfig;
 
     @Override
-    public T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass) throws ServiceException {
+    public T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams,Object request, Class<T> responseClass,boolean isListResponse,Class<T> listElementClass) throws ServiceException{
 
-        String url = buildURL(baseURL, requestParams);
-
+    	String url = buildURL(baseURL, requestParams);
+         
         String requestStr = convertToString(headers, request);
 
         /* Generate oauth*/
@@ -82,18 +85,28 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
             T response = callCrossBorderAPI(url, httpMethod, requestParams, requestEntity, responseClass);
             String responseLog = convertToString(headers, response);
             logger.info("Response payload : {}", responseLog);
+            if(isListResponse && listElementClass!=null) {
+            	return (T) mapAccountValues(responseLog,listElementClass,headers,responseClass);
+            }
             return response;
         }catch (HttpClientErrorException | HttpServerErrorException he){
             T errors = getContentFromString(headers, he.getResponseBodyAsString(), (Class<T>) Errors.class);
             throw new ServiceException(he.getResponseBodyAsString(), (Errors)errors );
         }
-
     }
 
-
+    @Override
+    public T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams,Object request, Class<T> responseClass) throws ServiceException{
+    	return service(baseURL,headers,httpMethod,requestParams,request,responseClass,false,null);
+    }
 
     @Override
-    public T serviceEncryption(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass) throws ServiceException {
+    public T serviceEncryption(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass) throws ServiceException{
+    	return serviceEncryption(baseURL,headers,httpMethod,requestParams,request,responseClass,false,null);
+        }
+
+    @Override
+    public T serviceEncryption(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass,boolean isListResponse,Class<T> listElementClass) throws ServiceException{
 
         if(mastercardApiConfig.getRunWithEncryptedPayload()) {
 
@@ -115,8 +128,13 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
                 T response = callCrossBorderAPI(url, httpMethod, requestParams, requestEntity, EncryptedPayload.class);
                 /*Decrypt the response payload and return*/
                 if (null != response) {
+                	
                     logger.info("Encrypted Response payload : {}", ((EncryptedPayload) response).getData());
-                    String responseStr = EncryptionUtils.jweDecrypt(((EncryptedPayload) response).getData(), mastercardApiConfig.getDecryptionKeyFile());
+                    String responseStr = EncryptionUtils.jweDecrypt(((EncryptedPayload) response).getData(), mastercardApiConfig.getDecryptionKeyFile(),mastercardApiConfig.getDecryptionKeyAlias(),mastercardApiConfig.getDecryptionKeyPassword());
+                    logger.info("Decrypted Response payload: {}:",responseStr);
+                    if(isListResponse && listElementClass!=null) {
+                    	return (T) mapAccountValues(responseStr,listElementClass,requestEntity.getHeaders(),responseClass);
+                    }
                     return getContentFromString(headers, responseStr, responseClass);
                 }
             }catch (HttpClientErrorException he){
@@ -127,10 +145,12 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         return null;
     }
     private String buildURL(String baseURL, Map<String, Object> requestParams){
+
         String builtURL = UriComponentsBuilder.fromHttpUrl( mastercardApiConfig.getEndPointURL() + "/" + baseURL).uriVariables(requestParams).build().toUriString();
         logger.info("requestURL : {}", builtURL);
         return builtURL;
     }
+
 
     private String authenticate(String url, HttpMethod httpMethod, String requestStr) throws ServiceException {
         try {
@@ -142,10 +162,11 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
 
     }
 
-
     private HttpEntity<MultiValueMap<String, String>> generateRequestEntity(Boolean encrypt, HttpHeaders headers, String requestStr, String oAuthString) {
         HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("x-mc-routing","nextgen-apigw");
         httpHeaders.add(HttpHeaders.AUTHORIZATION, oAuthString);
+
         //if content type is not already added, use application_xml
         if(headers.containsKey(HttpHeaders.CONTENT_TYPE) && null != headers.getContentType())
             httpHeaders.add(HttpHeaders.CONTENT_TYPE, headers.getContentType().toString());
@@ -166,12 +187,12 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         if (null != requestStr && processForEncryption(Boolean.TRUE) &&  headers.containsKey(HttpHeaders.CONTENT_TYPE) )
         {
             if ( null!= headers.getContentType()&& MediaType.APPLICATION_XML.equals(headers.getContentType().toString())) {
-                encryptedStr = EncryptionUtils.jweEncrypt(requestStr, mastercardApiConfig.getCertificateFile(), mastercardApiConfig.getEncryptionFP(), MediaType.APPLICATION_XML);
+                encryptedStr = EncryptionUtils.jweEncrypt(requestStr, mastercardApiConfig.getCertificateFile(), mastercardApiConfig.getEncryptionFP(), MediaType.APPLICATION_XML,mastercardApiConfig.getDecryptionKeyAlias(),mastercardApiConfig.getDecryptionKeyPassword());
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" +
                         "<encrypted_payload><data>" + encryptedStr + "</data></encrypted_payload>";
             }
             if(null != headers.getContentType() && MediaType.APPLICATION_JSON.equals(headers.getContentType().toString())) {
-                encryptedStr = EncryptionUtils.jweEncrypt(requestStr, mastercardApiConfig.getCertificateFile(), mastercardApiConfig.getEncryptionFP(), MediaType.APPLICATION_JSON);
+                encryptedStr = EncryptionUtils.jweEncrypt(requestStr, mastercardApiConfig.getCertificateFile(), mastercardApiConfig.getEncryptionFP(), MediaType.APPLICATION_JSON,mastercardApiConfig.getDecryptionKeyAlias(),mastercardApiConfig.getDecryptionKeyPassword());
                 return "{\"encrypted_payload\":{\"data\":"+"\"" + encryptedStr +"\""+"}}";
             }
         }
@@ -263,7 +284,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         return "";
     }
 
-    public String convertJsonToString(Object jsonObject) throws ServiceException {
+    public String convertJsonToString(Object jsonObject) throws ServiceException{
 
         try {
             return mapper.writeValueAsString(jsonObject);
@@ -272,7 +293,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         }
     }
 
-    private Document createXMLDocument(Object request) throws ServiceException {
+    private Document createXMLDocument(Object request) throws ServiceException{
         try {
             Document doc = dbf.newDocumentBuilder().newDocument();
             JAXBContext context = JAXBContext.newInstance(request.getClass());
@@ -282,5 +303,21 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
             throw new ServiceException(e.getMessage());
         }
     }
+    private List mapAccountValues(String response,Class<T> listElementClass ,HttpHeaders headers,Class<T> responseClass) throws ServiceException  {
+    	if ( null != headers.getContentType() && MediaType.APPLICATION_XML.equals(headers.getContentType().toString())) {
+            return (List) convertStringToXMLDocument(response,responseClass);
+        }
+        if ( null != headers.getContentType() && MediaType.APPLICATION_JSON.equals(headers.getContentType().toString())) {
+        try {
+            CollectionType listType =
+                    mapper.getTypeFactory().constructCollectionType(ArrayList.class,listElementClass);
+            return mapper.readValue(response, listType);
+        }catch(JsonProcessingException e){
+            logger.warn("Error while processing response");
+        }
+        }
+    return null;
+    }
+
 
 }

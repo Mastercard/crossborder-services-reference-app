@@ -1,5 +1,4 @@
 package com.mastercard.crossborder.api;
-
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.helper.CrossBorderAPITestHelper;
@@ -18,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -122,11 +121,12 @@ public class UpdateRequestAPITest {
             Assert.fail("Update Request has to fail for wrong request id");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-            Error error = errors.getError();
+           // Error error = errors.getError();
+            List<Error> error = errors.getErrors();
             Assert.assertFalse(se.getErrors()== null);
-            if( error != null) {
-                assertEquals("request_id", error.getSource());
-                assertEquals("DECLINE", error.getReasonCode());
+            if( error != null && !error.isEmpty()) {
+                assertEquals("request_id", error.get(0).getSource());
+                assertEquals("DECLINE", error.get(0).getReasonCode());
             }
             logger.error("Update Request  has failed for the error {}", se.getMessage());
         }

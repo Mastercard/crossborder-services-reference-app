@@ -1,8 +1,8 @@
 package com.mastercard.crossborder.api;
 
+import com.mastercard.crossborder.api.rest.RetrieveRequestAPI;
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
-import com.mastercard.crossborder.api.rest.RetrieveRequestAPI;
 import com.mastercard.crossborder.api.rest.RetrieveRequestResponseAPI;
 import com.mastercard.crossborder.api.rest.response.RetrieveRequestResponse;
 import org.junit.Assert;

@@ -1,29 +1,49 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
 package com.mastercard.crossborder.api.rest.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.ToString;
 
 @XmlType(
         name = "Details",
         propOrder = {"details"}
 )
+@ToString
 public class Details implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Detail detail;
+    private List<Detail> details = null;
+
+    public Details() {
+    }
 
     @XmlElement(
             name = "Detail",
-            required = true
+            required = true,
+            nillable = false
     )
-    @JsonProperty(value = "Detail")
-    public Detail getDetails() {
-        return this.detail;
+    @JsonProperty("Detail")
+    public List<Detail> getDetails() {
+        return this.details;
     }
 
-    public void setDetails(Detail detail) {
-        this.detail = detail;
+    public void setDetails(List<Detail> details) {
+        this.details = details;
+    }
+
+    public void addDetail(Detail detail) {
+        if (this.getDetails() == null) {
+            this.setDetails(new ArrayList());
+        }
+
+        this.getDetails().add(detail);
     }
 }

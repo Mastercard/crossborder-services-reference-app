@@ -5,16 +5,17 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
 import java.util.List;
 
-@JsonPropertyOrder(value = { "openingBalance", "processedAmount", "reservedBalance", "availableBalance", "settlementAccountBalance", "thresholdAmount", "thresholds"})
+@JsonPropertyOrder(value = { "openingBalance", "processedAmount", "reservedBalance", "availableBalance", "settlementAccountBalance", "thresholdAmount", "thresholds","queuedBalance"})
 public class BalanceDetails implements Serializable {
     private OpeningBalance openingBalance;
     private ProcessedAmount processedAmount;
     private ReservedBalance reservedBalance;
     private AvailableBalance availableBalance;
+
     private SettlementAccountBalance settlementAccountBalance;
     private ThresholdAmount thresholdAmount;
     private List<BalanceThreshold> thresholds;
-
+    private QueuedBalance queuedBalance;
 
     public OpeningBalance getOpeningBalance() {
         return openingBalance;
@@ -72,6 +73,14 @@ public class BalanceDetails implements Serializable {
         this.settlementAccountBalance = settlementAccountBalance;
     }
 
+    public QueuedBalance getQueuedBalance() {
+        return queuedBalance;
+    }
+
+    public void setQueuedBalance(QueuedBalance queuedBalance) {
+        this.queuedBalance = queuedBalance;
+    }
+
     @Override
     public String toString() {
         return "BalanceDetails{" +
@@ -81,6 +90,7 @@ public class BalanceDetails implements Serializable {
                 ", availableBalance=" + availableBalance +
                 ", settlementAccountBalance=" + settlementAccountBalance +
                 ", thresholdAmount=" + thresholdAmount +
+                ", queuedBalance=" + queuedBalance +
                 '}';
     }
 }

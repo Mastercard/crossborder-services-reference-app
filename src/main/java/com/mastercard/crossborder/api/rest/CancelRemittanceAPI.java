@@ -1,9 +1,9 @@
 package com.mastercard.crossborder.api.rest;
 
-import com.mastercard.crossborder.api.exception.ServiceException;
+import com.mastercard.crossborder.api.service.RestClientService;
 import com.mastercard.crossborder.api.rest.request.CancelRemittance;
 import com.mastercard.crossborder.api.rest.response.CancelResponse;
-import com.mastercard.crossborder.api.service.RestClientService;
+import com.mastercard.crossborder.api.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-
 /*
     This class is to call to cancel payment API.
     If the payment is initiated and it is not yet successful

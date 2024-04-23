@@ -2,15 +2,17 @@ package com.mastercard.crossborder.api.rest.response;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 @XmlType(
-        name = "Detail",
+        name = "details",
         propOrder = {"name", "value"}
 )
+@ToString
 public class Detail implements Serializable {
     private static final long serialVersionUID = 1L;
     private String name = null;

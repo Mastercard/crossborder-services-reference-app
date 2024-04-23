@@ -9,14 +9,7 @@ import com.mastercard.crossborder.api.rest.RemittanceAPI;
 import com.mastercard.crossborder.api.rest.request.QuotesRequest;
 import com.mastercard.crossborder.api.rest.request.RemittanceRequest;
 import com.mastercard.crossborder.api.rest.response.Error;
-import com.mastercard.crossborder.api.rest.response.Errors;
-import com.mastercard.crossborder.api.rest.response.Proposal;
-import com.mastercard.crossborder.api.rest.response.QuotesResponse;
-import com.mastercard.crossborder.api.rest.response.RemittanceResponse;
-import com.mastercard.crossborder.api.config.MastercardApiConfig;
-import com.mastercard.crossborder.api.exception.ServiceException;
-import com.mastercard.crossborder.api.rest.QuotesAPI;
-import com.mastercard.crossborder.api.rest.RemittanceAPI;
+import com.mastercard.crossborder.api.rest.response.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,10 +22,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.ws.rs.core.MediaType;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 /*
@@ -292,11 +286,12 @@ public class RemittanceAPITest  {
             Assert.fail("Payment has to fail for wrong proposal ID");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-            Error error = errors.getError();
+           // Error error = errors.getError();
+            List<Error> error = errors.getErrorList();
             Assert.assertFalse(error== null);
-            if( error != null) {
-                assertEquals("proposal_id", error.getSource());
-                assertEquals("DECLINE", error.getReasonCode());
+            if( error != null && !error.isEmpty()) {
+                assertEquals("proposal_id", error.get(0).getSource());
+                assertEquals("DECLINE", error.get(0).getReasonCode());
             }
             logger.error("Payment with quote has failed for the error {}", se.getMessage());
         }
@@ -393,11 +388,12 @@ public class RemittanceAPITest  {
             Assert.fail("Payment has to fail for wrong proposal ID");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-            Error error = errors.getError();
+            // Error error = errors.getError();
+            List<Error> error = errors.getErrorList();
             Assert.assertFalse(error== null);
-            if( error != null) {
-                assertEquals("proposal_id", error.getSource());
-                assertEquals("DECLINE", error.getReasonCode());
+            if( error != null && !error.isEmpty()) {
+                assertEquals("proposal_id", error.get(0).getSource());
+                assertEquals("DECLINE", error.get(0).getReasonCode());
             }
             logger.error("Payment with quote has failed for the error {}", se.getMessage());
         }
@@ -423,8 +419,8 @@ public class RemittanceAPITest  {
             remittanceAPI.makePayment(headers, requestParams, paymentRequest);
         }
         catch(ServiceException ex){
-            if(ex != null && ex.getErrors() != null && ex.getErrors().getError() != null) {
-                String source  = ex.getErrors().getError().getSource();
+            if(ex != null && ex.getErrors() != null && ex.getErrors().getErrorList() != null && !ex.getErrors().getErrorList().isEmpty()) {
+                String source  = ex.getErrors().getErrorList().get(0).getSource();
                 if (source!=null && (source.equalsIgnoreCase("Service") || source.equalsIgnoreCase("Gateway"))) {
                     logger.error("One shot payment has been timed out {}", ex.getMessage());
                     initiateBackoffAlgo(currentTransRef);
@@ -469,9 +465,9 @@ public class RemittanceAPITest  {
                 logger.info("Payment with quote has failed as quotes API has failed");
             }
         } catch (ServiceException ex) {
-            if (ex != null && ex.getErrors() != null && ex.getErrors().getError() != null) {
+            if (ex != null && ex.getErrors() != null && ex.getErrors().getErrorList() != null && !ex.getErrors().getErrorList().isEmpty()) {
                 logger.error("Payment with quote has been timed out {}", ex.getMessage());
-                String source = ex.getErrors().getError().getSource();
+                String source = ex.getErrors().getErrorList().get(0).getSource();
                 if (source.equalsIgnoreCase("Service") || source.equalsIgnoreCase("Gateway")) {
                     initiateBackoffAlgo(transactionRef);
                 }else {
