@@ -5,6 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mastercard</groupId>
     <artifactId>crossborder-ref-app</artifactId>
+    <name>MasterCard - XB - RefApp - API</name>
+    <description>This is cross-border reference application</description>
     <version>1.0.0</version>
     <build>
         <plugins>
