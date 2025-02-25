@@ -16,6 +16,7 @@ public class CancelRemittance extends BaseRequest implements Serializable {
     }
 
     public CancelRemittance(String stringBody) {
+                // Implement initialization or processing of springBody parameter in future
     }
 
 }
