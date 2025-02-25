@@ -5,21 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mastercard</groupId>
     <artifactId>crossborder-ref-app</artifactId>
-    <name>MasterCard - XB - RefApp - API</name>
-    <description>This is cross-border reference application</description>
     <version>1.0.0</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
     <name>MasterCard Cross-Border Services - Reference App</name>
     <description>This is cross-border services reference application</description>
     <properties>
@@ -34,6 +20,7 @@
         <javax.ws.rs.version>2.0.1</javax.ws.rs.version>
         <oauth1-signer-version>1.2.4</oauth1-signer-version>
         <nimbus-jwt>7.9</nimbus-jwt>
+        <sonar.coverage.exclusions>**/api/**</sonar.coverage.exclusions>
     </properties>
     <dependencies>
         <!-- Below are mandatory dependencies for executing cross border APIs-->
@@ -48,11 +35,6 @@
             <version>${spring.version}</version>
         </dependency>
         <!-- Below dependencies are required for making REST calls -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
@@ -123,6 +105,12 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
