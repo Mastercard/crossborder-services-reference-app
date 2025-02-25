@@ -2,11 +2,13 @@ package com.mastercard.crossborder.api.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.io.Serializable;
 
-@JsonTypeName(value = "downloadDocumentResponse")
+@JsonTypeName("downloadDocumentResponse")
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT,use = JsonTypeInfo.Id.NAME)
 @JsonPropertyOrder(value = {"file","fileName","referenceId"})
 public class DownloadDocumentResponse implements Serializable {
 

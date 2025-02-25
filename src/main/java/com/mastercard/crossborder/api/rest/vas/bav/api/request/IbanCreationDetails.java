@@ -3,7 +3,7 @@ package com.mastercard.crossborder.api.rest.vas.bav.api.request;
 import lombok.ToString;
 
 @ToString
-public class IbanCreationDetails extends BAVBaseRequest {
+public class IbanCreationDetails {
     private AccountUri accountUri;
     private String country;
     private String branchCode;

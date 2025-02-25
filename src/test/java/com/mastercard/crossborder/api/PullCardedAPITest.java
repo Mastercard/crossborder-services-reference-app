@@ -40,7 +40,7 @@ public class PullCardedAPITest {
 
     private static final Logger logger = LoggerFactory.getLogger(PullCardedAPITest.class);
 
-    private static final String partnerIdStr = "partner-id";
+    private static final String PARTNER_ID_STR = "partner-id";
 
     @Before
     public void init() {
@@ -57,11 +57,11 @@ public class PullCardedAPITest {
         logger.info("Running Usecase - 1, RETRIEVE FX RATES IN JSON FORMAT.");
         try {
             Map<String, Object> paymentParams = new HashMap<>();
-            paymentParams.put(partnerIdStr, partnerId);
+            paymentParams.put(PARTNER_ID_STR, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put(partnerIdStr, partnerId);
+            requestParams.put(PARTNER_ID_STR, partnerId);
             FxRateResponse retrieveGetFxRates = pullCardedAPI.getFxRates(headers, requestParams);
             if (null != retrieveGetFxRates) {
                 logger.info("Retrieve Fx Rates is Successful with Partner ID {}", partnerId);
@@ -87,12 +87,12 @@ public class PullCardedAPITest {
         if (apiConfig.getRunWithEncryptedPayload()) {
             logger.info("Running Usecase - 2, RETRIEVE FX RATES IN ENCRYPTED FORM.");
             try {
-                Map<String, Object> FXCardRateParams = new HashMap<>();
-                FXCardRateParams.put(partnerIdStr, partnerId);
+                Map<String, Object> fxCardRateParams = new HashMap<>();
+                fxCardRateParams.put(PARTNER_ID_STR, partnerId);
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
                 Map<String, Object> requestParams = new HashMap<>();
-                requestParams.put(partnerIdStr, partnerId);
+                requestParams.put(PARTNER_ID_STR, partnerId);
                 FxRateResponse retrieveGetFxRates = pullCardedAPI.getFxRatesEncryption(headers, requestParams);
                 if (null != retrieveGetFxRates) {
                     logger.info("Retrieve Fx Rates is Successful with Partner ID {}", partnerId);

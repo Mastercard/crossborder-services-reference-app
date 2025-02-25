@@ -62,9 +62,9 @@ public class QuoteConfirmationAPITest {
             QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if ( proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
+                String proposalId = ((Proposal) proposal.get()).getProposalId();
                 String transactionReference=quotesResponse.getProposalReference();
-                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(ProposalId,transactionReference);
+                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(proposalId,transactionReference);
 
                 QuoteConfirmationResponse quoteConfirmationResponse = quoteConfirmationAPI.getQuoteConfirmation(headers, requestParams, quoteConfirmationRequest);
                 if (null != quoteConfirmationResponse) {
@@ -97,13 +97,13 @@ public class QuoteConfirmationAPITest {
             QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if ( proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
+                String proposalId = ((Proposal) proposal.get()).getProposalId();
                 String transactionReference=quotesResponse.getProposalReference();
-                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(ProposalId,transactionReference);
+                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(proposalId,transactionReference);
                 QuoteConfirmationResponse quoteConfirmationResponse = quoteConfirmationAPI.getQuoteConfirmation(headers, requestParams, quoteConfirmationRequest);
 
                 if(quoteConfirmationResponse.getStatus().equals("CONFIRMED")) {
-                    quoteConfirmationResponse = quoteConfirmationAPI.cancelConfirmedQuote(headers, requestParams, CrossBorderAPITestHelper.setDataForQuoteConfirmation(ProposalId, transactionReference));
+                    quoteConfirmationResponse = quoteConfirmationAPI.cancelConfirmedQuote(headers, requestParams, CrossBorderAPITestHelper.setDataForQuoteConfirmation(proposalId, transactionReference));
                 }
                 if (null != quoteConfirmationResponse) {
                     Assert.assertNotNull(quoteConfirmationResponse.getProposalId());
@@ -134,9 +134,9 @@ public class QuoteConfirmationAPITest {
             QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if ( proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
+                String proposalId = ((Proposal) proposal.get()).getProposalId();
                 String transactionReference=quotesResponse.getProposalReference();
-                quoteConfirmationAPI.cancelConfirmedQuote(headers, requestParams, CrossBorderAPITestHelper.setDataForQuoteConfirmation(ProposalId, transactionReference));
+                quoteConfirmationAPI.cancelConfirmedQuote(headers, requestParams, CrossBorderAPITestHelper.setDataForQuoteConfirmation(proposalId, transactionReference));
             }
             else {
                 Assert.fail("Cancel Confirmed Quote has failed as quotes API has failed");
@@ -161,12 +161,12 @@ public class QuoteConfirmationAPITest {
             QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if ( proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
+                String proposalId = ((Proposal) proposal.get()).getProposalId();
                 String transactionReference=quotesResponse.getProposalReference();
-                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(ProposalId,transactionReference);
+                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(proposalId,transactionReference);
                 quoteConfirmationAPI.getQuoteConfirmation(headers, requestParams, quoteConfirmationRequest);
                 requestParams.put("transaction-reference",transactionReference);
-                requestParams.put("proposal-id",ProposalId);
+                requestParams.put("proposal-id",proposalId);
                 RetrieveQuoteStatus retrieveQuoteStatus = quoteConfirmationAPI.retrieveConfirmedQuote(headers, requestParams);
 
                 if (null != retrieveQuoteStatus) {
@@ -199,16 +199,16 @@ public class QuoteConfirmationAPITest {
             QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if ( proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
+                String proposalId = ((Proposal) proposal.get()).getProposalId();
                 String transactionReference=quotesResponse.getProposalReference();
-                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(ProposalId,transactionReference);
+                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(proposalId,transactionReference);
                 QuoteConfirmationResponse quoteConfirmationResponse = quoteConfirmationAPI.getQuoteConfirmation(headers, requestParams, quoteConfirmationRequest);
 
                 if(quoteConfirmationResponse.getStatus().equals("CONFIRMED")) {
-                    quoteConfirmationAPI.cancelConfirmedQuote(headers, requestParams, CrossBorderAPITestHelper.setDataForQuoteConfirmation(ProposalId, transactionReference));
+                    quoteConfirmationAPI.cancelConfirmedQuote(headers, requestParams, CrossBorderAPITestHelper.setDataForQuoteConfirmation(proposalId, transactionReference));
                 }
                 requestParams.put("transaction-reference",transactionReference);
-                requestParams.put("proposal-id",ProposalId);
+                requestParams.put("proposal-id",proposalId);
                 RetrieveQuoteStatus retrieveQuoteStatus = quoteConfirmationAPI.retrieveConfirmedQuote(headers, requestParams);
 
                 if (null != retrieveQuoteStatus) {
@@ -241,9 +241,9 @@ public class QuoteConfirmationAPITest {
             QuotesResponse quotesResponse = quotesAPI.getQuoteWithEncryption(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if ( proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
+                String proposalId = ((Proposal) proposal.get()).getProposalId();
                 String transactionReference=quotesResponse.getProposalReference();
-                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(ProposalId,transactionReference);
+                QuoteConfirmation quoteConfirmationRequest = CrossBorderAPITestHelper.setDataForQuoteConfirmation(proposalId,transactionReference);
 
                 QuoteConfirmationResponse quoteConfirmationResponse = quoteConfirmationAPI.getQuoteConfirmationWithEncryption(headers, requestParams, quoteConfirmationRequest);
                 if (null != quoteConfirmationResponse) {

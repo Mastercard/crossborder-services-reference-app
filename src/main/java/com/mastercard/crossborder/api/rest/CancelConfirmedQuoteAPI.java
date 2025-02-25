@@ -21,8 +21,12 @@ import java.util.Map;
 @Component
 public class CancelConfirmedQuoteAPI {
 
+    private final RestClientService<CancelConfirmedQuoteResponse> restClientService;
+
     @Autowired
-    RestClientService restClientService;
+    public CancelConfirmedQuoteAPI(RestClientService<CancelConfirmedQuoteResponse> restClientService) {
+        this.restClientService = restClientService;
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(CancelConfirmedQuoteAPI.class);
 
@@ -30,12 +34,12 @@ public class CancelConfirmedQuoteAPI {
 
     public CancelConfirmedQuoteResponse getQuote(HttpHeaders headers, Map<String, Object> requestParams, CancelConfirmedQuoteRequest cancelConfirmedQuoteRequest) throws ServiceException {
         logger.info("Calling Cancel Confirmed Quote API");
-        return (CancelConfirmedQuoteResponse) restClientService.service(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, cancelConfirmedQuoteRequest, CancelConfirmedQuoteResponse.class);
+        return restClientService.service(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, cancelConfirmedQuoteRequest, CancelConfirmedQuoteResponse.class);
 
     }
     public CancelConfirmedQuoteResponse getQuoteWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, CancelConfirmedQuoteRequest cancelConfirmedQuoteRequest) throws ServiceException {
         logger.info("Calling Cancel Confirmed Quote API With Encryption");
-        return (CancelConfirmedQuoteResponse) restClientService.serviceEncryption(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, cancelConfirmedQuoteRequest, CancelConfirmedQuoteResponse.class);
+        return restClientService.serviceEncryption(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, cancelConfirmedQuoteRequest, CancelConfirmedQuoteResponse.class);
     }
 
 }

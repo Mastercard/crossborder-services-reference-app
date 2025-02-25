@@ -21,7 +21,7 @@ public class QuoteConfirmationAPI {
 
 
     @Autowired
-    RestClientService restClientService;
+    RestClientService restClientService; //NOSONAR
 
     private static final Logger logger = LoggerFactory.getLogger(QuoteConfirmationAPI.class);
 

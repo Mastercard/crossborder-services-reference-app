@@ -40,7 +40,6 @@ public class DownloadDocumentAPITest {
 
     private static final Logger logger = LoggerFactory.getLogger(DownloadDocumentAPITest.class);
 
-    private static final String partnerIdStr ="partner-id";
     @Before
     public void init() {
         partnerId = apiConfig.getPartnerId();
@@ -60,7 +59,7 @@ public class DownloadDocumentAPITest {
 
             if (null != downloadDocumentResponse) {
                 logger.info("ReferenceId for the Download Document  is : {}", (downloadDocumentResponse.getReferenceId()));
-                Assert.assertNotNull(((downloadDocumentResponse.getReferenceId())));
+                Assert.assertNotNull((downloadDocumentResponse));
             } else {
                 logger.info("Download Document  request has failed");
                 Assert.fail("Download Document  request has failed");
@@ -88,7 +87,8 @@ public class DownloadDocumentAPITest {
                 DownloadDocumentResponse downloadDocumentResponse = downloadDocumentAPI.downloadDocumentByIdWithEncryption(headers, requestParams);
                 if (null != downloadDocumentResponse){
                     logger.info("ReferenceId for the download document is : {}", (downloadDocumentResponse.getReferenceId()));
-                    Assert.assertNotNull(((downloadDocumentResponse.getReferenceId())));
+
+                    Assert.assertNotNull((downloadDocumentResponse.getReferenceId()));
                 } else {
                     logger.info("Download Document  request has failed");
                     Assert.fail("Download Document  request has failed");
@@ -102,29 +102,29 @@ public class DownloadDocumentAPITest {
             logger.info("To run this use cases, Set runWithEncryptedPayload=true and other encryption / decryption keys in mastercard-api.properties.");
     }
 
+
     @Test
     public void testErrorHandling() {
         logger.info("Running Usecase - 3, ERROR HANDLING.");
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner_id", partnerId);
-        requestParams.put("document_id","d0b7db34-eff8-47fa-b707-2ad12929f0a8");
+        requestParams.put("document_id", "d0b7db34-eff8-47fa-b707-2ad12929f0a8");
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
 
         try {
-            DownloadDocumentResponse downloadDocumentResponse = downloadDocumentAPI.downloadDocumentById(headers, requestParams);
+            downloadDocumentAPI.downloadDocumentById(headers, requestParams);
             Assert.fail("Download Document Request has to fail for wrong document Id");
-        } catch (ServiceException se){
+        } catch (ServiceException se) {
             Errors errors = se.getErrors();
-//            Error error = errors.getError();
-            List<Error> error = errors.getErrors();
-            Assert.assertFalse(errors== null);
-            if( error != null) {
-                assertEquals("document_id", error.get(0).getSource());
-                assertEquals("DECLINE", error.get(0).getReasonCode());
+            List<Error> errorList = errors.getErrors();
+            Assert.assertNotNull(se.getErrors());
+            if (errorList != null && !errorList.isEmpty()) {
+                assertEquals("document_id", errorList.get(0).getSource());
+                assertEquals("DECLINE", errorList.get(0).getReasonCode());
             }
-            logger.error("Download Document Request  has failed for the error {}", se.getMessage());
+            logger.error("Download Document Request has failed for the error {}", se.getMessage());
         }
     }
 

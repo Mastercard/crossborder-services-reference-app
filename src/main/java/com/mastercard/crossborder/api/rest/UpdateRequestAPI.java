@@ -15,22 +15,27 @@ import java.util.Map;
 
 @Component
 public class UpdateRequestAPI {
+
+    private final RestClientService<UpdateResponse> restClientService;
+
     private static final Logger logger = LoggerFactory.getLogger(UpdateRequestAPI.class);
 
     public static final String UPDATE_REQUEST = "/send/partners/{partner_id}/crossborder/rfi/requests/{request_id}";
 
     @Autowired
-    RestClientService restClientService;
+    public UpdateRequestAPI(RestClientService<UpdateResponse> restClientService) {
+        this.restClientService = restClientService;
+    }
 
     public UpdateResponse updateRequest(HttpHeaders headers, Map<String, Object> requestParams, UpdateRequest updateRequest) throws ServiceException {
 
         logger.info("Calling UpdateRequest API");
-        return (UpdateResponse) restClientService.service(UPDATE_REQUEST, headers, HttpMethod.POST, requestParams, updateRequest, UpdateResponse.class);
+        return restClientService.service(UPDATE_REQUEST, headers, HttpMethod.POST, requestParams, updateRequest, UpdateResponse.class);
     }
     public UpdateResponse updateRequestWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, UpdateRequest updateRequest) throws ServiceException {
 
         logger.info("Calling UpdateRequest API with Encryption");
-        return (UpdateResponse) restClientService.serviceEncryption(UPDATE_REQUEST, headers, HttpMethod.POST, requestParams, updateRequest, UpdateResponse.class);
+        return restClientService.serviceEncryption(UPDATE_REQUEST, headers, HttpMethod.POST, requestParams, updateRequest, UpdateResponse.class);
     }
 
 }

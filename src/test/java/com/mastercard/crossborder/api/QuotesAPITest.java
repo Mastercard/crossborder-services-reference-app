@@ -5,7 +5,6 @@ import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.helper.CrossBorderAPITestHelper;
 import com.mastercard.crossborder.api.rest.QuotesAPI;
 import com.mastercard.crossborder.api.rest.request.QuotesRequest;
-import com.mastercard.crossborder.api.rest.response.Error;
 import com.mastercard.crossborder.api.rest.response.Proposal;
 import com.mastercard.crossborder.api.rest.response.QuotesResponse;
 import org.junit.Assert;

@@ -1,5 +1,5 @@
 package com.mastercard.crossborder.api.rest.vas.bav.api.response;
-import com.mastercard.crossborder.api.rest.vas.bav.api.response.BankInfoRes.Address;
+import com.mastercard.crossborder.api.rest.vas.bav.api.response.bankinfores.Address;
 
 import java.util.List;
 

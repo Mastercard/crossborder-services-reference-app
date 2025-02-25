@@ -24,7 +24,7 @@ public class BalanceAPI {
     public static final String GET_ACCOUNT_BALANCE_BY_ID = "/send/partners/{partner-id}/crossborder/accounts/{account_id}?include_balance={include_balance}";
 
     @Autowired
-    RestClientService restClientService;
+    RestClientService restClientService; //NOSONAR
 
     public List<Account> getAllAccountsBalances(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 

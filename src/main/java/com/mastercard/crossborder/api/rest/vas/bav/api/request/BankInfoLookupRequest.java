@@ -1,6 +1,5 @@
 package com.mastercard.crossborder.api.rest.vas.bav.api.request;
 
-import com.mastercard.crossborder.api.rest.vas.bav.api.request.Bank;
 import lombok.ToString;
 
 @ToString
