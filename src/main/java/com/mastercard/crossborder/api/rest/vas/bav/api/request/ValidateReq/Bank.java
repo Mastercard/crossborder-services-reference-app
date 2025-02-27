@@ -16,7 +16,7 @@ public class Bank {
     public Bank() {
     }
 
-    public Bank(String name, String branchName, String branchCode , String country , Bic bic, BAVAddress address) {
+    public Bank(String name, String branchName, String branchCode , Bic bic, BAVAddress address) {
         this.name = name;
         this.branchName = branchName;
         this.branchCode = branchCode;
@@ -36,12 +36,12 @@ public class Bank {
         return branchName;
     }
 
-    public void setBranchName(String branchCode) {
-        this.branchCode = branchCode;
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
     }
 
     public String getBranchCode() {
-        return branchName;
+        return branchCode;
     }
 
     public void setBranchCode(String branchCode) {

@@ -20,21 +20,25 @@ import java.util.Map;
 @Component
 public class QuotesAPI {
 
-    @Autowired
-    RestClientService restClientService;
+    private final RestClientService<QuotesResponse> restClientService;
 
     private static final Logger logger = LoggerFactory.getLogger(QuotesAPI.class);
 
     public static final String QUOTES = "/send/v1/partners/{partner-id}/crossborder/quotes" ;
 
+    @Autowired
+    public QuotesAPI(RestClientService<QuotesResponse> restClientService) {
+        this.restClientService = restClientService;
+    }
+
     public QuotesResponse getQuote(HttpHeaders headers, Map<String, Object> requestParams, QuotesRequest quotesRequest) throws ServiceException {
         logger.info("Calling Quotes API");
-        return (QuotesResponse) restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, quotesRequest, QuotesResponse.class);
+        return restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, quotesRequest, QuotesResponse.class);
 
     }
     public QuotesResponse getQuoteWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, QuotesRequest quotesRequest) throws ServiceException {
         logger.info("Calling Quotes API");
-        return (QuotesResponse) restClientService.serviceEncryption(QUOTES, headers, HttpMethod.POST, requestParams, quotesRequest, QuotesResponse.class);
+        return restClientService.serviceEncryption(QUOTES, headers, HttpMethod.POST, requestParams, quotesRequest, QuotesResponse.class);
     }
 
 }

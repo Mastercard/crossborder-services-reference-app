@@ -16,7 +16,7 @@ public class Amount implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String currency;
-    private String amount;
+    private String price;
 
     @JsonProperty(value = "currency")
     @XmlElement(name = "currency", required = true)
@@ -31,11 +31,11 @@ public class Amount implements Serializable {
     @JsonProperty(value = "amount")
     @XmlElement(name = "amount", required = true)
     public String getAmount() {
-        return amount;
+        return price;
     }
 
     public void setAmount(String amount) {
-        this.amount = amount;
+        this.price = amount;
     }
 
 }

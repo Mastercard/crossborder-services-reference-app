@@ -1,7 +1,6 @@
 package com.mastercard.crossborder.api.rest.vas.bav.api.response;
 
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.Account;
-import com.mastercard.crossborder.api.rest.vas.bav.api.request.AccountUri;
 
 import java.util.List;
 

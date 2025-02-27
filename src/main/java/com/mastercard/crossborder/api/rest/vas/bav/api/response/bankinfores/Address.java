@@ -1,4 +1,4 @@
-package com.mastercard.crossborder.api.rest.vas.bav.api.response.BankInfoRes;
+package com.mastercard.crossborder.api.rest.vas.bav.api.response.bankinfores;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -14,23 +14,28 @@ import java.util.Map;
 
 @Component
 public class RetrieveRequestAPI {
+
+    private final RestClientService<RetrieveResponse> restClientService;
+
     private static final Logger logger = LoggerFactory.getLogger(RetrieveRequestAPI.class);
 
     public static final String RETRIEVE_REQUEST = "/send/partners/{partner_id}/crossborder/rfi/requests/{request_id}";
 
     @Autowired
-    RestClientService restClientService;
+    public RetrieveRequestAPI(RestClientService<RetrieveResponse> restClientService) {
+        this.restClientService = restClientService;
+    }
 
     public RetrieveResponse getRequestById(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling RetrieveRequest by Request ID API");
-        return (RetrieveResponse) restClientService.service(RETRIEVE_REQUEST, headers, HttpMethod.GET, requestParams,null, RetrieveResponse.class);
+        return restClientService.service(RETRIEVE_REQUEST, headers, HttpMethod.GET, requestParams,null, RetrieveResponse.class);
     }
 
 
     public RetrieveResponse getRequestByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling RetrieveRequest with Encryption by Request ID API");
-        return (RetrieveResponse) restClientService.serviceEncryption(RETRIEVE_REQUEST, headers, HttpMethod.GET, requestParams, null, RetrieveResponse.class);
+        return restClientService.serviceEncryption(RETRIEVE_REQUEST, headers, HttpMethod.GET, requestParams, null, RetrieveResponse.class);
     }
 }

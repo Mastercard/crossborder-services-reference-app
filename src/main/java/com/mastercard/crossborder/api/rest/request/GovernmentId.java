@@ -13,7 +13,7 @@ public class GovernmentId implements Serializable {
 
     private String type;
     private String number;
-    private List< Object > documents = new ArrayList< Object>();
+    private transient List< Object > documents = new ArrayList<>();
 
 
     @JsonProperty(value = "type")

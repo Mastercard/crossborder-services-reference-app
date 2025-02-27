@@ -44,11 +44,10 @@ public class BalanceAPITest {
 
     private static final Logger logger = LoggerFactory.getLogger(BalanceAPITest.class);
 
-    private static final String partnerIdStr = "partner-id";
-    private static final String includeBalance="include_balance";
-    private static final Boolean value=true;
-    private static final String status = "ACTIVE";
-    private static final String accountId="account_id";
+    private static final String PARTNER_ID_STR = "partner-id";
+    private static final String INCLUDE_BALANCE="include_balance";
+    private static final String STATUS = "ACTIVE";
+    private static final String ACCOUNT_ID="account_id";
 
     @Before
     public void init() {
@@ -65,8 +64,8 @@ public class BalanceAPITest {
         logger.info("Running Usecase - 1, RETRIEVING ACCOUNTS BALANCES BY MASTERCARD PROVIDED ID WITH BALANCE INCLUDED.");
         try {
             Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put(includeBalance,"true");
-            requestParams.put(partnerIdStr, partnerId);
+            requestParams.put(INCLUDE_BALANCE,"true");
+            requestParams.put(PARTNER_ID_STR, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             List<Account> accountResponse= balanceAPI.getAllAccountsBalances(headers, requestParams);
@@ -95,9 +94,9 @@ public class BalanceAPITest {
         logger.info("Running Usecase - 2, RETRIEVING ACCOUNT BALANCES BY ACCOUNT_ID WITH BALANCE INCLUDED.");
         try {
             Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put(includeBalance,"true");
-            requestParams.put(partnerIdStr, partnerId);
-            requestParams.put(accountId,"acct_1234");
+            requestParams.put(INCLUDE_BALANCE,"true");
+            requestParams.put(PARTNER_ID_STR, partnerId);
+            requestParams.put(ACCOUNT_ID,"acct_1234");
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
@@ -113,7 +112,7 @@ public class BalanceAPITest {
              	   logger.info("Balance details Response consists of queued balance also, which is applicable only if customer is enrolled for Prefund queuing");
              	   Assert.assertNotNull(accountResponse.getBalanceDetails().getQueuedBalance());
                 }
-               Assert.assertEquals(accountResponse.getAccountState(), status);
+               Assert.assertEquals(STATUS,accountResponse.getAccountState());
             }
 
         } catch (ServiceException re) {
@@ -131,8 +130,8 @@ public class BalanceAPITest {
         logger.info("Running Usecase - 3, RETRIEVING ACCOUNTS BALANCES BY MASTERCARD PROVIDED ID WITH ENCRYPTION WITH BALANCE INCLUDED.");
         try {
             Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put(includeBalance,"true");
-            requestParams.put(partnerIdStr, partnerId);
+            requestParams.put(INCLUDE_BALANCE,"true");
+            requestParams.put(PARTNER_ID_STR, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             List<Account> accountResponse = balanceAPI.getAllAccountsBalancesWithEncryption(headers, requestParams);
@@ -160,15 +159,15 @@ public class BalanceAPITest {
             logger.info("Running Usecase - 4, RETRIEVE BALANCE IN ENCRYPTED FORM BY ACCOUNT ID WITH BALANCE INCLUDED.");
             try {
                 Map<String, Object> requestParams = new HashMap<>();
-                requestParams.put(includeBalance,"true");
-                requestParams.put(partnerIdStr, partnerId);
-                requestParams.put(accountId,"acct_1234");
+                requestParams.put(INCLUDE_BALANCE,"true");
+                requestParams.put(PARTNER_ID_STR, partnerId);
+                requestParams.put(ACCOUNT_ID,"acct_1234");
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
                 Account accountResponse = balanceAPI.getAcctBalanceByIdWithEncryption(headers, requestParams);
                 if (null != accountResponse) {
                     logger.info("Retrieve Balance by ID  with Encryption balance included is Successful with AccountId {}", accountResponse.getAccountId());
-                    Assert.assertEquals(accountResponse.getAccountState(), status);
+                    Assert.assertEquals(STATUS,accountResponse.getAccountState());
                 } else {
                     logger.info("Retrieve Balance by ID with Encryption balance included has failed");
                     Assert.fail("Retrieve Balance by ID with Encryption balance included has failed");
@@ -190,8 +189,8 @@ public class BalanceAPITest {
         logger.info("Running Usecase - 5, RETRIEVING ACCOUNTS BALANCES BY MASTERCARD PROVIDED ID WITH BALANCE NOT INCLUDED.");
         try {
             Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put(includeBalance,"false");
-            requestParams.put(partnerIdStr, partnerId);
+            requestParams.put(INCLUDE_BALANCE,"false");
+            requestParams.put(PARTNER_ID_STR, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             List<Account> accountResponse= balanceAPI.getAllAccountsBalances(headers, requestParams);
@@ -217,9 +216,9 @@ public class BalanceAPITest {
         logger.info("Running Usecase - 6, RETRIEVING ACCOUNTS BY ACCOUNT_ID WITH BALANCE NOT INCLUDED.");
         try {
             Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put(includeBalance,"False");
-            requestParams.put(partnerIdStr, partnerId);
-            requestParams.put(accountId,"acct_1234");
+            requestParams.put(INCLUDE_BALANCE,"False");
+            requestParams.put(PARTNER_ID_STR, partnerId);
+            requestParams.put(ACCOUNT_ID,"acct_1234");
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
@@ -229,7 +228,7 @@ public class BalanceAPITest {
                 Assert.fail("Retrieve Accounts Balance by Account-ID with balance not included has failed");
             } else {
                 logger.info("Retrieve Accounts Balances by Account ID with balance not included is Successful with account_Id {}", accountResponse.getAccountId());
-                Assert.assertEquals(accountResponse.getAccountState(), status);
+                Assert.assertEquals(STATUS,accountResponse.getAccountState());
             }
 
         } catch (ServiceException re) {
@@ -246,8 +245,8 @@ public class BalanceAPITest {
         logger.info("Running Usecase - 7, RETRIEVING ACCOUNTS BALANCES BY MASTERCARD PROVIDED ID WITH ENCRYPTION WITH BALANCE NOT INCLUDED.");
         try {
             Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put(includeBalance,"False");
-            requestParams.put(partnerIdStr, partnerId);
+            requestParams.put(INCLUDE_BALANCE,"False");
+            requestParams.put(PARTNER_ID_STR, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             List<Account> accountResponse = balanceAPI.getAllAccountsBalancesWithEncryption(headers, requestParams);
@@ -274,18 +273,15 @@ public class BalanceAPITest {
             logger.info("Running Usecase - 8, RETRIEVE ACCOUNT BALANCES IN ENCRYPTED FORM WITH BALANCE NOT INCLUDED");
             try {
                 Map<String, Object> requestParams = new HashMap<>();
-                requestParams.put(includeBalance,"false");
-                requestParams.put(partnerIdStr, partnerId);
-                requestParams.put(accountId,"acct_1234");
+                requestParams.put(INCLUDE_BALANCE,"false");
+                requestParams.put(PARTNER_ID_STR, partnerId);
+                requestParams.put(ACCOUNT_ID,"acct_1234");
                 HttpHeaders headers = new HttpHeaders();
-                // headers.add("x-encrypted","true");
-                //  headers.add("NextGenRouter" ,"99c0346643f24c5011ca7b1c7b3c13a0");
-                //headers.add("x-mc-routing","nextgen-apigw");
                 headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
                 Account accountResponse = balanceAPI.getAcctBalanceByIdWithEncryption(headers, requestParams);
                 if (null != accountResponse) {
                     logger.info("Retrieve Balance by ID with Encrption and balance not included is Successful with AccountId {}", accountResponse.getAccountId());
-                    Assert.assertEquals(accountResponse.getAccountState(), status);
+                    Assert.assertEquals(STATUS,accountResponse.getAccountState());
                 } else {
                     logger.info("Retrieve Balance by ID with Encrption and balance not included has failed");
                     Assert.fail("Retrieve Balance by ID with Encrption and balance not included has failed");

@@ -1,4 +1,5 @@
 package com.mastercard.crossborder.api.rest;
+
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.response.DownloadDocumentResponse;
 import com.mastercard.crossborder.api.service.RestClientService;
@@ -14,24 +15,28 @@ import java.util.Map;
 @Component
 public class DownloadDocumentAPI {
 
-        private static final Logger logger = LoggerFactory.getLogger(DownloadDocumentAPI.class);
+    private final RestClientService<DownloadDocumentResponse> restClientService;
 
-        public static final String DOWNLOAD_DOCUMENT = "/send/partners/{partner_id}/crossborder/rfi/documents/{document_id}";
+    private static final Logger logger = LoggerFactory.getLogger(DownloadDocumentAPI.class);
 
-        @Autowired
-        RestClientService restClientService;
+    public static final String DOWNLOAD_DOCUMENT = "/send/partners/{partner_id}/crossborder/rfi/documents/{document_id}";
 
-        public DownloadDocumentResponse downloadDocumentById(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
-
-            logger.info("Calling DownloadDocument API by Document ID ");
-            return (DownloadDocumentResponse) restClientService.service(DOWNLOAD_DOCUMENT, headers, HttpMethod.GET, requestParams,null, DownloadDocumentResponse.class);
-        }
-
-
-        public DownloadDocumentResponse downloadDocumentByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
-
-            logger.info("Calling DownloadDocument API with Encryption by Document ID");
-            return (DownloadDocumentResponse) restClientService.serviceEncryption(DOWNLOAD_DOCUMENT, headers, HttpMethod.GET, requestParams, null, DownloadDocumentResponse.class);
-        }
+    @Autowired
+    public DownloadDocumentAPI(RestClientService<DownloadDocumentResponse> restClientService) {
+        this.restClientService = restClientService;
     }
+
+    public DownloadDocumentResponse downloadDocumentById(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
+
+        logger.info("Calling DownloadDocument API by Document ID ");
+        return restClientService.service(DOWNLOAD_DOCUMENT, headers, HttpMethod.GET, requestParams, null, DownloadDocumentResponse.class);
+    }
+
+
+    public DownloadDocumentResponse downloadDocumentByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
+
+        logger.info("Calling DownloadDocument API with Encryption by Document ID");
+        return restClientService.serviceEncryption(DOWNLOAD_DOCUMENT, headers, HttpMethod.GET, requestParams, null, DownloadDocumentResponse.class);
+    }
+}
 

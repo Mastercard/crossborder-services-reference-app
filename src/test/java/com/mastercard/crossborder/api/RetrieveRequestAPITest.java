@@ -37,7 +37,7 @@ public class RetrieveRequestAPITest {
 
     private static final Logger logger = LoggerFactory.getLogger(RetrieveRequestAPITest.class);
 
-    private static final String partnerIdStr ="partner_id";
+    private static final String PARTNER_ID_STR ="partner_id";
     @Before
     public void init() {
         partnerId = apiConfig.getPartnerId();
@@ -48,15 +48,15 @@ public class RetrieveRequestAPITest {
         logger.info("Running Usecase - 1, RETRIEVE REQUEST BY REQUEST ID.");
         try {
             Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put(partnerIdStr, partnerId);
-            requestParams.put("request_id", "33TestRequest");
+            requestParams.put(PARTNER_ID_STR, partnerId);
+            requestParams.put("request_id", "022f6eca-6276-4993-bfeb-53cbbbba6f08");
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             headers.add("idempotency-key","7da7a728-f910-11e6-942a-68f728c1ba70");
             RetrieveRequestResponse retrieveRequestResponse = retrieveRequestResponseAPI.getRequestById(headers,requestParams);
             if (null != retrieveRequestResponse) {
                 logger.info("Retrieve Request by REQUEST ID is Successful with requestId {}", retrieveRequestResponse.getRetrieveResponse().getRequestId());
-                Assert.assertNotNull(((retrieveRequestResponse.getRetrieveResponse().getRequestId())));
+                Assert.assertNotNull((retrieveRequestResponse.getRetrieveResponse().getRequestId()));
             } else {
                 logger.info("Retrieve Request by ID has failed");
                 Assert.fail("Retrieve Request by ID has failed");
@@ -72,8 +72,8 @@ public class RetrieveRequestAPITest {
         if (apiConfig.getRunWithEncryptedPayload()) {
             logger.info("Running Usecase - 2, RETRIEVE REQUEST BY REQUEST ID WITH ENCRYPTION.");
             Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put(partnerIdStr, partnerId);
-            requestParams.put("request_id", "33TestRequest");
+            requestParams.put(PARTNER_ID_STR, partnerId);
+            requestParams.put("request_id", "022f6eca-6276-4993-bfeb-53cbbbba6f08");
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             /* set the input */
@@ -82,7 +82,7 @@ public class RetrieveRequestAPITest {
                 RetrieveRequestResponse retrieveRequestResponse = retrieveRequestResponseAPI.getRequestByIdWithEncryption(headers,requestParams);
                 if (null != retrieveRequestResponse) {
                     logger.info("Retrieve Request by REQUEST ID is Successful with requestId {}", retrieveRequestResponse.getRetrieveResponse().getRequestId());
-                    Assert.assertNotNull(((retrieveRequestResponse.getRetrieveResponse().getRequestId())));
+                    Assert.assertNotNull((retrieveRequestResponse.getRetrieveResponse().getRequestId()));
                 } else {
                     logger.info("Retrieve Request by ID has failed");
                     Assert.fail("Retrieve Request by ID has failed");

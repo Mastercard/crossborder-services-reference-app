@@ -40,7 +40,6 @@ public class UpdateRequestAPITest {
 
     private static final Logger logger = LoggerFactory.getLogger(UpdateRequestAPITest.class);
 
-    private static final String partnerIdStr ="partner_id";
     @Before
     public void init() {
         partnerId = apiConfig.getPartnerId();
@@ -51,7 +50,7 @@ public class UpdateRequestAPITest {
         logger.info("Running Usecase - 1, UPDATE REQUEST API.");
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner_id", partnerId);
-        requestParams.put("request_id","033TestRequest");
+        requestParams.put("request_id","03377dab-c4d2-4af2-a9cc-04322a25639e");
         /* set the input */
         try {
             UpdateRequest request = CrossBorderAPITestHelper.setDataForUpdateRequest();
@@ -62,7 +61,7 @@ public class UpdateRequestAPITest {
 
             if (null != updateResponse) {
                 logger.info("Reference Id for the update request is : {}", (updateResponse.getReferenceId()));
-                Assert.assertNotNull(((updateResponse.getReferenceId())));
+                Assert.assertNotNull((updateResponse.getReferenceId()));
             } else {
                 logger.info("Update Request has failed");
                 Assert.fail("Update Request has failed");
@@ -80,7 +79,7 @@ public class UpdateRequestAPITest {
             logger.info("Running Usecase - 2, UPDATE REQUEST WITH ENCRYPTION.");
             Map<String, Object> requestParams = new HashMap<>();
             requestParams.put("partner_id", partnerId);
-            requestParams.put("request_id","033TestRequest");
+            requestParams.put("request_id","03377dab-c4d2-4af2-a9cc-04322a25639e");
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             headers.add("idempotency-key","7da7a728-f910-11e6-942a-68f728c1ba70");
@@ -91,7 +90,7 @@ public class UpdateRequestAPITest {
                 UpdateResponse updateResponse = updateRequestAPI.updateRequestWithEncryption(headers, requestParams, request);
                 if (null != updateResponse){
                     logger.info("Reference Id for the update request is : {}", (updateResponse.getReferenceId()));
-                    Assert.assertNotNull(((updateResponse.getReferenceId())));
+                    Assert.assertNotNull((updateResponse.getReferenceId()));
                 } else {
                     logger.info("Update Request  has failed");
                     Assert.fail("Update Request  has failed");
@@ -117,13 +116,12 @@ public class UpdateRequestAPITest {
 
         try {
             UpdateRequest request = CrossBorderAPITestHelper.setDataForUpdateRequest();
-            UpdateResponse updateResponse = updateRequestAPI.updateRequest(headers, requestParams, request);
+            updateRequestAPI.updateRequest(headers, requestParams, request);
             Assert.fail("Update Request has to fail for wrong request id");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-           // Error error = errors.getError();
             List<Error> error = errors.getErrors();
-            Assert.assertFalse(se.getErrors()== null);
+            Assert.assertNotNull(se.getErrors());
             if( error != null && !error.isEmpty()) {
                 assertEquals("request_id", error.get(0).getSource());
                 assertEquals("DECLINE", error.get(0).getReasonCode());

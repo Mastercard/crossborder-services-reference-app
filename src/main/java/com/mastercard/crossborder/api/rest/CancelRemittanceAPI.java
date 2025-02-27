@@ -20,23 +20,27 @@ import java.util.Map;
 @Component
 public class CancelRemittanceAPI {
 
+    private final RestClientService<CancelResponse> restClientService;
+
     private static final Logger logger = LoggerFactory.getLogger(CancelRemittanceAPI.class);
 
     public static final String CANCEL_REMITTANCE = "/send/v1/partners/{partner-id}/crossborder/{payment-id}/cancel";
 
     @Autowired
-    RestClientService restClientService;
+    public CancelRemittanceAPI(RestClientService<CancelResponse> restClient) {
+        this.restClientService = restClient;
+    }
 
     public CancelResponse cancelPayment(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest ) throws ServiceException {
          logger.info("Calling cancel payment API");
-         return (CancelResponse) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, cancelRequest, CancelResponse.class);
+         return restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, cancelRequest, CancelResponse.class);
 
 
     }
 
     public CancelResponse cancelPaymentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest ) throws ServiceException {
         logger.info("Calling cancel payment API that supports encryption ");
-        return (CancelResponse) restClientService.serviceEncryption(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, cancelRequest, CancelResponse.class);
+        return restClientService.serviceEncryption(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, cancelRequest, CancelResponse.class);
 
     }
 

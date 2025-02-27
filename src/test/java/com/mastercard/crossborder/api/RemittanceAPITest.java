@@ -24,9 +24,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 /*
@@ -77,8 +74,8 @@ public class RemittanceAPITest  {
             QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if ( proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
-                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataWithQuote(ProposalId);
+                String proposalId = ((Proposal) proposal.get()).getProposalId();
+                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataWithQuote(proposalId);
                 RemittanceResponse paymentDetails = remittanceAPI.makePayment(headers, requestParams, paymentRequest);
                 if (null != paymentDetails) {
                     String paymentId = paymentDetails.getRemittanceId();
@@ -286,12 +283,12 @@ public class RemittanceAPITest  {
             Assert.fail("Payment has to fail for wrong proposal ID");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-           // Error error = errors.getError();
             List<Error> error = errors.getErrorList();
-            Assert.assertFalse(error== null);
             if( error != null && !error.isEmpty()) {
                 assertEquals("proposal_id", error.get(0).getSource());
                 assertEquals("DECLINE", error.get(0).getReasonCode());
+            }else {
+                Assert.fail("Expected error but found none.");
             }
             logger.error("Payment with quote has failed for the error {}", se.getMessage());
         }
@@ -346,8 +343,8 @@ public class RemittanceAPITest  {
             QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if ( proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
-                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataWithQuote(ProposalId);
+                String proposalId = ((Proposal) proposal.get()).getProposalId();
+                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataWithQuote(proposalId);
                 RemittanceResponse paymentDetails = remittanceAPI.makePayment(headers, requestParams, paymentRequest);
                 if (null != paymentDetails) {
                     String paymentId = paymentDetails.getRemittanceId();
@@ -388,9 +385,8 @@ public class RemittanceAPITest  {
             Assert.fail("Payment has to fail for wrong proposal ID");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-            // Error error = errors.getError();
             List<Error> error = errors.getErrorList();
-            Assert.assertFalse(error== null);
+            Assert.assertTrue(error.isEmpty());
             if( error != null && !error.isEmpty()) {
                 assertEquals("proposal_id", error.get(0).getSource());
                 assertEquals("DECLINE", error.get(0).getReasonCode());
@@ -455,8 +451,8 @@ public class RemittanceAPITest  {
             QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
             Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
             if (proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
-                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataWithQuote(ProposalId);
+                String proposalId = ((Proposal) proposal.get()).getProposalId();
+                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataWithQuote(proposalId);
                 paymentRequest.setRemittanceReference(request.getProposalReference());
                 transactionRef =  paymentRequest.getRemittanceReference();
                 remittanceAPI.makePayment(headers, requestParams, paymentRequest);

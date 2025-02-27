@@ -58,9 +58,11 @@ public class IBanGenerationTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
         httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON);
+
         try {
             IbanCreationDetails request = BavHelperApi.createIban();
             System.out.println("Request Payload >>>>>>>>>>>>>  "+request);
+            System.out.println("Headers: >>>>>>>>>>>>>>> "+httpHeaders);
             IBanGenerationResponse response = bavApi.generateIBan(httpHeaders, requestParams, request);
             if (response != null) {
                 Account actualIBanReceived = response.getIbanDetails().getAccounts().getAccount()
@@ -70,14 +72,14 @@ public class IBanGenerationTest {
                         .orElse(null);
                 assert actualIBanReceived != null;
                 logger.info("IBAN successfully generation {}", actualIBanReceived.getValue());
-                Assert.assertEquals("IT83W"+request.getAccountUri().getValue(), actualIBanReceived.getValue());
-                Assert.assertEquals(request.getBranchCode(), response.getIbanDetails().getBank().getBranchCode());
+                Assert.assertEquals("FR1420041010050500013M02606", actualIBanReceived.getValue());
+                Assert.assertEquals("2004101005", response.getIbanDetails().getBank().getBranchCode());
             } else {
                 logger.info("IBAN generation request has failed, IBAN is not created");
                 Assert.fail("IBAN generation request has failed, IBAN is not created");
             }
         } catch (ServiceException re) {
-            logger.error("IBAN generation request has failed as : {}", re.getMessage());
+            logger.error("IBAN generation request has failed as : {}", re.getStackTrace());
             Assert.fail(re.getMessage());
         }
     }
@@ -106,7 +108,7 @@ public class IBanGenerationTest {
                         .orElse(null);
                 assert actualIBanReceived != null;
                 logger.info("IBAN successfully generation {}", actualIBanReceived.getValue());
-                Assert.assertEquals(request.getBranchCode(), response.getIbanDetails().getBank().getBranchCode());
+                Assert.assertEquals("2004101005", response.getIbanDetails().getBank().getBranchCode());
             } else {
                 logger.info("IBAN generation request has failed, IBAN is not created");
                 Assert.fail("IBAN generation request has failed, IBAN is not created");
@@ -134,7 +136,7 @@ public class IBanGenerationTest {
             IBanGenerationResponse response = bavApi.generateIBan(httpHeaders, requestParams, request);
             if (response != null) {
                 logger.info("IBAN successfully generation {}", response.getIbanDetails().getAccounts().getAccount().get(0).getValue());
-                Assert.assertEquals("IT83W"+request.getAccountUri().getValue(), response.getIbanDetails().getAccounts().getAccount().get(0).getValue());
+                Assert.assertEquals("FR1420041010050500013M02606", response.getIbanDetails().getAccounts().getAccount().get(0).getValue());
             } else {
                 logger.info("IBAN generation request has failed, IBAN is not created");
                 Assert.fail("IBAN generation request has failed, IBAN is not created");

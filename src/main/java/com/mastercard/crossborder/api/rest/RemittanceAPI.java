@@ -25,17 +25,21 @@ public class RemittanceAPI {
 
     public static final String PAYMENT = "/send/v1/partners/{partner-id}/crossborder/payment";
 
+    private final RestClientService<RemittanceResponse> restClientService;
+
     @Autowired
-    RestClientService restClientService;
+    public RemittanceAPI(RestClientService<RemittanceResponse> restClientService) {
+        this.restClientService = restClientService;
+    }
 
     public RemittanceResponse makePayment(HttpHeaders headers, Map<String, Object> requestParams, RemittanceRequest payment) throws ServiceException {
 
         logger.info("Calling payment API");
-        return (RemittanceResponse) restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, payment, RemittanceResponse.class);
+        return restClientService.service(PAYMENT, headers, HttpMethod.POST, requestParams, payment, RemittanceResponse.class);
     }
     public RemittanceResponse makePaymentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, RemittanceRequest payment) throws ServiceException {
 
         logger.info("Calling payment API");
-        return (RemittanceResponse) restClientService.serviceEncryption(PAYMENT, headers, HttpMethod.POST, requestParams, payment,RemittanceResponse.class);
+        return restClientService.serviceEncryption(PAYMENT, headers, HttpMethod.POST, requestParams, payment,RemittanceResponse.class);
     }
 }
