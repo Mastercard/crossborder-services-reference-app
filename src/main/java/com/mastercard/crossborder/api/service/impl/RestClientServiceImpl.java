@@ -315,7 +315,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
                 CollectionType listType =
                         mapper.getTypeFactory().constructCollectionType(ArrayList.class,listElementClass);
                 return mapper.readValue(response, listType);
-            }catch(JsonProcessingException e){
+            }catch(IOException e){
                 logger.warn("Error while processing response");
             }
         }

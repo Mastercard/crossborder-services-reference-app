@@ -487,14 +487,19 @@ L] [Bank Info Lookup API](https://developer.mastercard.com/send-cross-border/doc
 - OI calls the service to retrieve Bank Information but there are no matching records for the input criteria, use case 10
 - The above use cases just shows two the examples of error handling
 
-M] [Validate IBAN API](https://developer.mastercard.com/send-cross-border/documentation/api-ref/validate-iban-apis#account-validation-api):
+M] [Validate Account API](https://developer.mastercard.com/cross-border-services/documentation/api-ref/bank-account-validation-api/#account-validation-api):
 
-> Case 1: **VALIDATE ACCOUNT WITH ACCOUNT TYPE AND VALUE** 
+> Case 1: **VALIDATE IBAN WITH ACCOUNT TYPE AND VALUE** 
 - OI can call this method to validate the IBAN account
 - In this use case, we need to pass partner ID and populate all the account type and value. The service provides a successful or rejection response.
 - Use case link
 
-> Case 2: **ERROR HANDLING**
+> Case 2: **VALIDATE PAN WITH ACCOUNT TYPE AND VALUE**
+- OI can call this method to validate the Card Eligibility for cross-border transaction
+- In this use case, we need to pass partner ID and populate all the account type and card number. The service provides eligibility of a card for cross-border transaction.
+- Use case link
+
+> Case 3: **ERROR HANDLING**
 - OI calls the service to Validate the account but the value field is null, use case 14
 - OI calls the service to Validate the account but the account number contains invalid check digit,
 - The above use cases just shows two of the examples of error handling
