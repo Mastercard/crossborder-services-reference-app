@@ -59,7 +59,7 @@ public class BavHelperApi {
     }
 
     public static IBanValidationRequest validateCardEligibility(){
-        AccountUri accountUri = new AccountUri("PAN","4000340000000515");
+        AccountUri accountUri = new AccountUri("PAN","4960144263583144");
         return new IBanValidationRequest(ValidateRequestType.CES, accountUri);
     }
 
