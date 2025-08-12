@@ -4,10 +4,12 @@ import com.mastercard.crossborder.api.rest.vas.bav.api.response.validateRes.Rece
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@ToString
 public class ValidateAccountResponse {
     private String refId;
     private String status;

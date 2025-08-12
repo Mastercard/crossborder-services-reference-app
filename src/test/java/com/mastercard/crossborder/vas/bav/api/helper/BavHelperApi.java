@@ -63,6 +63,14 @@ public class BavHelperApi {
         return new IBanValidationRequest(ValidateRequestType.CES, accountUri);
     }
 
+    public static AccountStatusValidation validateAccountStatus(){
+        AccountUri accountUri = new AccountUri("BAN","98000987651232");
+        AccountHolder accountHolder = new AccountHolder(new Name("Tim","John","Smith"), "1234567");
+        com.mastercard.crossborder.api.rest.vas.bav.api.request.Bic bic = new com.mastercard.crossborder.api.rest.vas.bav.api.request.Bic("123456789", "ABA");
+        AccountDetails accountDetails = new AccountDetails(accountHolder, "USD", bic);
+        return new AccountStatusValidation(ValidateRequestType.ASV, accountUri, accountDetails);
+    }
+
     public static IBanValidationRequest createAccountWithEmptyType(){
         return new IBanValidationRequest(new AccountUri("IBAN",null));
     }
