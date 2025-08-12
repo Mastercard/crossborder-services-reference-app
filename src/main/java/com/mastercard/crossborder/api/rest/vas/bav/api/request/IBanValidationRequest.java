@@ -19,6 +19,9 @@ public class IBanValidationRequest {
 
     private AccountUri accountUri;
 
+    @JsonInclude(Include.NON_NULL)
+    private AccountDetails accountDetails;
+
     public IBanValidationRequest(AccountUri accountUri) {
         this.accountUri = accountUri;
     }

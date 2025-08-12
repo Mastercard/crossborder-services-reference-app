@@ -5,7 +5,6 @@ import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.response.Error;
 import com.mastercard.crossborder.api.rest.response.Errors;
 import com.mastercard.crossborder.api.rest.vas.bav.api.BAVApi;
-import com.mastercard.crossborder.api.rest.vas.bav.api.request.AccountStatusValidation;
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.IBanValidationRequest;
 import com.mastercard.crossborder.api.rest.vas.bav.api.response.ValidateAccountResponse;
 import com.mastercard.crossborder.vas.bav.api.helper.BavHelperApi;
@@ -107,9 +106,9 @@ public class AccountValidationTest {
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
         httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON);
         try{
-            AccountStatusValidation request = BavHelperApi.validateAccountStatus();
+            IBanValidationRequest request = BavHelperApi.validateAccountStatus();
             logger.info("Request Payload >>>>>>>>>>>>>  "+request);
-            ValidateAccountResponse response = bavApi.validateAccountStatus(httpHeaders, requestParams, request);
+            ValidateAccountResponse response = bavApi.validateAccount(httpHeaders, requestParams, request);
             if(response != null) {
                 logger.info("ASV response message {} ", response.getMessage());
                 Assert.assertEquals("IN_PROGRESS",response.getStatus());

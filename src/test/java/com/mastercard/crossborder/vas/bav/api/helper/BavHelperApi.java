@@ -60,15 +60,15 @@ public class BavHelperApi {
 
     public static IBanValidationRequest validateCardEligibility(){
         AccountUri accountUri = new AccountUri("PAN","4960144263583144");
-        return new IBanValidationRequest(ValidateRequestType.CES, accountUri);
+        return new IBanValidationRequest(ValidateRequestType.CES, accountUri, null);
     }
 
-    public static AccountStatusValidation validateAccountStatus(){
+    public static IBanValidationRequest validateAccountStatus(){
         AccountUri accountUri = new AccountUri("BAN","98000987651232");
         AccountHolder accountHolder = new AccountHolder(new Name("Tim","John","Smith"), "1234567");
         com.mastercard.crossborder.api.rest.vas.bav.api.request.Bic bic = new com.mastercard.crossborder.api.rest.vas.bav.api.request.Bic("123456789", "ABA");
         AccountDetails accountDetails = new AccountDetails(accountHolder, "USD", bic);
-        return new AccountStatusValidation(ValidateRequestType.ASV, accountUri, accountDetails);
+        return new IBanValidationRequest(ValidateRequestType.ASV, accountUri, accountDetails);
     }
 
     public static IBanValidationRequest createAccountWithEmptyType(){

@@ -1,7 +1,6 @@
 package com.mastercard.crossborder.api.rest.vas.bav.api;
 
 import com.mastercard.crossborder.api.exception.ServiceException;
-import com.mastercard.crossborder.api.rest.vas.bav.api.request.AccountStatusValidation;
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.BankInfoLookupRequest;
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.IBanValidationRequest;
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.IbanCreationDetails;
@@ -42,11 +41,6 @@ public class BAVApi {
     }
 
     public ValidateAccountResponse validateAccount(HttpHeaders httpHeaders, Map<String, Object> requestParams, IBanValidationRequest request) throws ServiceException {
-        logger.info(LOGGER_MESSAGE);
-        return (ValidateAccountResponse) restClientService.serviceEncryption(ACCOUNT_VALIDATION_URL, httpHeaders, HttpMethod.POST, requestParams, request, ValidateAccountResponse.class);
-    }
-
-    public ValidateAccountResponse validateAccountStatus(HttpHeaders httpHeaders, Map<String, Object> requestParams, AccountStatusValidation request) throws ServiceException {
         logger.info(LOGGER_MESSAGE);
         return (ValidateAccountResponse) restClientService.serviceEncryption(ACCOUNT_VALIDATION_URL, httpHeaders, HttpMethod.POST, requestParams, request, ValidateAccountResponse.class);
     }
