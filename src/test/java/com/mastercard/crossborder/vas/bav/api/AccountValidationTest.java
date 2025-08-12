@@ -114,8 +114,8 @@ public class AccountValidationTest {
                 Assert.assertEquals("IN_PROGRESS",response.getStatus());
             }
             else{
-                logger.info("Card Eligibility request has failed");
-                Assert.fail("Card Eligibility request has failed");
+                logger.info("ASV request has failed");
+                Assert.fail("ASV request has failed");
             }
         } catch (ServiceException re) {
             logger.error("ASV request failed as : {}", re.getMessage());
