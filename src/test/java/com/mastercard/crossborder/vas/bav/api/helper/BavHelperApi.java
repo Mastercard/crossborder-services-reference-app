@@ -1,6 +1,7 @@
 package com.mastercard.crossborder.vas.bav.api.helper;
 
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.*;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.ValidateReq.ValidateRequestType;
 import com.mastercard.crossborder.api.rest.vas.bav.api.response.Bic;
 
 public class BavHelperApi {
@@ -55,6 +56,19 @@ public class BavHelperApi {
     /**** IBan Validation request payloads ****/
     public static IBanValidationRequest createAccount(){
         return new IBanValidationRequest(new AccountUri("IBAN","GB33BUKB20201555555555"));
+    }
+
+    public static IBanValidationRequest validateCardEligibility(){
+        AccountUri accountUri = new AccountUri("PAN","4960144263583144");
+        return new IBanValidationRequest(ValidateRequestType.CES, accountUri, null);
+    }
+
+    public static IBanValidationRequest validateAccountStatus(){
+        AccountUri accountUri = new AccountUri("BAN","98000987651232");
+        AccountHolder accountHolder = new AccountHolder(new Name("Tim","John","Smith"), "1234567");
+        com.mastercard.crossborder.api.rest.vas.bav.api.request.Bic bic = new com.mastercard.crossborder.api.rest.vas.bav.api.request.Bic("123456789", "ABA");
+        AccountDetails accountDetails = new AccountDetails(accountHolder, "USD", bic);
+        return new IBanValidationRequest(ValidateRequestType.ASV, accountUri, accountDetails);
     }
 
     public static IBanValidationRequest createAccountWithEmptyType(){
