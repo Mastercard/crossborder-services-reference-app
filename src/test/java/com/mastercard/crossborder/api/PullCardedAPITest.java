@@ -6,6 +6,7 @@ import com.mastercard.crossborder.api.rest.PullCardedAPI;
 import com.mastercard.crossborder.api.rest.response.FxRateResponse;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -52,6 +53,7 @@ public class PullCardedAPITest {
         #Usecase - 1 - **Get Fx Rates for partner ID**
         It will pull all the Fx Rates related to Partner ID
     */
+    @Ignore("Sandbox testing is not allowed as per devzone")
     @Test
     public void testGetFxRatesInJsonFormat() {
         logger.info("Running Usecase - 1, RETRIEVE FX RATES IN JSON FORMAT.");
@@ -82,6 +84,7 @@ public class PullCardedAPITest {
          #Usecase - 2 - **RETRIEVE FX RATES IN ENCRYPTED FORM**
          All these calls are encrypted.
        */
+    @Ignore("Sandbox testing is not allowed as per devzone")
     @Test
     public void testGetFxRatesWithEncryption() {
         if (apiConfig.getRunWithEncryptedPayload()) {
