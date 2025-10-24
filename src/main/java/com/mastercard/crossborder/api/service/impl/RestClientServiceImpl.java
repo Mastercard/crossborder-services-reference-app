@@ -25,7 +25,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.w3c.dom.Document;
-
+import java.io.IOException;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -315,7 +315,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
                 CollectionType listType =
                         mapper.getTypeFactory().constructCollectionType(ArrayList.class,listElementClass);
                 return mapper.readValue(response, listType);
-            }catch(JsonProcessingException e){
+            }catch(IOException e){
                 logger.warn("Error while processing response");
             }
         }
