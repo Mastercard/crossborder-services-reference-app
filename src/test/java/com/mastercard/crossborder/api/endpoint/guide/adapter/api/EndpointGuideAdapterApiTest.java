@@ -182,13 +182,8 @@ public class EndpointGuideAdapterApiTest {
             httpHeaders.add(PARTNER_REF_ID.toString(), partnerId);
             httpHeaders.add("Specification-Type","BEG");
             httpHeaders.add(ENCRYPTED_HEADER.toString(), "false");
-            List<?> rawResponse = endpointGuideAdapterApi.getEndpoint(httpHeaders, requestParams);
-            if (rawResponse != null) {
-                ObjectMapper mapper = new ObjectMapper();
-                List<EndpointGuideResponse> endpointGuideResponse = rawResponse.stream()
-                        .map(item -> mapper.convertValue(item, EndpointGuideResponse.class))
-                        .collect(Collectors.toList());
-
+            List<EndpointGuideResponse> endpointGuideResponse = endpointGuideAdapterApi.getEndpoint(httpHeaders, requestParams);
+            if (endpointGuideResponse != null) {
                 logger.info("Retrieve Endpoint is Successful");
                 assertEquals("PKR", endpointGuideResponse.get(0).getDestinationCurrency());
                 assertEquals("PAK", endpointGuideResponse.get(0).getDestinationCountry());
