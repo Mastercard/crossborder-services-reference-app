@@ -56,6 +56,7 @@ import java.util.Map;
 
 import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
 import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.PARTNER_REF_ID;
+import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.SPECIFICATION_TYPE;
 
 @Component
 public class RestClientServiceImpl<T> implements RestClientService<T> {
@@ -159,7 +160,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
 
     private String authenticate(String url, HttpMethod httpMethod, String requestStr) throws ServiceException {
         try {
-            PrivateKey privateKey = AuthenticationUtils.loadSigningKey(mastercardApiConfig.getP12File().getFile().getAbsolutePath(), mastercardApiConfig.getKeyAlias(), mastercardApiConfig.getKeyPassword());
+            PrivateKey privateKey = AuthenticationUtils.loadSigningKey(mastercardApiConfig.getP12File().getFile().getAbsolutePath(), mastercardApiConfig.getKeyAlias(), mastercardApiConfig.getPaswd());
             return OAuth.getAuthorizationHeader(new URI(url), httpMethod.name(), requestStr, StandardCharsets.UTF_8, mastercardApiConfig.getConsumerKey(), privateKey);
         } catch (IOException | KeyStoreException | CertificateException | NoSuchProviderException |
                  NoSuchAlgorithmException | URISyntaxException | UnrecoverableKeyException e) {
@@ -183,14 +184,13 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         headers.getAccept();
         if (headers.containsKey(HttpHeaders.ACCEPT))
             httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON);
+        if(headers.containsKey(SPECIFICATION_TYPE.toString()))
+            httpHeaders.add(SPECIFICATION_TYPE.toString(), headers.getFirst(SPECIFICATION_TYPE.toString()));
+
         //Below header need to be added to process the encryption request
-        if (headers.containsKey(ENCRYPTED_HEADER.toString())) {
-            httpHeaders.add(ENCRYPTED_HEADER.toString(), String.valueOf(processForEncryption(encrypt)));
-        }
-        if(headers.containsKey("downstream-route"))
-        {
-            httpHeaders.add("downstream-route", headers.getFirst("downstream-route"));
-        }
+        if (processForEncryption(encrypt))
+            httpHeaders.add(ENCRYPTED_HEADER.toString(), "true");
+
         return (HttpEntity<MultiValueMap<String, String>>) new HttpEntity(requestStr, httpHeaders); // NOSONAR
     }
 
@@ -324,8 +324,6 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
                         mapper.getTypeFactory().constructCollectionType(ArrayList.class, listElementClass);
                 return mapper.readValue(response, listType);
             } catch (JsonProcessingException e) {
-                logger.warn("Error while processing response");
-            } catch (IOException e) {
                 logger.warn("Error while processing response");
             }
         }
