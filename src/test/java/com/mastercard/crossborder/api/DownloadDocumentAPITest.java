@@ -108,7 +108,7 @@ public class DownloadDocumentAPITest {
         logger.info("Running Usecase - 3, ERROR HANDLING.");
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("partner_id", partnerId);
-        requestParams.put("document_id", "d0b7db34-eff8-47fa-b707-2ad12929f0a8");
+        requestParams.put("document_id", "10b7db34-eff8-47fa-b707-2ad129130200");
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
