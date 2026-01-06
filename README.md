@@ -520,3 +520,17 @@ N] [Generate IBAN API](https://developer.mastercard.com/send-cross-border/docume
 - OI calls the service to generate the IBAN but the country is not entered in acceptable format, use case 14
 - OI calls the service to generate the IBAN but the Bank Identifier is incorrect, use case 15
 - The above use cases just shows two the examples of error handling
+
+O] [Endpoint Guide API](https://developer.mastercard.com/cross-border-services/documentation/api-ref/endpoint-guide-adapter_api/):
+
+> Case 1: **Test Endpoint Guide API for TEG data with encryption**
+- OI can call this method to get details of TEG data for a specific corridor
+- In this use case, we need to pass payment type, destination payment instrument, destination country and destination currency as request headers. A successful response would result with TEG data.
+
+> Case 2: **Error scenario**
+- OI calls the service to get TEG data but the corridor details are incorrect
+- API results in error response as resource unknown
+
+> Case 3: **Test Endpoint Guide API for BEG data with encryption**
+- OI can call this method to get details of TEG data for a specific corridor
+- In this use case, we need to pass payment type, destination payment instrument, destination country and destination currency as request headers. A successful response would result with BEG data.
