@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-
 public class ClearingHouseDetailDTO {
     private String clearingHouseDetailId;
     private String endpointId;
@@ -16,5 +15,6 @@ public class ClearingHouseDetailDTO {
     private String processingStartTime;
     private List<String> processingDaysOfWeeks;
     private AmountDTO maxLimit;
+    private AmountDTO minLimit;
     private String deliveryTime;
 }
