@@ -2,7 +2,7 @@ package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response.begapi.Business;
+import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response.begapi.BusinessBeg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -17,7 +17,7 @@ public class EndpointGuideResponse extends BaseResponse {
     private String destinationCurrency;
     private DestinationPaymentInstrument destinationPaymentInstrument;
     private Technical technical;
-    private Business business;
+    private BusinessBeg business;
 
     @SneakyThrows
     @Override
