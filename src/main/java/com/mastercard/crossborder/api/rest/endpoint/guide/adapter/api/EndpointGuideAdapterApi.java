@@ -21,15 +21,13 @@ public class EndpointGuideAdapterApi {
     public static final String ENDPOINT_GUIDE_ADAPTER_URL="crossborder/endpoint-guide/specifications?payment_type={paymentType}&destination_payment_instrument={destinationPaymentInstrument}&destination_country={destinationCountry}&destination_currency={destinationCurrency}";
 
     public List<EndpointGuideResponse> getEndpointWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
-        logger.info("Calling Endpoint guide adapter api ");
-        return (List<EndpointGuideResponse>) restClientService.serviceEncryption(ENDPOINT_GUIDE_ADAPTER_URL,headers, HttpMethod.GET, requestParams,null, List.class, false,null);
-
+        logger.info("Calling Endpoint guide adapter api with encryption");
+        return (List<EndpointGuideResponse>) restClientService.serviceEncryption(ENDPOINT_GUIDE_ADAPTER_URL,headers, HttpMethod.GET, requestParams,null, List.class, true, EndpointGuideResponse.class);
     }
 
     public List<EndpointGuideResponse> getEndpoint(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
         logger.info("Calling Endpoint guide adapter api ");
-        return (List<EndpointGuideResponse>) restClientService.service(ENDPOINT_GUIDE_ADAPTER_URL,headers, HttpMethod.GET, requestParams,null, List.class, false,null);
-
+        return (List<EndpointGuideResponse>) restClientService.service(ENDPOINT_GUIDE_ADAPTER_URL,headers, HttpMethod.GET, requestParams,null, List.class, true,EndpointGuideResponse.class);
     }
 
 }
