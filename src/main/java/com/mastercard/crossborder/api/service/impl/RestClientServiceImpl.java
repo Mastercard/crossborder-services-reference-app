@@ -160,7 +160,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
 
     private String authenticate(String url, HttpMethod httpMethod, String requestStr) throws ServiceException {
         try {
-            PrivateKey privateKey = AuthenticationUtils.loadSigningKey(mastercardApiConfig.getP12File().getFile().getAbsolutePath(), mastercardApiConfig.getKeyAlias(), mastercardApiConfig.getPaswd());
+            PrivateKey privateKey = AuthenticationUtils.loadSigningKey(mastercardApiConfig.getP12File().getFile().getAbsolutePath(), mastercardApiConfig.getKeyAlias(), mastercardApiConfig.getKeyPassword());
             return OAuth.getAuthorizationHeader(new URI(url), httpMethod.name(), requestStr, StandardCharsets.UTF_8, mastercardApiConfig.getConsumerKey(), privateKey);
         } catch (IOException | KeyStoreException | CertificateException | NoSuchProviderException |
                  NoSuchAlgorithmException | URISyntaxException | UnrecoverableKeyException e) {
@@ -325,6 +325,8 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
                 return mapper.readValue(response, listType);
             } catch (JsonProcessingException e) {
                 logger.warn("Error while processing response");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
         return new ArrayList<>();
