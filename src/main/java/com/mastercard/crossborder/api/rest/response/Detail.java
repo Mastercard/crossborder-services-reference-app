@@ -1,6 +1,7 @@
 package com.mastercard.crossborder.api.rest.response;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.ToString;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
         propOrder = {"name", "value"}
 )
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Detail implements Serializable {
     private static final long serialVersionUID = 1L;
     private String name = null;
