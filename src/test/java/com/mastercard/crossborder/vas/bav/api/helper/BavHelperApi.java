@@ -1,7 +1,16 @@
 package com.mastercard.crossborder.vas.bav.api.helper;
 
-import com.mastercard.crossborder.api.rest.vas.bav.api.request.*;
-import com.mastercard.crossborder.api.rest.vas.bav.api.response.Bic;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.AccountUri;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.BAVAddress;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.Bank;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.BankInfoLookupRequest;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.Bic;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.IBanValidationRequest;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.IbanCreationDetails;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.validate.AccountDetails;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.validate.AccountHolder;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.validate.AccountHolderName;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.validate.ValidateRequestType;
 
 public class BavHelperApi {
 
@@ -73,14 +82,14 @@ public class BavHelperApi {
 
     /**** Bank Info Request Payloads ****/
     public static BankInfoLookupRequest createBank() {
-        Bic bic= new Bic("UKSORT","204846");
+        Bic bic= new Bic("UKSORT","204846",null,null);
         BAVAddress bavAddress = new BAVAddress("Guiseley",null,"LS20 8AE");
         Bank bank = new Bank("Barclays Bank PLC",
                 "Oxford Rd","GBR",bic,bavAddress);
         return new BankInfoLookupRequest(bank);
     }
     public static BankInfoLookupRequest createBankWithNameAndCountry() {
-        Bic bic= new Bic(null,null);
+        Bic bic= new Bic(null,null,null,null);
         BAVAddress bavAddress = new BAVAddress("Belfast",null,null);
         Bank bank = new Bank("Barclays Bank PLC",
                 null,"GBR",bic,bavAddress);
@@ -88,7 +97,7 @@ public class BavHelperApi {
     }
 
     public static BankInfoLookupRequest createBankWithBicDetails() {
-        Bic bic= new Bic("UKSORT","204846");
+        Bic bic= new Bic("UKSORT","204846",null,null);
         BAVAddress bavAddress = new BAVAddress("Guiseley",null,"LS20 8AE");
         Bank bank = new Bank(null,
                 "Oxford Rd","GBR",bic,bavAddress);
@@ -96,7 +105,7 @@ public class BavHelperApi {
     }
 
     public static BankInfoLookupRequest createBankWithBankNameAndNoCountry() {
-        Bic bic= new Bic(null,null);
+        Bic bic= new Bic(null,null,null,null);
         BAVAddress bavAddress = new BAVAddress("Guiseley",null,"LS20 8AE");
         Bank bank = new Bank("Barclays Bank PLC",
                 "Oxford Rd",null,bic,bavAddress);
@@ -104,7 +113,7 @@ public class BavHelperApi {
     }
 
     public static BankInfoLookupRequest createBankWithBankNameAndCountryNotSupported() {
-        Bic bic= new Bic(null,null);
+        Bic bic= new Bic(null,null,null,null);
         BAVAddress bavAddress = new BAVAddress("Guiseley",null,"LS20 8AE");
         Bank bank = new Bank("Barclays Bank PLC",
                 "Oxford Rd","ARG",bic,bavAddress);
@@ -112,7 +121,7 @@ public class BavHelperApi {
     }
 
     public static BankInfoLookupRequest createBankWithInvalidCountryFormat() {
-        Bic bic= new Bic(null,null);
+        Bic bic= new Bic(null,null,null,null);
         BAVAddress bavAddress = new BAVAddress("Guiseley",null,"LS20 8AE");
         Bank bank = new Bank("Barclays Bank PLC",
                 "Oxford Rd","G@R",bic,bavAddress);
@@ -120,7 +129,7 @@ public class BavHelperApi {
     }
 
     public static BankInfoLookupRequest createBankWithNoRecord() {
-        Bic bic= new Bic(null,null);
+        Bic bic= new Bic(null,null,null,null);
         BAVAddress bavAddress = new BAVAddress("Guiseley",null,"LS20 8AE");
         Bank bank = new Bank("Bank of Queensland Limited",
                 "Oxford Rd","GBR",bic,bavAddress);
@@ -128,7 +137,7 @@ public class BavHelperApi {
     }
 
     public static BankInfoLookupRequest createBankWithCountryNotSupported() {
-        Bic bic= new Bic(null,null);
+        Bic bic= new Bic(null,null,null,null);
         BAVAddress bavAddress = new BAVAddress("Guiseley",null,"LS20 8AE");
         Bank bank = new Bank("Bank of Queensland Limited",
                 "Oxford Rd","SBM",bic,bavAddress);
@@ -136,17 +145,59 @@ public class BavHelperApi {
     }
 
     public static BankInfoLookupRequest createBankWithInvalidCountry() {
-        Bic bic= new Bic(null,null);
+        Bic bic= new Bic(null,null,null,null);
         BAVAddress bavAddress = new BAVAddress(null,null,null);
         Bank bank = new Bank("Barclays Bank PLC",
                 "Oxford Rd","XYZ",bic,bavAddress);
         return new BankInfoLookupRequest(bank);
     }
     public static BankInfoLookupRequest createBankWithInvalidCountryLengthAndPostalCodeLength() {
-        Bic bic= new Bic(null,null);
+        Bic bic= new Bic(null,null,null,null);
         BAVAddress bavAddress = new BAVAddress("Guiseley",null,"LS20 8AELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
         Bank bank = new Bank("Barclays Bank PLC",
                 "Oxford Rd","GBRRR",bic,bavAddress);
         return new BankInfoLookupRequest(bank);
     }
+
+    public static IBanValidationRequest validateCardEligibility(){
+        AccountUri accountUri = new AccountUri("PAN","4960144263583144");
+        return new IBanValidationRequest(ValidateRequestType.CES, accountUri);
+    }
+
+    public static IBanValidationRequest validateAccountStatus(){
+        AccountUri accountUri = new AccountUri("BAN","98000987651232");
+        AccountHolder accountHolder = new AccountHolder(new AccountHolderName("Tim","John", "Smith"), "1234567");
+        Bic bic = new Bic("ABA","123456789",null,null);
+        AccountDetails accountDetails = new AccountDetails("USD", accountHolder, bic);
+        return new IBanValidationRequest(ValidateRequestType.ASV, accountUri, accountDetails);
+    }
+    public static BankInfoLookupRequest createBankWithBicAchWireDetails() {
+        Bic bic= new Bic("ABA","122240861",null,null);
+        BAVAddress bavAddress = null;
+        Bank bank = new Bank("FedSUC004",
+                null,"USA",bic,bavAddress);
+        return new BankInfoLookupRequest(bank);
+    }
+    public static BankInfoLookupRequest createBankWithBicAchDetails() {
+        Bic bic= new Bic("ABA","122240861",null,null);
+        BAVAddress bavAddress = new BAVAddress(null,null,null);
+        Bank bank = new Bank("FedSUC003",
+                null,"USA",bic,bavAddress);
+        return new BankInfoLookupRequest(bank);
+    }
+    public static BankInfoLookupRequest createBankWithBicWireDetails() {
+        Bic bic= new Bic("ABA","122240861",null,null);
+        BAVAddress bavAddress = new BAVAddress(null,null,null);
+        Bank bank = new Bank("FedSUC005",
+                null,"USA",bic,bavAddress);
+        return new BankInfoLookupRequest(bank);
+    }
+    public static BankInfoLookupRequest createBankWithBicInvalidDetails() {
+        Bic bic= new Bic("ABA","122240861",null,null);
+        BAVAddress bavAddress = new BAVAddress(null,null,null);
+        Bank bank = new Bank("FedSUC002",
+                null,"USA",bic,bavAddress);
+        return new BankInfoLookupRequest(bank);
+    }
+
 }
