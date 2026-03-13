@@ -3,10 +3,8 @@ package com.mastercard.crossborder.vas.bav.api;
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.vas.bav.api.BAVApi;
-import com.mastercard.crossborder.api.rest.vas.bav.api.request.Bank;
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.BankInfoLookupRequest;
 import com.mastercard.crossborder.api.rest.vas.bav.api.response.BankInfoLookupResponse;
-import com.mastercard.crossborder.api.rest.vas.bav.api.response.BankInfoResponse;
 import com.mastercard.crossborder.api.rest.response.Error;
 import com.mastercard.crossborder.api.rest.response.Errors;
 import com.mastercard.crossborder.vas.bav.api.helper.BavHelperApi;
@@ -220,6 +218,117 @@ public class BankInfoLookupTest {
                 logger.error("Bank Validation request is failed for errors : {}", serviceException.getMessage());
                 Assert.fail(serviceException.getMessage());
             }
+        }
+    }
+
+
+    @Test
+    public void getBanDetailsWithBicACHWireValue() {
+        logger.info("Test case search for a Bank with Bic ACH and Wire details");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", "Enc_Decryp_FlexiOI");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON);
+        try {
+            BankInfoLookupRequest request = BavHelperApi.createBankWithBicAchWireDetails();
+            System.out.println("Request Payload >>>>>>>>>>>>>  "+request);
+            BankInfoLookupResponse response = bavApi.getBankDetails(httpHeaders, requestParams, request);
+            if (response != null) {
+                logger.info("Bank is Present {} with Ach {} and Wire {} information.", response.getBankInfo().getBanks().getBankData().get(0).getName(),response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getAch(),response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getWire());
+
+                Assert.assertEquals(true, response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getAch().isEnabled());
+                Assert.assertEquals("022000022", response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getAch().getPreferredRoutingNumber());
+                Assert.assertEquals(true, response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getWire().isEnabled());
+                Assert.assertEquals("021000021", response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getWire().getPreferredRoutingNumber());
+            } else {
+                logger.info("Bank Info request has failed, Bank does not exist");
+                Assert.fail("Bank Info request has failed, Bank does not exist");
+            }
+        } catch (ServiceException re) {
+            logger.error("Bank Info request failed as : {}", re.getMessage());
+            Assert.fail(re.getMessage());
+        }
+    }
+
+    @Test
+    public void getBanDetailsWithBicACHValue() {
+        logger.info("Test case search for a Bank with Bic ACH details.");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", "Enc_Decryp_FlexiOI");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON);
+        try {
+            BankInfoLookupRequest request = BavHelperApi.createBankWithBicAchDetails();
+            System.out.println("Request Payload >>>>>>>>>>>>>  "+request);
+            BankInfoLookupResponse response = bavApi.getBankDetails(httpHeaders, requestParams, request);
+            if (response != null) {
+                logger.info("Bank is Present {} with Ach {} information.", response.getBankInfo().getBanks().getBankData().get(0).getName(),response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getAch());
+
+                Assert.assertEquals(true, response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getAch().isEnabled());
+                Assert.assertEquals(null, response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getAch().getPreferredRoutingNumber());
+            } else {
+                logger.info("Bank Info request has failed, Bank does not exist");
+                Assert.fail("Bank Info request has failed, Bank does not exist");
+            }
+        } catch (ServiceException re) {
+            logger.error("Bank Info request failed as : {}", re.getMessage());
+            Assert.fail(re.getMessage());
+        }
+    }
+
+    @Test
+    public void getBanDetailsWithBicWireValue() {
+        logger.info("Test case search for a Bank with Bic Wire details");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", "Enc_Decryp_FlexiOI");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON);
+        try {
+            BankInfoLookupRequest request = BavHelperApi.createBankWithBicWireDetails();
+            System.out.println("Request Payload >>>>>>>>>>>>>  "+request);
+            BankInfoLookupResponse response = bavApi.getBankDetails(httpHeaders, requestParams, request);
+            if (response != null) {
+                logger.info("Bank is Present {} with Wire {} information.", response.getBankInfo().getBanks().getBankData().get(0).getName(), response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getWire());
+
+                Assert.assertEquals(true, response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getWire().isEnabled());
+                Assert.assertEquals(null, response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getWire().getPreferredRoutingNumber());
+            } else {
+                logger.info("Bank Info request has failed, Bank does not exist");
+                Assert.fail("Bank Info request has failed, Bank does not exist");
+            }
+        } catch (ServiceException re) {
+            logger.error("Bank Info request failed as : {}", re.getMessage());
+            Assert.fail(re.getMessage());
+        }
+    }
+
+    @Test
+    public void getBanDetailsWithBicInvalidDetails() {
+        logger.info("Test case search for a Bank with invalid Bic details");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", "Enc_Decryp_FlexiOI");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON);
+        try {
+            BankInfoLookupRequest request = BavHelperApi.createBankWithBicInvalidDetails();
+            System.out.println("Request Payload >>>>>>>>>>>>>  "+request);
+            BankInfoLookupResponse response = bavApi.getBankDetails(httpHeaders, requestParams, request);
+            if (response != null) {
+                logger.info("Bank is Present {} with invalid Bic details.", response.getBankInfo().getBanks().getBankData().get(0).getName());
+
+                Assert.assertEquals(false, response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getWire().isEnabled());
+                Assert.assertEquals("021000021", response.getBankInfo().getBanks().getBankData().get(0).getBics().get(0).getWire().getPreferredRoutingNumber());
+            } else {
+                logger.info("Bank Info request has failed, Bank does not exist");
+                Assert.fail("Bank Info request has failed, Bank does not exist");
+            }
+        } catch (ServiceException re) {
+            logger.error("Bank Info request failed as : {}", re.getMessage());
+            Assert.fail(re.getMessage());
         }
     }
 

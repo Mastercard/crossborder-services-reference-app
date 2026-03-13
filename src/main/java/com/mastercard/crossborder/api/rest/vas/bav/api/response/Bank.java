@@ -1,4 +1,5 @@
 package com.mastercard.crossborder.api.rest.vas.bav.api.response;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.Bic;
 
 public class Bank {
 
