@@ -1,5 +1,5 @@
 package com.mastercard.crossborder.api.rest.vas.bav.api.request.ValidateReq;
-import com.mastercard.crossborder.api.rest.vas.bav.api.response.Bic;
+import com.mastercard.crossborder.api.rest.vas.bav.api.request.Bic;
 import lombok.ToString;
 
 @ToString
