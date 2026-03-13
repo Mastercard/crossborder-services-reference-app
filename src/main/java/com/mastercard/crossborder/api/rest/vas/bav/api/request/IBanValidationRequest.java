@@ -13,6 +13,11 @@ public class IBanValidationRequest {
     public IBanValidationRequest(AccountUri accountUri) {
         this.accountUri = accountUri;
     }
+    
+    public IBanValidationRequest(ValidateRequestType requestType, AccountUri accountUri) {
+        this.requestType = requestType;
+        this.accountUri = accountUri;
+    }
 
     public AccountUri getAccountUri() {
         return accountUri;
