@@ -66,11 +66,6 @@ public class BavHelperApi {
         return new IBanValidationRequest(new AccountUri("IBAN","GB33BUKB20201555555555"));
     }
 
-    public static IBanValidationRequest validateCardEligibility(){
-        AccountUri accountUri = new AccountUri("PAN","4960144263583144");
-        return new IBanValidationRequest(ValidateRequestType.CES, accountUri);
-    }
-
     public static IBanValidationRequest createAccountWithEmptyType(){
         return new IBanValidationRequest(new AccountUri("IBAN",null));
     }
@@ -166,7 +161,7 @@ public class BavHelperApi {
 
     public static IBanValidationRequest validateCardEligibility(){
         AccountUri accountUri = new AccountUri("PAN","4960144263583144");
-        return new IBanValidationRequest(ValidateRequestType.CES, accountUri);
+        return new IBanValidationRequest(ValidateRequestType.CES, accountUri, null);
     }
 
     public static IBanValidationRequest validateAccountStatus(){
