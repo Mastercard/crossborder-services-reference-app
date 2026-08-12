@@ -71,6 +71,32 @@ public class AccountValidationTest {
         }
     }
 
+    @Test
+    public void validateCard() {
+        logger.info("Test case to validate card for Cross-Border Services");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON);
+        try {
+            IBanValidationRequest request = BavHelperApi.validateCardEligibility();
+            System.out.println("Request Payload >>>>>>>>>>>>>  "+request);
+            ValidateAccountResponse response = bavApi.validateAccount(httpHeaders, requestParams, request);
+            if(response != null) {
+                logger.info("Card Eligibility response message {} ", response.getMessage());
+                Assert.assertEquals("SUCCESS",response.getStatus());
+            }
+            else{
+                logger.info("Card Eligibility request has failed");
+                Assert.fail("Card Eligibility request has failed");
+            }
+        } catch (ServiceException re) {
+            logger.error("Card Eligibility request failed as : {}", re.getMessage());
+            Assert.fail(re.getMessage());
+        }
+    }
+
   /*  **
      * This is an error scenario test case, where the mandatory field i.e the type is sent as "" empty
      */

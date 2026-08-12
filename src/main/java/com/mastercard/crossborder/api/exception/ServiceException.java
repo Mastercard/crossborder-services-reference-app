@@ -1,6 +1,9 @@
 package com.mastercard.crossborder.api.exception;
 
 import com.mastercard.crossborder.api.rest.response.Errors;
+import lombok.Getter;
+
+@Getter
 public class ServiceException extends Exception{
 
     private final Errors errors = new Errors();
@@ -14,8 +17,5 @@ public class ServiceException extends Exception{
         errors.setErrorList(serviceErrors.getErrorList());
     }
 
-    public Errors getErrors() {
-        return errors;
-    }
-
 }
+

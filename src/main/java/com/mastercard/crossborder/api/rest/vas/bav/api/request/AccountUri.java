@@ -1,9 +1,15 @@
 package com.mastercard.crossborder.api.rest.vas.bav.api.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class AccountUri {
     @JsonProperty(value = "type")
     private String type;
@@ -11,35 +17,4 @@ public class AccountUri {
     @JsonProperty(value = "value")
     private String value;
 
-    public String getType() {
-        return type;
-    }
-
-    public AccountUri() {
-    }
-
-    public AccountUri(String type, String value) {
-        this.type = type;
-        this.value = value;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "type='" + type + '\'' +
-                ", value='" + value + '\'' +
-                '}';
-    }
 }
