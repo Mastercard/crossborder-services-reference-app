@@ -6,7 +6,6 @@ import com.mastercard.crossborder.api.rest.PullCardedAPI;
 import com.mastercard.crossborder.api.rest.response.FxRateResponse;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -26,6 +25,7 @@ import java.util.Map;
    It will provide FX rates, rate IDs, effective times, as well as other information.
    If used as the primary mechanism to retrieve FX rates, OI will be required to create a scheduler that will make API calls depending on refresh times.
    Please note carded rate API is JSON Only.
+   Sandbox testing is unavailable for Carded Rate APIs and might result in empty response
 */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MastercardApiConfig.class})
@@ -53,7 +53,6 @@ public class PullCardedAPITest {
         #Usecase - 1 - **Get Fx Rates for partner ID**
         It will pull all the Fx Rates related to Partner ID
     */
-    @Ignore("Sandbox testing is not allowed as per devzone")
     @Test
     public void testGetFxRatesInJsonFormat() {
         logger.info("Running Usecase - 1, RETRIEVE FX RATES IN JSON FORMAT.");
@@ -68,15 +67,13 @@ public class PullCardedAPITest {
             if (null != retrieveGetFxRates) {
                 logger.info("Retrieve Fx Rates is Successful with Partner ID {}", partnerId);
                 Assert.assertNotNull(retrieveGetFxRates);
-                Assert.assertNotEquals(retrieveGetFxRates.getRates().size(),0);
             } else {
                 logger.info("Retrieve Fx Rates has failed");
                 Assert.fail("Retrieve Fx Rates has failed");
             }
         } catch (ServiceException re) {
-            Assert.fail(re.getMessage());
             logger.error("Retrieve Fx Rates has failed {}", re.getMessage());
-
+            Assert.fail(re.getMessage());
         }
     }
 
@@ -84,7 +81,6 @@ public class PullCardedAPITest {
          #Usecase - 2 - **RETRIEVE FX RATES IN ENCRYPTED FORM**
          All these calls are encrypted.
        */
-    @Ignore("Sandbox testing is not allowed as per devzone")
     @Test
     public void testGetFxRatesWithEncryption() {
         if (apiConfig.getRunWithEncryptedPayload()) {
@@ -100,14 +96,13 @@ public class PullCardedAPITest {
                 if (null != retrieveGetFxRates) {
                     logger.info("Retrieve Fx Rates is Successful with Partner ID {}", partnerId);
                     Assert.assertNotNull(retrieveGetFxRates);
-                    Assert.assertNotEquals(retrieveGetFxRates.getRates().size(),0);
                 } else {
                     logger.info("Retrieve Fx Rates has failed");
                     Assert.fail("Retrieve Fx Rates has failed");
                 }
             }catch (ServiceException re) {
-                Assert.fail(re.getMessage());
                 logger.error("Retrieve Fx Rates has failed {}", re.getMessage());
+                Assert.fail(re.getMessage());
             }
         }
     }

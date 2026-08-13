@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 
 @JsonTypeName(value = "updateResponse")
-//@JsonTypeInfo(include = As.WRAPPER_OBJECT, use = Id.NAME)
+@JsonTypeInfo(include = As.WRAPPER_OBJECT, use = Id.NAME)
 @JsonPropertyOrder(value = {"referenceId","requestStatus"})
 public class UpdateResponse implements Serializable {
 

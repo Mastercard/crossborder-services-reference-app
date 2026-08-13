@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 
 @JsonTypeName(value = "uploadDocumentResponse")
-//@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonPropertyOrder(value = {"referenceId","documentId"})
 public class UploadDocumentResponse implements Serializable {
 
