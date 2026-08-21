@@ -5,6 +5,7 @@ public class BankInfoLookupResponse {
     BankInfoResponse bankInfo;
 
     public BankInfoLookupResponse(){
+        // Required by serialization/deserialization frameworks that instantiate via reflection.
     }
 
     public BankInfoResponse getBankInfo() {

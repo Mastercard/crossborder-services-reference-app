@@ -8,6 +8,7 @@ import com.mastercard.crossborder.api.rest.vas.bav.api.response.BankInfoLookupRe
 import com.mastercard.crossborder.api.rest.vas.bav.api.response.IBanGenerationResponse;
 import com.mastercard.crossborder.api.rest.vas.bav.api.response.ValidateAccountResponse;
 import com.mastercard.crossborder.api.service.RestClientService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Component
 public class BAVApi {
 
-    @Autowired
-    RestClientService restClientService; // NOSONAR
+
+    private final RestClientService restClientService;
 
     private static final Logger logger = LoggerFactory.getLogger(BAVApi.class);
 
