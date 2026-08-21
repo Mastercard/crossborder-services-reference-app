@@ -23,6 +23,7 @@ public class Details implements Serializable {
     private List<Detail> details = null;
 
     public Details() {
+        // Required by JAXB/Jackson for reflective instantiation during deserialization.
     }
 
     @XmlElement(

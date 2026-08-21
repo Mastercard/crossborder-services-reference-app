@@ -9,10 +9,10 @@ import java.io.Serializable;
 
 @JsonTypeName(value = "response")
 @JsonPropertyOrder(value = {"value"})
-public class Response<T> implements Serializable {
+public class Response<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private T value;
+    private transient T value;
 
     @JsonProperty(value = "value")
     public T getValue() {
