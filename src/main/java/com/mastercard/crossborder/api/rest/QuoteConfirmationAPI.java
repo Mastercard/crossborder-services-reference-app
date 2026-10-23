@@ -4,6 +4,7 @@ import com.mastercard.crossborder.api.rest.request.QuoteConfirmation;
 import com.mastercard.crossborder.api.rest.response.QuoteConfirmationResponse;
 import com.mastercard.crossborder.api.rest.response.RetrieveQuoteStatus;
 import com.mastercard.crossborder.api.service.RestClientService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,12 @@ import java.util.Map;
 /*
     This class is to make a Quotes Confirmation API call.
  */
-
+@RequiredArgsConstructor
 @Component
 public class QuoteConfirmationAPI {
 
 
-    @Autowired
-    RestClientService restClientService; //NOSONAR
+    private final RestClientService restClientService; //NOSONAR
 
     private static final Logger logger = LoggerFactory.getLogger(QuoteConfirmationAPI.class);
 

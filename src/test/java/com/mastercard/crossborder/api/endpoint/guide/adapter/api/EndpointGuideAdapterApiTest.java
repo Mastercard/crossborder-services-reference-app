@@ -91,7 +91,7 @@ public class EndpointGuideAdapterApiTest {
             logger.error("service error: {}",serviceException.getMessage());
             Errors errors = serviceException.getErrors();
             List<Error> errorList = errors.getErrorList();
-            logger.info("Error Response >>>>>>>>>>>>>>>> " + errorList.get(0));
+            logger.info("Error Response >>>>>>>>>>>>>>>> {}", errorList.get(0));
             if (errorList != null && !errorList.isEmpty()) {
                 assertEquals("Endpoint", errorList.get(0).getSource());
                 assertEquals("RESOURCE_UNKNOWN", errorList.get(0).getReasonCode());

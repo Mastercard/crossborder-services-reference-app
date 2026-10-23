@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class DetailsDeserializer extends JsonDeserializer<Details> {
 	@Override
 	public Details deserialize(JsonParser p, DeserializationContext ctxt)
-			throws IOException, JsonProcessingException {
+			throws IOException {
 		JsonNode node = p.getCodec().readTree(p);
 
 		Details details = new Details();

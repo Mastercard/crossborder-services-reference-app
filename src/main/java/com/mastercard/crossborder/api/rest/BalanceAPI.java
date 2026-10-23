@@ -4,6 +4,7 @@ import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.response.accountbalances.Account;
 import com.mastercard.crossborder.api.service.RestClientService;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Component
 public class BalanceAPI {
 
@@ -23,8 +25,7 @@ public class BalanceAPI {
     public static final String GET_ALL_ACCOUNTS_BALANCES = "/send/partners/{partner-id}/crossborder/accounts?include_balance={include_balance}";
     public static final String GET_ACCOUNT_BALANCE_BY_ID = "/send/partners/{partner-id}/crossborder/accounts/{account_id}?include_balance={include_balance}";
 
-    @Autowired
-    RestClientService restClientService; //NOSONAR
+    private final RestClientService restClientService; //NOSONAR
 
     public List<Account> getAllAccountsBalances(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
